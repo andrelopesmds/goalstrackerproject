@@ -1,6 +1,8 @@
-# goalstrackersproject
 Pet Project
 
 
+<<<<<<< HEAD
+=======
 new line
 
+>>>>>>> master
