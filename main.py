@@ -1,5 +1,5 @@
 def main():
-    print "This is a test"
+    print "This is a test number one"
 
 
 def foo():
