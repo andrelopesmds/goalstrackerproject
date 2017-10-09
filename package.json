@@ -1,0 +1,23 @@
+{
+  "name": "goalstrackersproject",
+  "version": "1.0.0",
+  "description": "Pet project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrelms1/goalstrackersproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrelms1/goalstrackersproject/issues"
+  },
+  "homepage": "https://github.com/andrelms1/goalstrackersproject#readme",
+  "dependencies": {
+    "express": "^4.16.1",
+    "sqlite3": "^3.1.13"
+  }
+}
