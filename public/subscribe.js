@@ -12,7 +12,7 @@ else{
     var team = document.getElementById("teamId").value;    
     if(validate(name, email, team)){
 
-	registerServiceWorker();
+	subscribeUserToPush();
 
 	// continue ...
 
@@ -27,16 +27,45 @@ else{
 
 
 
-
-
-function registerServiceWorker() {
+function subscribeUserToPush() {
   return navigator.serviceWorker.register('service-worker.js')
   .then(function(registration) {
     console.log('Service worker successfully registered.');
-    return registration;
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(
+	'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4'
+      )
+    };
+
+    return registration.pushManager.subscribe(subscribeOptions);
   })
-  .catch(function(err) {
-    console.error('Unable to register service worker.', err);
+  .then(function(pushSubscription) {
+
+	var data = JSON.stringify(pushSubscription);
+        console.log('Received PushSubscription: ', data);
+	sendToServer(data);
+	
+   return pushSubscription;
+  });
+}
+
+
+function sendToServer(subscription) {
+
+	// send it to backend too!!!
+    var name = document.getElementById("nameId").value;
+    var email = document.getElementById("emailId").value;
+    var team = document.getElementById("teamId").value;    
+    
+
+
+  return fetch('/api/save-subscription/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: subscription
   });
 }
 
@@ -50,6 +79,19 @@ function validate(name, email, team){
 	}
 }
 
+
+function urlBase64ToUint8Array(base64String) {
+	const padding = '='.repeat((4 - base64String.length % 4) % 4);
+	const base64 = (base64String + padding)
+        	.replace(/\-/g, '+')
+        	.replace(/_/g, '/');
+	const rawData = window.atob(base64);
+      	const outputArray = new Uint8Array(rawData.length);
+     	for (let i = 0; i < rawData.length; ++i) {
+        	outputArray[i] = rawData.charCodeAt(i);
+     	 }
+	return outputArray;
+}
 
 
 
