@@ -57,8 +57,16 @@ function sendToServer(subscription) {
     var name = document.getElementById("nameId").value;
     var email = document.getElementById("emailId").value;
     var team = document.getElementById("teamId").value;    
-    
+	
+    var data = JSON.parse(subscription);
 
+    data.name = name;
+    data.email = email;
+    data.team = team;
+
+    console.log(data);
+    var subscription = JSON.stringify(data);     
+    console.log(subscription);
 
   return fetch('/api/save-subscription/', {
     method: 'POST',
