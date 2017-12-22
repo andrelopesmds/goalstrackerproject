@@ -2,7 +2,7 @@ self.addEventListener('push', function(event) {
   if (event.data) {
     console.log('This push event has data: ', event.data.text());
 
-    const promiseChain = self.registration.showNotification('hey from goalstrackers!');
+    const promiseChain = self.registration.showNotification(event.data.text());
     event.waitUntil(promiseChain);
 
   } else {
