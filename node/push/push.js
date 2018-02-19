@@ -31,8 +31,7 @@ webpush.setVapidDetails(
   vapidKeys.privateKey
 );
 
-
-const subscription = {"endpoint":"https://fcm.googleapis.com/fcm/send/cLQkYRexM9s:APA91bEoJTbjiv5Bf3461ZpPxmrX8Bqwes-_Q4bWzMLvhiU3XvczbAFwSHqZcQC-JXJaa-d0HAAHuOEpszquZlxQmNOlflEGAStrCrwAj8SQho8ENgCUwafP1nNBSyXMSb1wbZsUN-5f","expirationTime":null,"keys":{"p256dh":"BFYpiVZN7QgpsEJC4RYn3Y-StGxszIyrQciWjgzOWmN9UmYyA92E5xqp8KrRS52LwdcNtrDe6kuZTEiesL4y0r4=","auth":"TvllQnIWIyvScRTXUVqlkg=="}} // andre's mobile
+const subscription = {"endpoint":"https://fcm.googleapis.com/fcm/send/fO2ny_yVTOs:APA91bG7cAHUJs065IXAA6ibGLPo7sGTYFzzctlHVM093rQtPWBpKHpvMlIJCKbP436N-i5BSw7bbFUYQJjW2ylBZPCAawwgjexdLxbsiwN7oBxlMIx55q1-nEpsGySIZKbWznSdOF74","expirationTime":null,"keys":{"p256dh":"BAShEE-6cXc3b-bYq_VD0Qw9DkCYn5vT8zSveToHh7obFQORj8JJYEsOP4hki_JX-nZ0V8mftFQCVSXoDUioIXM=","auth":"_djATzijEJB4C_1qXiAqJw=="}} // andre's mobile
 
 function triggerPushMsg(subscription, dataToSend) {
   return webpush.sendNotification(subscription, dataToSend)
