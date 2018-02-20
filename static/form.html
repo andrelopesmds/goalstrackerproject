@@ -1,22 +1,89 @@
 <html>
 <head>
-   <meta charset="UTF-8">
-   <title>Welcome</title>
+  <meta charset="UTF-8">
+  <title>Siga o Galo</title>
+  <link rel="icon" href="images/galo.png" type="image/png" >
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC">
+  <style>
+  body, html {height: 100%}
+  body,h1,h2,h3,h4,h5,h6 {font-family: "Amatic SC", sans-serif}
+  .menu {display: none}
+  .bgimg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('images/estadio.jpg');
+    min-height: 90%;
+  }
+
+</style>
+
 </head>
-   <body>
-	<label for="name">Name:</label>
-        <input id="nameId" required type="text" id="name" name="name"  placeholder="Enter your full name" />
+  <body>
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+      <div class="w3-bar w3-xlarge w3-black w3-opacity w3-hover-opacity-off" id="myNavbar">
+        <a href="#" class="w3-bar-item w3-button">INÍCIO</a>
+        <a href="#about" class="w3-bar-item w3-button">SOBRE</a>
+        <a href="#subscribe" class="w3-bar-item w3-button">SE INSCREVA</a>
+        <a href="#contact" class="w3-bar-item w3-button">CONTATO</a>
+      </div>
+    </div>
+
+    <!-- Header with image -->
+    <header class="bgimg w3-display-container w3-grayscale-min" id="home">
+      <div class="w3-display-middle w3-center">
+      <p><a href="#subscribe" class="w3-button w3-xxlarge w3-black">Siga o galo!</a></p>
+      </div>
+    </header>
+
+        <!--About Container -->
+	<div class="w3-container w3-padding-64 w3-black w3-grayscale w3-xlarge" id="about">
+	  <div class="w3-content">
+	    <h1 class="w3-center w3-xxxlarge" style="margin-bottom:64px">SOBRE</h1>
+	    <p><strong>Siga o galo</strong> permite que você acompanhe o galo pelo smartphone. Basta se inscrever e começar agora a receber atualizações!.</p> 
+          </div>
+	</div>
+
+
+     <!-- Subscribe  -->
+    <div class="w3-container w3-padding-64 w3-black w3-grayscale-min w3-xlarge" id="subscribe">
+      <div class="w3-content">
+        <h1 class="w3-center w3-xxxlarge" style="margin-botton:64px">Se inscreva aqui!</h1>
+        <label for="name">Nome:</label>
+        <input class="w3-input w3-padding-16 w3-border" id="nameId" required type="text" id="name" name="name"  placeholder="Nome completo" />
         <br />
         <label for="email">Email:</label>
-        <input id="emailId" required type="email" id="email" name="email" placeholder="Enter your email address" />
+        <input class="w3-input w3-padding-16 w3-border"  id="emailId" required type="email" id="email" name="email" placeholder="Email de contato" />
         <br />
-        <label for "team">Team:</label>
-        <input id="teamId" required type="text" id="team" name="team" placeholder="Enter your team"/>
+        <label for "team">Time:</label>
+        <input class="w3-input w3-padding-16 w3-border"  id="teamId" required type="text" id="team" name="team" placeholder="Aqui é galo!"/>
         <br />
-        <button id="buttonId" onclick="subscribe()">Subscribe! </button>
+        <button id="buttonId" onclick="subscribe()">Efetuar cadastro</button>
+      </div>
+    </div>
+
+
+
+
+	<!-- Contact -->
+	<div class="w3-container w3-padding-64 w3-black w3-grayscale-min w3-xlarge" id="contact">
+	  <div class="w3-content">
+	    <h1 class="w3-center w3-xxxlarge" style="margin-bottom:64px">CONTATO</h1>
+	    <p>Entre em contato. Gostaríamos de saber o que achou do <strong>Siga O Galo!</strong></p>
+	    <div>
+	      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Nome" required name="Name"></p>
+	      <p><input class="w3-input w3-padding-16 w3-border" type="email" placeholder="Email de contato" required name="Email"></p>
+	      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Mensagem" required name="Message"></p>
+	      <p><button id="buttonSendId" onClick="sendFeedback">Enviar</button></p>
+	   </div>
+         </div>
+       </div>
 
    <script src="subscribe.js"></script>
 	
 
    </body>
 </html>
+
