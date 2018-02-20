@@ -1,30 +1,15 @@
 function subscribe(){
 
-if ( !('serviceWorker' in navigator) || !('PushManager' in window) ){
+  if ( !('serviceWorker' in navigator) || !('PushManager' in window) ){
     alert("Sorry, your browser does not support this application!");
     document.getElementById("buttonId").disabled = true;
+  }
+  else{
+
+    subscribeUserToPush();
+
+  } 
 }
-else{
-
-    // validate form data
-    var name = document.getElementById("nameId").value;
-    var email = document.getElementById("emailId").value;
-    var team = document.getElementById("teamId").value;    
-    if(validate(name, email, team)){
-
-	subscribeUserToPush();
-
-	// continue ...
-
-    }else{
-	alert("Check if any field is empty");
-    }
-
-
-}
-
-}
-
 
 
 function subscribeUserToPush() {
@@ -37,7 +22,6 @@ function subscribeUserToPush() {
 	'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4'
       )
     };
-
     return registration.pushManager.subscribe(subscribeOptions);
   })
   .then(function(pushSubscription) {
@@ -53,20 +37,7 @@ function subscribeUserToPush() {
 
 function sendToServer(subscription) {
 
-	// send it to backend too!!!
-    var name = document.getElementById("nameId").value;
-    var email = document.getElementById("emailId").value;
-    var team = document.getElementById("teamId").value;    
-	
-    var data = JSON.parse(subscription);
-
-    data.name = name;
-    data.email = email;
-    data.team = team;
-
-    console.log(data);
-    var subscription = JSON.stringify(data);     
-    console.log(subscription);
+  console.log(subscription);
 
   return fetch('/api/save-subscription/', {
     method: 'POST',
@@ -75,16 +46,6 @@ function sendToServer(subscription) {
     },
     body: subscription
   });
-}
-
-function validate(name, email, team){
-	// check if any field is not empty
-	if(name && email && team){
-	  console.log(name, email, team);
-	  return true;
-	}else{
-	return false
-	}
 }
 
 
@@ -100,6 +61,4 @@ function urlBase64ToUint8Array(base64String) {
      	 }
 	return outputArray;
 }
-
-
 
