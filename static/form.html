@@ -17,6 +17,11 @@
     min-height: 90%;
   }
 
+
+#p2,#p3 {
+    display: none;
+}
+
 </style>
 
 </head>
@@ -33,7 +38,9 @@
     <!-- Header with image -->
     <header class="bgimg w3-display-container w3-grayscale-min" id="home">
       <div class="w3-display-middle w3-center">
-      <p><a onclick="subscribe()"  class="w3-button w3-xxlarge w3-black">Siga o galo!</a></p>
+      <p id="p1"><a onclick="subscribe()"  class="w3-button w3-xxlarge w3-black">Siga o galo!</a></p>
+      <p id="p2" align="center"><img src="images/galo.png" height="70" width="70"></p>
+      <p id="p3"><a class="w3-button w3-xlarge w3-black">Inscrição efetuada</a></p>
       </div>
     </header>
 
@@ -60,6 +67,7 @@
 	   </div>
          </div>
        </div>
+
 
    <script src="subscribe.js"></script>	
 

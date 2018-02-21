@@ -47,9 +47,14 @@ function sendToServer(subscription) {
     body: subscription
   }).then(function(response) {
   if(response.ok) {
-    alert('Obrigado por se inscrever. Aqui é Galo!');
-  } else {
-    console.log('Algo errado aconteceu. Verifique sua conexão com a internet e/ou entre em contato para suporte');
+    
+    document.getElementById("p1").style.display = "none";
+    document.getElementById("p2").style.display = "block";
+    document.getElementById("p3").style.display = "block";
+
+
+  }else {
+    alert('Algo errado aconteceu. Seu cadastro não foi efetuado. Entre em contato para suporte');
   }
 })
 .catch(function(error) {
