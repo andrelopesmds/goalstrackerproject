@@ -45,7 +45,17 @@ function sendToServer(subscription) {
       'Content-Type': 'application/json'
     },
     body: subscription
-  });
+  }).then(function(response) {
+  if(response.ok) {
+    alert('Obrigado por se inscrever. Aqui é Galo!');
+  } else {
+    console.log('Algo errado aconteceu. Verifique sua conexão com a internet e/ou entre em contato para suporte');
+  }
+})
+.catch(function(error) {
+  console.log('There has been a problem with your fetch operation: ' + error.message);
+});
+
 }
 
 
