@@ -27,6 +27,9 @@ app.post('/api/save-subscription/', function (req, res) {
 	
 	controlDB.insert(appPath + '/db/', endpoint, expirationTime, key256, keyAuth );
 
+	res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ data: { success: true } }));
+
 })
 
 
