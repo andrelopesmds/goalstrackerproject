@@ -12,7 +12,25 @@ app.post('/', function(req, res){
   var team = req.body.team;
   var message = req.body.message;
   res.send(team+' :  '+message+'!');
-  triggerPushMsg(subscription, message);
+
+  
+  var p1 = new Promise(function(resolve, reject) {
+    var data = getSubscriptionsFromDatabase();
+    resolve(data);
+  });
+
+  p1.then(function(subscriptions) {
+    // send a message for each subscription found in DB
+    for (let i = 0; i < subscriptions.length; i++) {
+      const subscription = subscriptions[i];
+      triggerPushMsg(subscription, message);   
+    }
+
+
+  }, function(reason) {
+    console.log(reason); // Error!
+  });
+
 })
 
 app.listen(3000, 'localhost')
@@ -44,4 +62,15 @@ function triggerPushMsg(subscription, dataToSend) {
   });
 };
 
+function getSubscriptionsFromDatabase(){
+
+  var data = [];
+  data[0] = subscription;
+  data[1] = subscription;
+
+  return data;
+
+
+
+}
 
