@@ -36,3 +36,25 @@ exports.select = function(path){
 
 };
 
+
+exports.getUsers = function(path, callback){
+
+	var db = new sqlite3.Database(path+'/DB');
+
+        db.serialize(function() {
+
+        db.all("SELECT * from visitors", function(err, allRows) {
+
+            if(err != null){
+                console.log(err);
+                callback(err);
+            }
+
+            callback(allRows);
+            db.close();
+
+        });
+
+    });
+
+}
