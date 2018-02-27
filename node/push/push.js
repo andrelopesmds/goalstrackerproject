@@ -4,6 +4,7 @@ var app = express()
 var appPath = __dirname;
 const path = require('path');
 var bodyParser = require('body-parser')
+var controlDB = require('../app/controlDB.js');
 
 app.use(bodyParser.urlencoded({ extended: false}));
 
@@ -13,23 +14,7 @@ app.post('/', function(req, res){
   var message = req.body.message;
   res.send(team+' :  '+message+'!');
 
-  
-  var p1 = new Promise(function(resolve, reject) {
-    var data = getSubscriptionsFromDatabase();
-    resolve(data);
-  });
-
-  p1.then(function(subscriptions) {
-    // send a message for each subscription found in DB
-    for (let i = 0; i < subscriptions.length; i++) {
-      const subscription = subscriptions[i];
-      triggerPushMsg(subscription, message);   
-    }
-
-
-  }, function(reason) {
-    console.log(reason); // Error!
-  });
+  getSubscriptionsFromDatabase(sendMsg, message);
 
 })
 
@@ -49,8 +34,6 @@ webpush.setVapidDetails(
   vapidKeys.privateKey
 );
 
-const subscription = {"endpoint":"https://fcm.googleapis.com/fcm/send/fO2ny_yVTOs:APA91bG7cAHUJs065IXAA6ibGLPo7sGTYFzzctlHVM093rQtPWBpKHpvMlIJCKbP436N-i5BSw7bbFUYQJjW2ylBZPCAawwgjexdLxbsiwN7oBxlMIx55q1-nEpsGySIZKbWznSdOF74","expirationTime":null,"keys":{"p256dh":"BAShEE-6cXc3b-bYq_VD0Qw9DkCYn5vT8zSveToHh7obFQORj8JJYEsOP4hki_JX-nZ0V8mftFQCVSXoDUioIXM=","auth":"_djATzijEJB4C_1qXiAqJw=="}} // andre's mobile
-
 function triggerPushMsg(subscription, dataToSend) {
   return webpush.sendNotification(subscription, dataToSend)
   .catch((err) => {
@@ -62,15 +45,27 @@ function triggerPushMsg(subscription, dataToSend) {
   });
 };
 
-function getSubscriptionsFromDatabase(){
+function getSubscriptionsFromDatabase(callback, teste){
 
-  var data = [];
-  data[0] = subscription;
-  data[1] = subscription;
+  controlDB.getUsers(path.join(appPath,'../app/db'), function(subscriptions){
 
-  return data;
+    callback(subscriptions, teste);
+
+});
 
 
+}
 
+function sendMsg(data, message){
+
+  for (let i = 0; i < data.length; i++) {
+
+    const subscription = {"endpoint":data[i].endpoint ,"expirationTime":data[i].expirationTime,"keys":{"p256dh":data[i].key256,"auth":data[i].keyAuth}} 
+  
+    triggerPushMsg(subscription, message);
+  
+    console.log(data[i]);
+    
+  }
 }
 
