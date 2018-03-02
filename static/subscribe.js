@@ -6,25 +6,60 @@ function subscribe(){
   }
   else{
 
-    subscribeUserToPush();
+    registerServiceWorker();
 
   } 
 }
 
 
-function subscribeUserToPush() {
-  return navigator.serviceWorker.register('service-worker.js')
-  .then(function(registration) {
-    console.log('Service worker successfully registered.');
+function registerServiceWorker(){
+
+    navigator.serviceWorker.register('service-worker.js')
+    .then( function (reg) {
+        var serviceWorker;
+        if (reg.installing) {
+            serviceWorker = reg.installing;
+            // console.log('Service worker installing');
+        } else if (reg.waiting) {
+            serviceWorker = reg.waiting;
+            // console.log('Service worker installed & waiting');
+        } else if (reg.active) {
+            serviceWorker = reg.active;
+            // console.log('Service worker active');
+        }
+
+        if (serviceWorker) {
+            console.log("sw current state", serviceWorker.state);
+            if (serviceWorker.state == "activated") {
+                //console.log("sw already activated - Do watever needed here");
+            }
+            serviceWorker.addEventListener("statechange", function(e) {
+                console.log("sw statechange : ", e.target.state);
+                if (e.target.state == "activated") {
+                    // use pushManger for subscribing here.
+                    subscribeUserToPush(reg);
+	            console.log('Service worker registered and activated.');
+                }
+            });
+        }
+    },
+    function (err) {
+        console.error('unsuccessful registration with ', workerFileName, err);
+    }
+);
+
+}
+
+
+function subscribeUserToPush(registration) {
     const subscribeOptions = {
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
 	'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4'
       )
     };
-    return registration.pushManager.subscribe(subscribeOptions);
-  })
-  .then(function(pushSubscription) {
+    return registration.pushManager.subscribe(subscribeOptions)
+    .then(function(pushSubscription) {
 
 	var data = JSON.stringify(pushSubscription);
         console.log('Received PushSubscription: ', data);
