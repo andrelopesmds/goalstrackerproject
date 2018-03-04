@@ -4,18 +4,22 @@ exports.createDB = function(path){
 
 	var db = new sqlite3.Database(path+'/DB');
 
-	db.run("CREATE TABLE IF NOT EXISTS visitors (endpoint VARCHAR(250), expirationTime VARCHAR(50), key256 VARCHAR(250), keyAuth VARCHAR(250)  )");
+	db.run("CREATE TABLE IF NOT EXISTS visitors (endpoint VARCHAR(250), expirationTime VARCHAR(50), key256 VARCHAR(250), keyAuth VARCHAR(250) , subscribeDate TEXT , unsubscribeDate TEXT )");
 
 	db.close();
 };
 
 exports.insert = function(path, endpoint, expirationTime, key256, keyAuth){
 
+
+        var date = new Date();
+        var dateISO = date.toISOString();
+
 	var db = new sqlite3.Database(path+'/DB');
 
-	var stmt = db.prepare("INSERT INTO visitors VALUES (?,?,?,?)");
+	var stmt = db.prepare("INSERT INTO visitors VALUES (?,?,?,?,?,?)");
 
-	stmt.run(endpoint,expirationTime,key256,keyAuth);
+	stmt.run(endpoint,expirationTime,key256,keyAuth, dateISO, null );
 
 	stmt.finalize();
 
