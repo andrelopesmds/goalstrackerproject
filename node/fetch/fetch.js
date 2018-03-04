@@ -69,10 +69,10 @@ function configMessage(data){
           message = "Começa o jogo!\n"+data.team1+" x "+data.team2;
           break;
       case 'Halftime':
-          message = "Fim do primeiro tempo!\n"+data.team1+" x "+data.team2;
+          message = "Fim do primeiro tempo!\n"+data.team1+" "+score+" "+data.team2;
           break;
       case '2nd Half Started':
-          message = "Começa o segundo tempo!\n"+data.team1+" x "+data.team2;
+          message = "Começa o segundo tempo!\n"+data.team1+" "+score+" "+data.team2;
           break;
       case 'Match Postponed':
           message = "Jogo adiado!\n"+data.team1+" x "+data.team2;
