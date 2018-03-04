@@ -1,7 +1,7 @@
 function subscribe(){
 
   if ( !('serviceWorker' in navigator) || !('PushManager' in window) ){
-    alert("Sorry, your browser does not support this application!");
+    alert("Seu navegador não suporta o envio de notificações!");
     document.getElementById("buttonId").disabled = true;
   }
   else{
