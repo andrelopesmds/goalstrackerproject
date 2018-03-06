@@ -1,7 +1,7 @@
 var TimerJob = require('timer-jobs');
 var jobTime = 5000;   // set the time in ms
 var sportsLive = require('sports-live');
-var team = 'Austria (W)';
+var team = 'Pontedera';
 var buffer;
 var score;
 var request = require('request');
@@ -51,40 +51,65 @@ var fetchGoals = new TimerJob({interval: jobTime}, function(done){
 
 fetchGoals.start();
 
-			
+
 function configMessage(data){
   
-  if(data.currentStatus.includes(data.team1)){
+ if(data.currentStatus.includes(data.team1)){
 
-    message = "Gol do "+data.team1+"!\n"+data.team1+" "+score+" "+data.team2;
+    var title = "Gol do "+data.team1+"!";
+    var body = data.team1+" "+score+" "+data.team2;
+    var icon = "images/ball.png";
 
   } else if (data.currentStatus.includes(data.team2)){
 
-    message = "Gol do "+data.team2+"!\n"+data.team1+" "+score+" "+data.team2;
+    var title = message = "Gol do "+data.team2+"!";
+    var body = data.team1+" "+score+" "+data.team2;
+    var icon = "images/ball.png";
 
   } else {
 
     switch (data.currentStatus) {
       case 'Kick Off':
-          message = "Começa o jogo!\n"+data.team1+" x "+data.team2;
+          var title = "Começa o jogo!\n";
+          var body = data.team1+" x "+data.team2;
+          var icon = "images/field.png";
           break;
       case 'Halftime':
-          message = "Fim do primeiro tempo!\n"+data.team1+" "+score+" "+data.team2;
+          var title = "Fim do primeiro tempo!\n";
+          var body = data.team1+" "+score+" "+data.team2;
+          var icon = "images/time.png";
           break;
       case '2nd Half Started':
-          message = "Começa o segundo tempo!\n"+data.team1+" "+score+" "+data.team2;
+          var title = "Começa o segundo tempo!\n";
+          var body = data.team1+" "+score+" "+data.team2;
+          var icon = "images/field.png";
           break;
       case 'Match Postponed':
-          message = "Jogo adiado!\n"+data.team1+" x "+data.team2;
+          var title = "Jogo adiado!\n";
+          var body = data.team1+" x "+data.team2;
+          var icon = "images/time.png";
           break;
       case 'Match Finished':
-          message = "Fim de jogo!\n"+data.team1+" "+score+" "+data.team2;
+          var title = "Fim de jogo!\n";
+          var body = data.team1+" "+score+" "+data.team2;
+          var icon = "images/time.png";
           break;
       default:
-          message = "Galo!";
+          var title = "Galo!";
+          var body = "Galo!";
+          var icon = "images/galo.png";
     }
   }
 
-  return message;
+  var json = {
+  "title": title,
+  "body": body,
+  "icon": icon
+  }
 
+  var data = JSON.stringify(json);
+
+  return data;
 }
+
+

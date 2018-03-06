@@ -2,24 +2,21 @@ self.addEventListener('push', function(event) {
   if (event.data) {
     console.log('This push event has data: ', event.data.text());
 
-    const options = {
-	"icon": 'images/ball.png'
-				
-};
 
-    const promiseChain = self.registration.showNotification(event.data.text(), options);
+    var json = JSON.parse(event.data.text());
+    var title = json.title;
+
+
+    const options = {
+        "icon": json.icon,
+	"body": json.body
+    };
+
+    const promiseChain = self.registration.showNotification(title, options);
     event.waitUntil(promiseChain);
 
   } else {
     console.log('This push event has no data.');
   }
 });
-
-/*
-self.addEventListener('push', function(event) {
-  const promiseChain = self.registration.showNotification('Hello, World.');
-
-  event.waitUntil(promiseChain);
-});
-*/
 
