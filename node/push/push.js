@@ -63,9 +63,10 @@ function sendMsg(data, message){
     const subscription = {"endpoint":data[i].endpoint ,"expirationTime":data[i].expirationTime,"keys":{"p256dh":data[i].key256,"auth":data[i].keyAuth}} 
   
     triggerPushMsg(subscription, message);
-  
-    console.log(data[i]);
-    
+
+     console.log(data[i]);
+     console.log(message);
+     
   }
 }
 
