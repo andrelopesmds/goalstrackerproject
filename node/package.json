@@ -1,5 +1,5 @@
 {
-  "name": "goalstrackersproject",
+  "name": "goalstrackerproject",
   "version": "1.0.0",
   "description": "Pet project",
   "main": "app.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrelms1/goalstrackersproject.git"
+    "url": "git+https://github.com/andrelms1/goalstrackerproject.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/andrelms1/goalstrackersproject/issues"
+    "url": "https://github.com/andrelms1/goalstrackerproject/issues"
   },
-  "homepage": "https://github.com/andrelms1/goalstrackersproject#readme",
+  "homepage": "https://github.com/andrelms1/goalstrackerproject#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "data-validate": "^1.0.2",
