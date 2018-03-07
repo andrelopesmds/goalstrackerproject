@@ -5,7 +5,7 @@ self.addEventListener('push', function(event) {
 
     var json = JSON.parse(event.data.text());
     var title = json.title;
-    var badge = 'images/galo.png';
+    var badge = 'images/galoBadge.png';
 
 
     const options = {
