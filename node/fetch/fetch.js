@@ -72,7 +72,7 @@ function configMessage(data){
       case 'Kick Off':
           var title = "Começa o jogo!\n";
           var body = data.team1+" x "+data.team2;
-          var icon = "images/field.png";
+          var icon = "images/galo.png";
           break;
       case 'Halftime':
           var title = "Fim do primeiro tempo!\n";
@@ -82,7 +82,7 @@ function configMessage(data){
       case '2nd Half Started':
           var title = "Começa o segundo tempo!\n";
           var body = data.team1+" "+score+" "+data.team2;
-          var icon = "images/field.png";
+          var icon = "images/time.png";
           break;
       case 'Match Postponed':
           var title = "Jogo adiado!\n";
