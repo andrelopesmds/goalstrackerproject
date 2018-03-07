@@ -5,11 +5,13 @@ self.addEventListener('push', function(event) {
 
     var json = JSON.parse(event.data.text());
     var title = json.title;
+    var badge = 'images/galo.png';
 
 
     const options = {
         "icon": json.icon,
-	"body": json.body
+	"body": json.body,
+        "badge": badge
     };
 
     const promiseChain = self.registration.showNotification(title, options);
