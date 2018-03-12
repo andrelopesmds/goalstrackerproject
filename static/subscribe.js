@@ -82,10 +82,15 @@ function sendToServer(subscription) {
     body: subscription
   }).then(function(response) {
   if(response.ok) {
-    
-    document.getElementById("p1").style.display = "none";
-    document.getElementById("p2").style.display = "block";
-    document.getElementById("p3").style.display = "block";
+   
+//    detectUser();
+   document.getElementById("p1").style.visibility = "hidden";
+  document.getElementById("p2").style.visibility = "visible";
+  document.getElementById("p3").style.visibility = "visible";
+     
+//    document.getElementById("p1").style.display = "none";
+  //  document.getElementById("p2").style.display = "block";
+   // document.getElementById("p3").style.display = "block";
 
 
   }else {
@@ -112,3 +117,4 @@ function urlBase64ToUint8Array(base64String) {
 	return outputArray;
 }
 
+ 
