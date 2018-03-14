@@ -84,13 +84,13 @@ function sendToServer(subscription) {
   if(response.ok) {
    
 //    detectUser();
-   document.getElementById("p1").style.visibility = "hidden";
-  document.getElementById("p2").style.visibility = "visible";
-  document.getElementById("p3").style.visibility = "visible";
+//   document.getElementById("p1").style.visibility = "hidden";
+//  document.getElementById("p2").style.visibility = "visible";
+//  document.getElementById("p3").style.visibility = "visible";
      
-//    document.getElementById("p1").style.display = "none";
-  //  document.getElementById("p2").style.display = "block";
-   // document.getElementById("p3").style.display = "block";
+  document.getElementById("p1").style.display = "none";
+  document.getElementById("p2").style.display = "";
+  document.getElementById("p3").style.display = "";
 
 
   }else {

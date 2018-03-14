@@ -17,45 +17,48 @@
 <style>
 
 body, html {
-    height: 100%;
+  height: 100%;
 }
-.bg { 
-    /* The image used */
-    background-image: url("images/estadio.jpg");
 
-    /* Full height */
-    height: 100%; 
-   
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}             
+.bg { 
+  /* The image used */
+  background-image: url("images/estadio.jpg");
+
+  /* Fullscreem */
+  height: 100%; 
+  width: 100%; 
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  display: table;}             
 
 #buttons {
-  position: relative;
-  top: 40%;
-  text-align: center;  
-  }
+
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;  }
+
 .btn {
-    margin: 5px;}
-  .navbar {
-    text-align: left;}
+  margin: 5px;}
+
+.navbar {
+  text-align: left;}
   
-  #p1 {
-    visibility: visible;
-  }
-  #p2, #p3 {
-    visibility: hidden;
-  }                    
+#p1 {
+  visibility: visible;}
+
+#p2, #p3 {
+  /*  visibility: hidden;*/}                    
 
 html,body, #about {
-    background-color: black;   
-    background-size: 100% 100%;    
-    background-repeat: no-repeat; 
-    font-family: "Itim", "cursive";
-    font-size: large;} 
-
+  background-color: black;   
+  background-size: 100% 100%;    
+  background-repeat: no-repeat; 
+  font-family: "Itim", "cursive";
+  font-size: large;} 
 
 </style>
 
@@ -65,24 +68,20 @@ html,body, #about {
 
 <div id="home" class="bg">
 
-
-<!-- Menu  -->
-<nav class="navbar navbar-expand-lg fixed-top navbar-light">
-  <a href="#home" class="btn  btn-dark">INÍCIO</a>
-  <a href="#about" class="btn  btn-dark">SOBRE</a>
-</nav>
-
-
-<!-- Button to subscribe  -->
-<div id="buttons">    
- <div class="">
-    <p onclick="subscribe()" id="p1" class="bt btn btn-lg btn-dark">Clique aqui e siga o Galo!</p>
-    <p id="p2"><img src="images/galo.png" height="70" width="70"></p>
-    <p id="p3" class="bt btn btn-lg btn-dark">Inscrição Efetuada!</p>
+  <!-- Menu  -->
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+    <a href="#home" class="btn  btn-dark">INÍCIO</a>
+    <a href="#about" class="btn  btn-dark">SOBRE</a>
+  </nav>
+  
+  <!-- Button to subscribe  -->
+  <div id="buttons">    
+    <div class="">
+      <p onclick="subscribe()" id="p1" class="bt btn btn-lg btn-dark">Clique aqui e siga o Galo!</p>
+      <p id="p2"><img src="images/galo.png" height="70" width="70"></p>
+      <p id="p3" class="bt btn btn-lg btn-dark">Inscrição Efetuada!</p>
+    </div>
   </div>
-</div>
-
-
 
 </div>
 
