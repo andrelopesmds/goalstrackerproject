@@ -1,5 +1,5 @@
 var TimerJob = require('timer-jobs');
-var jobTime = 5000;   // set the time in ms
+var jobTime = 120000;   // set the time in ms
 var sportsLive = require('sports-live');
 var team = 'Pontedera';
 var buffer;
