@@ -22,7 +22,7 @@ body, html {
 
 .bg { 
   /* The image used */
-  background-image: url("images/estadio.jpg");
+  background-image: url("images/estadioExtraLarge.jpg");
 
   /* Fullscreem */
   height: 100%; 
@@ -59,6 +59,38 @@ html,body, #about {
   background-repeat: no-repeat; 
   font-family: "Itim", "cursive";
   font-size: large;} 
+
+
+
+@media (max-width: 569.98px) {
+  .bg{
+    background-image: url("images/estadioExtraSmall.jpg");
+  }  
+}
+
+@media (min-width: 570px) and (max-width: 767.98px) {
+.bg{
+    background-image: url("images/estadioSmall.jpg");
+  }  
+}
+
+@media (min-width: 768px) and  (max-width: 991.98px) {
+  .bg{
+    background-image: url("images/estadioMedium.jpg");
+  }  
+}
+
+@media (min-width: 992px) and  (max-width: 1199.98px) {
+  .bg{
+    background-image: url("images/estadioLarge.jpg");
+  }  
+} 
+
+@media (orientation: landscape){
+  .bg{
+    background-image: url("images/estadioExtraLarge.jpg");
+  }
+}
 
 </style>
 
