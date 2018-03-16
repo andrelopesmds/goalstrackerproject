@@ -38,7 +38,7 @@ function triggerPushMsg(subscription, dataToSend) {
   return webpush.sendNotification(subscription, dataToSend)
   .catch((err) => {
     if (err.statusCode === 410) {
-      return deleteSubscriptionFromDatabase(subscription._id);
+      return removeSubscriptionFromDatabase(subscription);
     } else {
       console.log('Subscription is no longer valid: ', err);
     }
@@ -70,3 +70,8 @@ function sendMsg(data, message){
   }
 }
 
+function removeSubscriptionFromDatabase(subscription){
+
+  controlDB.removeSubscription(path.join(appPath,'../app/db'), subscription);
+
+}
