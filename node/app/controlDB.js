@@ -28,6 +28,8 @@ exports.insert = function(path, endpoint, expirationTime, key256, keyAuth){
 
 exports.select = function(path){
 
+  //  get all rows in DB
+
 	var db = new sqlite3.Database(path+'/DB');
 
 	db.serialize(function(){
@@ -43,11 +45,13 @@ exports.select = function(path){
 
 exports.getUsers = function(path, callback){
 
+  // get only active users
+
 	var db = new sqlite3.Database(path+'/DB');
 
         db.serialize(function() {
 
-        db.all("SELECT * from visitors", function(err, allRows) {
+        db.all("SELECT * from visitors WHERE unsubscribeDate IS NULL", function(err, allRows) {
 
             if(err != null){
                 console.log(err);
@@ -64,9 +68,6 @@ exports.getUsers = function(path, callback){
 }
 
 exports.removeSubscription = function(path, subscription){
-
-  console.log("hey");
-  console.log(subscription);
 
   var date = new Date();
   var dateISO = date.toISOString();
