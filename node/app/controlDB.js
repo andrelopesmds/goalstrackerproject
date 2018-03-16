@@ -62,3 +62,19 @@ exports.getUsers = function(path, callback){
     });
 
 }
+
+exports.removeSubscription = function(path, subscription){
+
+  console.log("hey");
+  console.log(subscription);
+
+  var date = new Date();
+  var dateISO = date.toISOString();
+
+  var db = new sqlite3.Database(path+'/DB');
+
+  db.run("UPDATE visitors SET unsubscribeDate = ? WHERE endpoint = ?", dateISO, subscription.endpoint);
+
+  db.close();
+
+}
