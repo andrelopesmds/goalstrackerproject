@@ -1,7 +1,7 @@
 var TimerJob = require('timer-jobs');
 var jobTime = 120000;   // set the time in ms
 var sportsLive = require('sports-live');
-var team = 'Pontedera';
+var team = 'Atletico Mineiro';
 var buffer;
 var score;
 var request = require('request');
