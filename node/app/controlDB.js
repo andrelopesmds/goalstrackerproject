@@ -1,59 +1,60 @@
 var sqlite3 = require('sqlite3').verbose();
 
-exports.createDB = function(path){
+exports.createDB = function(path) {
 
-	var db = new sqlite3.Database(path+'/DB');
+    var db = new sqlite3.Database(path + '/DB');
 
-	db.run("CREATE TABLE IF NOT EXISTS visitors (endpoint VARCHAR(250), expirationTime VARCHAR(50), key256 VARCHAR(250), keyAuth VARCHAR(250) , subscribeDate TEXT , unsubscribeDate TEXT )");
+    db.run("CREATE TABLE IF NOT EXISTS visitors (endpoint VARCHAR(250), expirationTime VARCHAR(50), key256 VARCHAR(250), keyAuth VARCHAR(250) , subscribeDate TEXT , unsubscribeDate TEXT )");
 
-	db.close();
+    db.close();
 };
 
-exports.insert = function(path, endpoint, expirationTime, key256, keyAuth){
+exports.insert = function(path, endpoint, expirationTime, key256, keyAuth) {
 
 
-        var date = new Date();
-        var dateISO = date.toISOString();
+    var date = new Date();
+    var dateISO = date.toISOString();
 
-	var db = new sqlite3.Database(path+'/DB');
+    var db = new sqlite3.Database(path + '/DB');
 
-	var stmt = db.prepare("INSERT INTO visitors VALUES (?,?,?,?,?,?)");
+    var stmt = db.prepare("INSERT INTO visitors VALUES (?,?,?,?,?,?)");
 
-	stmt.run(endpoint,expirationTime,key256,keyAuth, dateISO, null );
+    stmt.run(endpoint, expirationTime, key256, keyAuth, dateISO, null);
 
-	stmt.finalize();
+    stmt.finalize();
 
-	db.close();
+    db.close();
 };
 
-exports.select = function(path){
+exports.select = function(path) {
 
-  //  get all rows in DB
+    //  get all rows in DB
 
-	var db = new sqlite3.Database(path+'/DB');
+    var db = new sqlite3.Database(path + '/DB');
 
-	db.serialize(function(){
+    db.serialize(function() {
 
-		db.each("SELECT * from visitors", function(err, row){					console.log(row);
-		});
-	});	
+        db.each("SELECT * from visitors", function(err, row) {
+            console.log(row);
+        });
+    });
 
-	db.close();
+    db.close();
 
 };
 
 
-exports.getUsers = function(path, callback){
+exports.getUsers = function(path, callback) {
 
-  // get only active users
+    // get only active users
 
-	var db = new sqlite3.Database(path+'/DB');
+    var db = new sqlite3.Database(path + '/DB');
 
-        db.serialize(function() {
+    db.serialize(function() {
 
         db.all("SELECT * from visitors WHERE unsubscribeDate IS NULL", function(err, allRows) {
 
-            if(err != null){
+            if (err != null) {
                 console.log(err);
                 callback(err);
             }
@@ -67,15 +68,15 @@ exports.getUsers = function(path, callback){
 
 }
 
-exports.removeSubscription = function(path, subscription){
+exports.removeSubscription = function(path, subscription) {
 
-  var date = new Date();
-  var dateISO = date.toISOString();
+    var date = new Date();
+    var dateISO = date.toISOString();
 
-  var db = new sqlite3.Database(path+'/DB');
+    var db = new sqlite3.Database(path + '/DB');
 
-  db.run("UPDATE visitors SET unsubscribeDate = ? WHERE endpoint = ?", dateISO, subscription.endpoint);
+    db.run("UPDATE visitors SET unsubscribeDate = ? WHERE endpoint = ?", dateISO, subscription.endpoint);
 
-  db.close();
+    db.close();
 
 }
