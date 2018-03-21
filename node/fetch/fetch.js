@@ -61,13 +61,13 @@ function configMessage(data) {
     if (data.currentStatus.includes(data.team1)) {
 
         var title = "Gol do " + data.team1 + "!";
-        var body = data.team1 + " " + score + " " + data.team2;
+        var body = data.team1 + " " + data.score + " " + data.team2;
         var icon = "images/ball.png";
 
     } else if (data.currentStatus.includes(data.team2)) {
 
         var title = message = "Gol do " + data.team2 + "!";
-        var body = data.team1 + " " + score + " " + data.team2;
+        var body = data.team1 + " " + data.score + " " + data.team2;
         var icon = "images/ball.png";
 
     } else {
@@ -80,12 +80,12 @@ function configMessage(data) {
                 break;
             case 'Halftime':
                 var title = "Fim do primeiro tempo!\n";
-                var body = data.team1 + " " + score + " " + data.team2;
+                var body = data.team1 + " " + data.score + " " + data.team2;
                 var icon = "images/time.png";
                 break;
             case '2nd Half Started':
                 var title = "Começa o segundo tempo!\n";
-                var body = data.team1 + " " + score + " " + data.team2;
+                var body = data.team1 + " " + data.score + " " + data.team2;
                 var icon = "images/time.png";
                 break;
             case 'Match Postponed':
@@ -95,7 +95,7 @@ function configMessage(data) {
                 break;
             case 'Match Finished':
                 var title = "Fim de jogo!\n";
-                var body = data.team1 + " " + score + " " + data.team2;
+                var body = data.team1 + " " + data.score + " " + data.team2;
                 var icon = "images/time.png";
                 break;
             default:
@@ -115,3 +115,7 @@ function configMessage(data) {
 
     return data;
 }
+
+var C = {};
+C.configMessage = configMessage;
+module.exports = C;
