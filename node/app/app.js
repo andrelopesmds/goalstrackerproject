@@ -17,15 +17,13 @@ app.use(bodyParser.json())
 
 app.post('/api/save-subscription/', function(req, res) {
 
-    console.log("from server ... ");
-    console.log(req.body);
-    console.log(req.body.endpoint);
-    console.log(req.body.keys.auth);
+  var endpoint = req.body.endpoint;
+  var expirationTime = req.body.expirationTime;
+  var key256 = req.body.keys.p256dh;
+  var keyAuth = req.body.keys.auth;
 
-    var endpoint = req.body.endpoint;
-    var expirationTime = req.body.expirationTime;
-    var key256 = req.body.keys.p256dh;
-    var keyAuth = req.body.keys.auth;
+  // endpoint and keys are required, expirationTime is optional
+  if(endpoint && key256 && keyAuth){
 
     controlDB.insert(appPath + '/db/', endpoint, expirationTime, key256, keyAuth);
 
@@ -36,8 +34,20 @@ app.post('/api/save-subscription/', function(req, res) {
         }
     }));
 
-})
+  }else {
 
+    res.setHeader('Content-Type', 'application/json');
+    res.status(400)
+    res.send(JSON.stringify({
+        data: {
+            success: false
+        }
+    }));
+
+  }
+
+})
 
 app.listen(8080, 'localhost')
 
+module.exports = app; // for testing

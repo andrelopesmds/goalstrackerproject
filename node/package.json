@@ -18,6 +18,8 @@
   "homepage": "https://github.com/andrelms1/goalstrackerproject#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "data-validate": "^1.0.2",
     "express": "^4.16.1",
     "formidable": "^1.1.1",

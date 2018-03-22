@@ -10,9 +10,9 @@ var game = {
 
 describe('Fetch service', function(){
 
-  describe('Config message', function(){
+  describe('should have a config message method', function(){
 
-    it('should have a configMessage Method', function(){
+    it('should be a function', function(){
       assert.equal(typeof C, 'object');
       assert.equal(typeof C.configMessage, 'function');
     })
@@ -21,15 +21,15 @@ describe('Fetch service', function(){
        assert.equal(typeof C.configMessage(game) , 'string');
     })
     
-    it("should return 'Gol do Atletico Mineiro!'", function(){  
+    it("should return title message", function(){  
       assert.equal(JSON.parse(C.configMessage(game)).title, 'Gol do Atletico Mineiro!');
     })
 
-    it("should return 'Atletico Mineiro 3-1 Cruzeiro'", function(){
+    it("should return body message", function(){
       assert.equal(JSON.parse(C.configMessage(game)).body, 'Atletico Mineiro 3-1 Cruzeiro');
     })
 
-    it("should return 'images/ball.png'", function(){
+    it("should return icon path", function(){
       assert.equal(JSON.parse(C.configMessage(game)).icon, 'images/ball.png');
     })
 
