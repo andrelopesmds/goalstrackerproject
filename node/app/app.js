@@ -48,6 +48,18 @@ app.post('/api/save-subscription/', function(req, res) {
 
 })
 
+app.get('/statistics/', function(req, res){
+
+  controlDB.getNumberOfUsers(appPath + '/db/', function(number){
+    console.log(number);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ 'number': number  }));
+  }); 
+
+})
+
 app.listen(8080, 'localhost')
 
 module.exports = app; // for testing
+
+
