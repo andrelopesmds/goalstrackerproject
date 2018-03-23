@@ -13,7 +13,18 @@ var invalidSubscription = {"end":"https://fcm.googleapis.com/fcm/send/f0WEtgCFsk
 
 describe('API - Save subscription service', function() {
 
-  it('should response with status 200 after valid subscription', function(done){
+   // why it does not work if I put it at the end ?????
+  it('should response with status 200 after get statistics', function(done){
+    chai.request(server)
+      .get('/statistics/')
+      .end(function(err, res){
+        expect(err).to.be.null;
+        res.should.have.status(200);
+       done();
+      });
+  });
+
+ it('should response with status 200 after (post) valid subscription', function(done){
     chai.request(server)
       .post('/api/save-subscription/')
       .send(validSubscription)
@@ -24,7 +35,7 @@ describe('API - Save subscription service', function() {
       });
   });
 
-  it('should response with json after valid subscription', function(done){
+ it('should response with json after (post) valid subscription', function(done){
     chai.request(server)
       .post('/api/save-subscription/')
       .send(validSubscription)
@@ -34,7 +45,7 @@ describe('API - Save subscription service', function() {
       });
   });
 
-  it('should response with status 400 after invalid subscription', function(done){
+ it('should response with status 400 after (post) invalid subscription', function(done){
     chai.request(server)
       .post('/api/save-subscription/')
       .send(invalidSubscription)
@@ -48,6 +59,8 @@ describe('API - Save subscription service', function() {
 
 
 });
+
+
 
 
 

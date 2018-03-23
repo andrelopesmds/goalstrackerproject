@@ -80,3 +80,26 @@ exports.removeSubscription = function(path, subscription) {
     db.close();
 
 }
+
+exports.getNumberOfUsers = function(path, callback) {
+
+    // get the number of active users
+
+    var db = new sqlite3.Database(path + '/DB');
+
+    db.get("SELECT count(*) from visitors WHERE unsubscribeDate IS NULL", function(err, res){
+
+      if(err != null){
+        console.log(err);
+        callback(err);
+      }
+      console.log(res);
+      callback(res["count(*)"]);
+    });
+
+    db.close();
+};
+
+
+
+
