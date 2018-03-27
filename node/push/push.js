@@ -10,13 +10,27 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// routes
 app.post('/', function(req, res) {
-    var team = req.body.team;
-    var message = req.body.message;
-    res.send(team + ' :  ' + message + '!');
+
+  var team = req.body.team;
+  var message = req.body.message;
+
+  if (team && message){
 
     getSubscriptionsFromDatabase(sendMsg, message);
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      'success': true
+    }));
+
+  } else{
+
+    // bad request
+    res.setHeader('Content-Type', 'application/json');
+    res.status(400)
+    res.send( {'success': false} );
+  }
 
 })
 
@@ -82,3 +96,6 @@ function removeSubscriptionFromDatabase(subscription) {
     controlDB.removeSubscription(path.join(appPath, '../app/db'), subscription);
 
 }
+
+module.exports = app; // for testing
+
