@@ -44,6 +44,32 @@ exports.select = function(path) {
 };
 
 
+exports.getSubscriptionDates = function(path, callback) {
+
+    // get all subscription dates
+
+    var db = new sqlite3.Database(path + '/DB');
+
+    db.serialize(function() {
+
+        db.all("SELECT subscribeDate, unsubscribeDate from visitors", function(err, allRows) {
+
+            if (err != null) {
+                console.log(err);
+                callback(err);
+            }
+
+            callback(allRows);
+            db.close();
+
+        });
+
+    });
+
+}
+
+
+
 exports.getUsers = function(path, callback) {
 
     // get only active users
