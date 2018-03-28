@@ -85,9 +85,6 @@ function sendMsg(data, message) {
 
         triggerPushMsg(subscription, message);
 
-        console.log(data[i]);
-        console.log(message);
-
     }
 }
 

@@ -11,7 +11,7 @@ var validSubscription = {"endpoint":"https://fcm.googleapis.com/fcm/send/f0WEtgC
 var invalidSubscription = {"end":"https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP","expirationTime":null,"keys":{"p256dh":"BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=","auth":"GS_k7K70ihQtA1GvfAZ8wA=="}};
 
 
-describe('API - Save subscription service', function() {
+describe('App service', function() {
 
  it('should respond to post valid subscription', function(done){
     chai.request(server)
