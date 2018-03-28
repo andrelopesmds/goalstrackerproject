@@ -2,59 +2,66 @@ var TimerJob = require('timer-jobs');
 var jobTime = 120000; // set the time in ms
 var sportsLive = require('sports-live');
 var team = 'Atletico Mineiro';
-var buffer;
-var score;
 var request = require('request');
 
+// global variables
+var buffer;  
+var score;
 
-var fetchGoals = new TimerJob({
-    interval: jobTime
-}, function(done) {
+var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
 
-    sportsLive.getAllMatches("soccer", function(err, matches) {
-
-        if (err) {
-            console.log(err.message);
-        } else {
-            for (i = 0; i < matches.length; i++) {
-                if (matches[i].team1 == team || matches[i].team2 == team) {
-
-
-                    if (buffer != matches[i].currentStatus || score != matches[i].score) {
-                        buffer = matches[i].currentStatus;
-                        score = matches[i].score;
-                        console.log('new status in this game!');
-                        console.log(matches[i].currentStatus);
-                        var msg = configMessage(matches[i]);
-                        request.post('http://localhost:3000', {
-                            form: {
-                                team: 'galo',
-                                message: msg
-                            }
-                        }, function(error, response, body) {
-                            console.log('error:', error); // Print the error if one occurred
-                            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-                            console.log('body:', body);
-                        });
-
-                    }
-                }
-
-            }
-        }
-
-
-    });
-
-
-    console.log('...');
-    done();
+  runApi(sendRequest);
+  console.log('...');
+  done();
 
 });
 
 
 fetchGoals.start();
 
+
+function sendRequest(matches){
+
+  for (i = 0; i < matches.length; i++) {
+ 
+    if (matches[i].team1 == team || matches[i].team2 == team) {
+
+      if (buffer != matches[i].currentStatus || score != matches[i].score) {
+                       
+        buffer = matches[i].currentStatus;
+        score = matches[i].score;
+        console.log('new status in this game!');
+        console.log(matches[i].currentStatus);
+        var msg = configMessage(matches[i]);
+        request.post('http://localhost:3000', {
+          form: {
+            team: 'galo',
+            message: msg
+            }
+        }, function(error, response, body) {
+          console.log('error:', error); // Print the error if one occurred
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+          console.log('body:', body);
+        });
+      }
+    }
+  }
+}
+
+
+function runApi(callback){
+
+  sportsLive.getAllMatches("soccer", function(err, matches) {
+
+    if (err) { 
+      console.log(err.message);
+      
+    } else {
+      callback(matches);
+       
+    }
+  });
+}
 
 function configMessage(data) {
 
@@ -118,4 +125,5 @@ function configMessage(data) {
 
 var C = {};
 C.configMessage = configMessage;
+C.runApi = runApi;
 module.exports = C;

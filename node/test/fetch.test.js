@@ -26,4 +26,15 @@ describe('Fetch service', function(){
 
   })
 
+
+  
+  describe('should have a runApi method', function(){
+
+    it('which is a function', function(){
+      assert.equal(typeof C, 'object');
+      assert.equal(typeof C.runApi, 'function');
+    })
+  
+  })
+
 })
