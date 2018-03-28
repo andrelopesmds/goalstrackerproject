@@ -13,46 +13,50 @@ var invalidSubscription = {"end":"https://fcm.googleapis.com/fcm/send/f0WEtgCFsk
 
 describe('API - Save subscription service', function() {
 
-   // why it does not work if I put it at the end ?????
-  it('should response with status 200 after get statistics', function(done){
-    chai.request(server)
-      .get('/statistics/')
-      .end(function(err, res){
-        expect(err).to.be.null;
-        res.should.have.status(200);
-       done();
-      });
-  });
-
- it('should response with status 200 after (post) valid subscription', function(done){
+ it('should respond to post valid subscription', function(done){
     chai.request(server)
       .post('/api/save-subscription/')
       .send(validSubscription)
       .end(function(err, res){
+        should.not.exist(err);
         res.should.have.status(200);
-        expect(err).to.be.null;
+        res.type.should.equal('application/json');
+        res.body.success.should.equal(true);
         done();
       });
   });
 
- it('should response with json after (post) valid subscription', function(done){
-    chai.request(server)
-      .post('/api/save-subscription/')
-      .send(validSubscription)
-      .end(function(err, res){
-        expect(res).to.be.json;
-        done();
-      });
-  });
-
- it('should response with status 400 after (post) invalid subscription', function(done){
+ it('should respond to post invalid subscription', function(done){
     chai.request(server)
       .post('/api/save-subscription/')
       .send(invalidSubscription)
       .end(function(err, res){
-        expect(err).to.be.null;
+        should.not.exist(err);
         res.should.have.status(400);
+        res.type.should.equal('application/json');
+        res.body.success.should.equal(false);
         done();
+      });
+  });
+
+   // why it does not work if I put it at the end ?????
+  it('should respond to get statistics', function(done){
+    chai.request(server)
+      .get('/statistics/')
+      .end(function(err, res){
+        // there should be no errors
+        should.not.exist(err);
+        // there should be a 200 status code
+        res.should.have.status(200);
+        // response should be json
+        res.type.should.equal('application/json');
+        // JSON response body should have a key-value pair of {"status":"success"}
+        res.body.status.should.equal('success');
+        // the first obj in dates array should have the right keys
+        res.body.data[0].should.include.keys(
+          'subscribeDate', 'unsubscribeDate'  
+        );       
+       done();
       });
   });
 
