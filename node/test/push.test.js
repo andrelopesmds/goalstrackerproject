@@ -1,6 +1,8 @@
+// This test is not doing anything for now
+
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var server = require('../push/push.js');
+//var server = require('../push/push.js');
 var should = chai.should();
 var expect = chai.expect;
 
