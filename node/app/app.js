@@ -29,9 +29,7 @@ app.post('/api/save-subscription/', function(req, res) {
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
-        data: {
-            success: true
-        }
+      success: true  
     }));
 
   }else {
@@ -39,9 +37,7 @@ app.post('/api/save-subscription/', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.status(400)
     res.send(JSON.stringify({
-        data: {
-            success: false
-        }
+      success: false
     }));
 
   }
@@ -50,16 +46,13 @@ app.post('/api/save-subscription/', function(req, res) {
 
 app.get('/statistics/', function(req, res){
 
-  controlDB.getSubscriptionDates(appPath+ '/db/', function(dates){
+  controlDB.getSubscriptionDates(appPath+ '/db/', function(data){
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ 'dates': dates }));
+    res.send(JSON.stringify({ 
+      'status': 'success',
+      'data': data
+    }));
   });
-
-//  controlDB.getNumberOfUsers(appPath + '/db/', function(number){
-//    console.log(number);
-//    res.setHeader('Content-Type', 'application/json');
-//    res.send(JSON.stringify({ 'number': number  }));
-//  }); 
 
 })
 

@@ -37,9 +37,10 @@ return fetch('/statistics/', {
   method: 'GET',
   headers: {'Content-Type': 'application/json'}
   }).then(function(response){ return response.json();})
-    .then(function(data) { return makePoints(data);})
+    .then(function(obj) { return makePoints(obj.data);})
     .then(function(points){
-                   
+
+      console.log(points);                   
       show(points);
 
     })
@@ -55,26 +56,26 @@ function makePoints(data){
   var skip;
 
   //teste  adding fake data
-  data.dates.push({'subscribeDate':"2017-12-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2017-12-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2017-11-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2017-11-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-02-26T17:15:10.48Z", 'unsubscribeDate':null});
-  data.dates.push({'subscribeDate':"2018-02-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2017-12-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2017-12-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-01-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2017-11-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2017-11-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-02-26T17:15:10.48Z", 'unsubscribeDate':null});
+  data.push({'subscribeDate':"2018-02-26T17:15:10.48Z", 'unsubscribeDate':null});
   // teste
 
-  for (i = 0; i < data.dates.length; i++){
+  for (i = 0; i < data.length; i++){
 
-    if(!data.dates[i].unsubscribeDate){
+    if(!data[i].unsubscribeDate){
 
-      subscribeDate = new Date(data.dates[i].subscribeDate);
+      subscribeDate = new Date(data[i].subscribeDate);
       month = subscribeDate.getMonth() + 1;
       year = subscribeDate.getFullYear();           
 
