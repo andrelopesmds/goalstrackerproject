@@ -6,31 +6,29 @@ const path = require('path');
 var bodyParser = require('body-parser')
 var controlDB = require('../app/controlDB.js');
 
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
+controlDB.connect(path.join(appPath, '../app/db'));
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/', function(req, res) {
 
-  var team = req.body.team;
-  var message = req.body.message;
+    var team = req.body.team;
+    var message = req.body.message;
 
-  if (team && message){
+    if (team && message){
 
-    getSubscriptionsFromDatabase(sendMsg, message);
+        getSubscriptionsFromDatabase(sendMsg, message);
 
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      'success': true
-    }));
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ 'success': true }));
+    } else {
 
-  } else{
-
-    // bad request
-    res.setHeader('Content-Type', 'application/json');
-    res.status(400)
-    res.send( {'success': false} );
-  }
+        // bad request
+        res.setHeader('Content-Type', 'application/json');
+        res.status(400)
+        res.send({ 'success': false });
+    }
 
 })
 
@@ -61,10 +59,9 @@ function triggerPushMsg(subscription, dataToSend) {
 
 function getSubscriptionsFromDatabase(callback, teste) {
 
-    controlDB.getUsers(path.join(appPath, '../app/db'), function(subscriptions) {
+    controlDB.getUsers(function(subscriptions) {
 
         callback(subscriptions, teste);
-
     });
 
 
@@ -72,6 +69,7 @@ function getSubscriptionsFromDatabase(callback, teste) {
 
 function sendMsg(data, message) {
 
+    console.log(data);
     for (let i = 0; i < data.length; i++) {
 
         const subscription = {
@@ -82,7 +80,6 @@ function sendMsg(data, message) {
                 "auth": data[i].keyAuth
             }
         }
-
         triggerPushMsg(subscription, message);
 
     }
@@ -90,9 +87,8 @@ function sendMsg(data, message) {
 
 function removeSubscriptionFromDatabase(subscription) {
 
-    controlDB.removeSubscription(path.join(appPath, '../app/db'), subscription);
+    controlDB.removeSubscription(subscription);
 
 }
 
 module.exports = app; // for testing
-
