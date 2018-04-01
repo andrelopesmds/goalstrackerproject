@@ -126,7 +126,8 @@ function configMessage(data) {
     return data;
 }
 
-var C = {};
-C.configMessage = configMessage;
-C.runApi = runApi;
-module.exports = C;
+var fetch = {};
+fetch.configMessage = configMessage;
+fetch.runApi = runApi;
+fetch.sendRequest = sendRequest;
+module.exports = fetch;
