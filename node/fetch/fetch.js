@@ -22,30 +22,33 @@ fetchGoals.start();
 
 function sendRequest(matches){
 
-  for (i = 0; i < matches.length; i++) {
+    for (i = 0; i < matches.length; i++) {
  
-    if (matches[i].team1 == team || matches[i].team2 == team) {
+        if (matches[i].team1 == team || matches[i].team2 == team) {
 
-      if (buffer != matches[i].currentStatus || score != matches[i].score) {
+            if (buffer != matches[i].currentStatus || score != matches[i].score) {
                        
-        buffer = matches[i].currentStatus;
-        score = matches[i].score;
-        console.log('new status in this game!');
-        console.log(matches[i].currentStatus);
-        var msg = configMessage(matches[i]);
-        request.post('http://localhost:3000', {
-          form: {
-            team: 'galo',
-            message: msg
+                buffer = matches[i].currentStatus;
+                score = matches[i].score;
+                console.log('new status in this game!');
+                console.log(matches[i].currentStatus);
+                var msg = configMessage(matches[i]);
+                    request.post('http://localhost:3000', {
+                        form: {
+                            team: 'galo',
+                            message: msg
+                        }
+                }, function(error, response, body) {
+                    console.log('error:', error); // Print the error if one occurred
+                    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+                    console.log('body:', body);
+                    });
             }
-        }, function(error, response, body) {
-          console.log('error:', error); // Print the error if one occurred
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-          console.log('body:', body);
-        });
-      }
+
+        }
+
     }
-  }
+
 }
 
 
