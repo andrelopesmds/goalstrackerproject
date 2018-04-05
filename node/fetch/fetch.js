@@ -3,6 +3,7 @@ var jobTime = 120000; // set the time in ms
 var sportsLive = require('sports-live');
 var team = 'Atletico Mineiro';
 var request = require('request');
+var url = 'http://localhost:3000';
 
 // global variables
 var buffer;  
@@ -10,7 +11,7 @@ var score;
 
 var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
 
-  runApi(sendRequest);
+  runApi(checkGameStatus);
   console.log('...');
   done();
 
@@ -19,8 +20,7 @@ var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
 
 fetchGoals.start();
 
-
-function sendRequest(matches){
+function checkGameStatus(matches){
 
     for (i = 0; i < matches.length; i++) {
  
@@ -33,22 +33,30 @@ function sendRequest(matches){
                 console.log('new status in this game!');
                 console.log(matches[i].currentStatus);
                 var msg = configMessage(matches[i]);
-                    request.post('http://localhost:3000', {
-                        form: {
-                            team: 'galo',
-                            message: msg
-                        }
-                }, function(error, response, body) {
-                    console.log('error:', error); // Print the error if one occurred
-                    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-                    console.log('body:', body);
-                    });
+                sendRequest(msg);
+                   
             }
 
         }
 
     }
 
+}
+
+
+function sendRequest(msg){
+                      
+    request.post(url, {
+        form: {
+            team: 'galo',
+            message: msg
+        }
+    }, function(error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body);
+    });
+            
 }
 
 
@@ -129,5 +137,6 @@ function configMessage(data) {
 var fetch = {};
 fetch.configMessage = configMessage;
 fetch.runApi = runApi;
+fetch.checkGameStatus = checkGameStatus;
 fetch.sendRequest = sendRequest;
 module.exports = fetch;

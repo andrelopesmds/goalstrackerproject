@@ -8,24 +8,12 @@ var game = {
     team2: 'Cruzeiro',
     score: '3-1',
     currentStatus: 'Goal for Atletico Mineiro!'
-}      
+} 
+     
 
 describe('Fetch service', function() {
 
-    describe('configMessage function', function(){
-   
-        it('should return the correct string' , function() {
-            assert.equal(typeof fetch, 'object');
-            assert.equal(typeof fetch.configMessage, 'function');
-            assert.equal(typeof fetch.configMessage(game) , 'string');
-            assert.equal(JSON.parse(fetch.configMessage(game)).title, 'Gol do Atletico Mineiro!');
-            assert.equal(JSON.parse(fetch.configMessage(game)).body, 'Atletico Mineiro 3-1 Cruzeiro');
-            assert.equal(JSON.parse(fetch.configMessage(game)).icon, 'images/ball.png');
-        })
-
-    })
-  
-    describe('runApishould function', function() {
+     describe('runApishould function', function() {
 
         it('should return the correct json if there is any match at this moment', function(done) {
             assert.equal(typeof fetch, 'object');
@@ -41,9 +29,32 @@ describe('Fetch service', function() {
   
     })
 
+   describe('configMessage function', function(){
+   
+        it('should return the correct string' , function() {
+            assert.equal(typeof fetch, 'object');
+            assert.equal(typeof fetch.configMessage, 'function');
+            assert.equal(typeof fetch.configMessage(game) , 'string');
+            assert.equal(JSON.parse(fetch.configMessage(game)).title, 'Gol do Atletico Mineiro!');
+            assert.equal(JSON.parse(fetch.configMessage(game)).body, 'Atletico Mineiro 3-1 Cruzeiro');
+            assert.equal(JSON.parse(fetch.configMessage(game)).icon, 'images/ball.png');
+        })
+
+    })
+
+    describe('checkGameStatus function', function() {
+
+        it('should check if the team is playing and if yes, send a request', function() {
+            assert.equal(typeof fetch.checkGameStatus, 'function');
+            
+        })
+  
+    })
+
+ 
     describe('sendRequest function', function() {
 
-        it('which is a function', function() {
+        it('should send a request', function() {
             assert.equal(typeof fetch.sendRequest, 'function');
         })
   
