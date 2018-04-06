@@ -1,0 +1,3 @@
+The SQLite3 database will be store here.
+
+It is recommended to change the permission of access to this directory to only the services in which database is needed in order to help to prevent undesired access.
