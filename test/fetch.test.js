@@ -14,7 +14,7 @@ var game = {
 describe('Fetch service', function() {
 
     describe('runApishould function', function() {
-        this.timeout(3000);
+        this.timeout(5000);
 
         it('should return the correct json if there is any match at this moment', function(done) {
             assert.equal(typeof fetch, 'object');
