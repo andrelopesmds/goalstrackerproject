@@ -1,5 +1,5 @@
 var assert = require('assert');
-var fetch = require('../fetch/fetch.js');
+var fetch = require('../node/fetch/fetch.js');
 var chai = require('chai');
 var should = chai.should();
 
@@ -13,7 +13,8 @@ var game = {
 
 describe('Fetch service', function() {
 
-     describe('runApishould function', function() {
+    describe('runApishould function', function() {
+        this.timeout(3000);
 
         it('should return the correct json if there is any match at this moment', function(done) {
             assert.equal(typeof fetch, 'object');
