@@ -8,8 +8,9 @@ var game = {
     team2: 'Cruzeiro',
     score: '3-1',
     currentStatus: 'Goal for Atletico Mineiro!'
-} 
-     
+}
+
+var games = [game];
 
 describe('Fetch service', function() {
 
@@ -45,9 +46,10 @@ describe('Fetch service', function() {
 
     describe('checkGameStatus function', function() {
 
-        it('should check if the team is playing and if yes, send a request', function() {
+       it('should check if there is a new status in the game and if yes, send a request', function() {
             assert.equal(typeof fetch.checkGameStatus, 'function');
-            
+            assert.equal(fetch.checkGameStatus(), false);    // invalid entry data
+            assert.equal(fetch.checkGameStatus(games, true), true);  
         })
   
     })
