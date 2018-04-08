@@ -20,26 +20,38 @@ var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
 
 fetchGoals.start();
 
-function checkGameStatus(matches){
+function checkGameStatus(matches, test) {
 
-    for (i = 0; i < matches.length; i++) {
+    var newStatus = false;
+
+    if(matches) {
+
+        for (i = 0; i < matches.length; i++) {
  
-        if (matches[i].team1 == team || matches[i].team2 == team) {
+            if (matches[i].team1 == team || matches[i].team2 == team) {
 
-            if (buffer != matches[i].currentStatus || score != matches[i].score) {
+                if (buffer != matches[i].currentStatus || score != matches[i].score) {
                        
-                buffer = matches[i].currentStatus;
-                score = matches[i].score;
-                console.log('new status in this game!');
-                console.log(matches[i].currentStatus);
-                var msg = configMessage(matches[i]);
-                sendRequest(msg);
+                    buffer = matches[i].currentStatus;
+                    score = matches[i].score;
+                    var msg = configMessage(matches[i]);
+                    if(test) {
+                        newStatus = true;
+                    } else { 
+                        console.log('new status in this game!');
+                        console.log(matches[i].currentStatus);
+                        sendRequest(msg);
+                    }
                    
+                }
+
             }
 
         }
 
     }
+
+    return newStatus;
 
 }
 
