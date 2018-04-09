@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-//var server = require('../node/push/push.js');
+var server = require('../node/push/push.js');
 var should = chai.should();
 var expect = chai.expect;
 
@@ -18,6 +18,10 @@ var msg = JSON.stringify(json);
 
 
 describe('Push service', function() {
+
+    it('test of it is loading env variables', function(){
+        // There is nothing here
+    });
 
   describe('should respond to valid post request', function(){
 
