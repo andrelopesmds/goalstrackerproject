@@ -8,7 +8,6 @@ var controlDB = require('../app/controlDB.js');
 
 controlDB.connect(path.join(appPath, '../app/db'));
 
-
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/', function(req, res) {
@@ -21,13 +20,13 @@ app.post('/', function(req, res) {
         getSubscriptionsFromDatabase(sendMsg, message);
 
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({ 'success': true }));
+        res.send(JSON.stringify({'success': true}));
     } else {
 
         // bad request
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
-        res.send({ 'success': false });
+        res.send({'success': false});
     }
 
 })
@@ -51,17 +50,19 @@ function triggerPushMsg(subscription, dataToSend) {
         .catch((err) => {
             if (err.statusCode === 410) {
                 return removeSubscriptionFromDatabase(subscription);
+
             } else {
                 console.log('Subscription is no longer valid: ', err);
+
             }
         });
 };
 
-function getSubscriptionsFromDatabase(callback, teste) {
+function getSubscriptionsFromDatabase(callback, message) {
 
     controlDB.getUsers(function(subscriptions) {
 
-        callback(subscriptions, teste);
+        callback(subscriptions, message);
     });
 
 
@@ -69,7 +70,6 @@ function getSubscriptionsFromDatabase(callback, teste) {
 
 function sendMsg(data, message) {
 
-    console.log(data);
     for (let i = 0; i < data.length; i++) {
 
         const subscription = {
@@ -80,8 +80,8 @@ function sendMsg(data, message) {
                 "auth": data[i].keyAuth
             }
         }
-        triggerPushMsg(subscription, message);
 
+        triggerPushMsg(subscription, message);
     }
 }
 
@@ -91,4 +91,7 @@ function removeSubscriptionFromDatabase(subscription) {
 
 }
 
-module.exports = app; // for testing
+var push = {};
+push.app = app;
+push.getSubscriptionsFromDatabase = getSubscriptionsFromDatabase;
+module.exports = push; // for testing
