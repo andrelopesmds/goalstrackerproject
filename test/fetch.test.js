@@ -21,7 +21,7 @@ describe('Fetch service', function() {
             assert.equal(typeof fetch, 'object');
             assert.equal(typeof fetch.runApi, 'function');
             fetch.runApi(function(data) {
-                assert.equal( typeof data, 'object');
+                assert.equal(typeof data, 'object');
                 data[0].should.include.keys(
                     'team1', 'team2', 'score', 'currentStatus'
                 );

@@ -1,8 +1,7 @@
-// This test is not doing anything for now
-
+var assert = require('assert');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var server = require('../node/push/push.js');
+var push = require('../node/push/push.js');
 var should = chai.should();
 var expect = chai.expect;
 
@@ -16,47 +15,53 @@ var json = {
 
 var msg = JSON.stringify(json);
 
-
 describe('Push service', function() {
 
-    it('test of it is loading env variables', function(){
-        // There is nothing here
+    describe('should respond to post request', function() {
+
+        it('200 - valid post request', function(done){
+            chai.request(push.app)
+                .post('/')
+                .type('form')
+                .send({'team': 'Galo', 'message' : msg})
+                .end(function(err, res) {
+                    expect(err).to.be.null;
+                    res.should.have.status(200);
+                    done();
+                });
+        });
+
+        it('400 - invalid post request', function(done) {
+            chai.request(push.app)
+                .post('/')
+                .type('form')
+                .send({'team': 'Galo'})
+                .end(function(err, res) {
+                    should.not.exist(err);
+                    res.should.have.status(400);
+                    res.type.should.equal('application/json');
+                    res.body.success.should.equal(false);
+                    done();
+                });
+        });
+
     });
 
-  describe('should respond to valid post request', function(){
+    describe('getSubscription funtion', function(){
 
-  // necessary vapid keys (works locally)
+        it('should get data from database', function(done){
+           assert.equal(typeof push.getSubscriptionsFromDatabase, 'function');
+           push.getSubscriptionsFromDatabase(function(data){
+               assert.equal(typeof data, 'object');
+               data[0].should.include.keys(
+                   'endpoint', 'expirationTime', 'key256', 'keyAuth', 'subscribeDate', 'unsubscribeDate'
+               );
+               done();
+           });            
 
-/*  it('200 - valid post request', function(done){
-    chai.request(server)
-      .post('/')
-      .type('form')
-      .send({ 'team': 'Galo', 'message' : msg  })
-      .end(function(err, res){
-        expect(err).to.be.null;
-        res.should.have.status(200);
-       done();
-      });
-  });
-*/
+        });
 
-/*  it('should respond to invalid post request', function(done){
-    chai.request(server)
-      .post('/')
-      .type('form')
-      .send({ 'team': 'Galo' })
-      .end(function(err, res){
-        should.not.exist(err);
-        res.should.have.status(400);
-        res.type.should.equal('application/json');
-        res.body.success.should.equal(false);
-       done();
-      });
-  });
-*/
-
-});
-
+    });
 
 });
 

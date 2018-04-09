@@ -8,7 +8,7 @@ var json = {
 }
 
 var json2 = {
-    "body": "This is a test massage",
+    "body": "This is a test message",
     "title": "Aqui é Galo",
     "icon": "images/galo.png"
 }
