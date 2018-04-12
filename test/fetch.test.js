@@ -2,6 +2,7 @@ var assert = require('assert');
 var fetch = require('../node/fetch/fetch.js');
 var chai = require('chai');
 var should = chai.should();
+var expect = chai.expect;
 
 var game = {
     team1: 'Atletico Mineiro',
@@ -14,26 +15,20 @@ var games = [game];
 
 describe('Fetch service', function() {
 
-    describe('runApishould function', function() {
+    describe('runApi function', function() {
         this.timeout(5000);
 
-        it('should return the correct json if there is any match at this moment', function(done) {
-            assert.equal(typeof fetch, 'object');
-            assert.equal(typeof fetch.runApi, 'function');
-            fetch.runApi(function(data) {
-                assert.equal(typeof data, 'object');
-                data[0].should.include.keys(
-                    'team1', 'team2', 'score', 'currentStatus'
-                );
-                done();
-            })
-        })
-  
+        it('should return an array with the data of the matches', async () => {
+            const result = await fetch.runApi();
+            result[0].should.include.keys(
+                'team1', 'team2', 'score', 'currentStatus'
+            );
+        });
     })
 
    describe('configMessage function', function(){
    
-        it('should return the correct string' , function() {
+        it('should return the correct string in Portuguese' , function() {
             assert.equal(typeof fetch, 'object');
             assert.equal(typeof fetch.configMessage, 'function');
             assert.equal(typeof fetch.configMessage(game) , 'string');
@@ -46,10 +41,10 @@ describe('Fetch service', function() {
 
     describe('checkGameStatus function', function() {
 
-       it('should check if there is a new status in the game and if yes, send a request', function() {
+       it('should return a string if there is a new status in the game and null otherwise', function() {
             assert.equal(typeof fetch.checkGameStatus, 'function');
-            assert.equal(fetch.checkGameStatus(), false);    // invalid entry data
-            assert.equal(fetch.checkGameStatus(games, true), true);  
+            assert.equal(fetch.checkGameStatus(), null);    // invalid entry data
+            assert.equal(typeof fetch.checkGameStatus(games), 'string' );  
         })
   
     })
