@@ -11,18 +11,28 @@ var score;
 
 var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
 
-  runApi(checkGameStatus);
-  console.log('...');
-  done();
-
+    return runApi()
+    .then(function (matches) {
+        return checkGameStatus(matches);
+    })
+    .then(function (msg) {
+        if(msg) {
+            sendRequest(msg);
+        }
+    })
+    .catch(function (err) {
+        console.log("It failed: ", err);
+    })
+    .then(function () {
+        console.log('...');
+        done();
+    })
 });
 
 
 fetchGoals.start();
 
-function checkGameStatus(matches, test) {
-
-    var newStatus = false;
+function checkGameStatus(matches) {
 
     if(matches) {
 
@@ -35,14 +45,9 @@ function checkGameStatus(matches, test) {
                     buffer = matches[i].currentStatus;
                     score = matches[i].score;
                     var msg = configMessage(matches[i]);
-                    if(test) {
-                        newStatus = true;
-                    } else { 
-                        console.log('new status in this game!');
-                        console.log(matches[i].currentStatus);
-                        sendRequest(msg);
-                    }
-                   
+                    console.log('new status in this game!');
+                    console.log(matches[i].currentStatus);
+                    return msg;
                 }
 
             }
@@ -51,7 +56,7 @@ function checkGameStatus(matches, test) {
 
     }
 
-    return newStatus;
+    return null;
 
 }
 
@@ -72,18 +77,17 @@ function sendRequest(msg){
 }
 
 
-function runApi(callback){
-
-  sportsLive.getAllMatches("soccer", function(err, matches) {
-
-    if (err) { 
-      console.log(err.message);
-      
-    } else {
-      callback(matches);
-       
-    }
-  });
+function runApi(){
+    return new Promise(function (resolve, reject) {
+        sportsLive.getAllMatches("soccer", function(err, matches) {
+            if (err) { 
+                console.log(err.message);
+                reject(err);
+            } else {
+                resolve(matches);
+            }
+        });
+    })
 }
 
 function configMessage(data) {
