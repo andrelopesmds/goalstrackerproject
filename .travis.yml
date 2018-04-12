@@ -2,6 +2,6 @@ language: node_js
 node_js:
   - "9"
 notifications:
-  slack:
+  email:
     on_success: never
     on_failure: always
