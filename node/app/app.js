@@ -3,7 +3,7 @@ var serveStatic = require('serve-static')
 var bodyParser = require('body-parser')
 var app = express()
 var validate = require('data-validate');
-var controlDB = require('./controlDB.js');
+var controlDB = require('./controldb.js');
 var appPath = __dirname;
 const path = require('path');
 
