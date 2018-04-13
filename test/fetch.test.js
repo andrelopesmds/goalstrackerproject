@@ -3,6 +3,12 @@ var fetch = require('../node/fetch/fetch.js');
 var chai = require('chai');
 var should = chai.should();
 var expect = chai.expect;
+var nock = require('nock');
+var url = 'http://localhost:3000';
+
+var interceptor = nock(url)
+                  .post('/')
+                  .reply(200, {'success': true});
 
 var game = {
     team1: 'Atletico Mineiro',
@@ -52,12 +58,13 @@ describe('Fetch service', function() {
  
     describe('sendRequest function', function() {
 
-        it('should send a request', function() {
+        it('should send a request', async () => {
             assert.equal(typeof fetch.sendRequest, 'function');
+            const result = await fetch.sendRequest('some message');
+            expect(result).to.equal("'success':true");
         })
   
     })
 
 })
-
 
