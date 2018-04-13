@@ -4,7 +4,7 @@ var app = express()
 var appPath = __dirname;
 const path = require('path');
 var bodyParser = require('body-parser')
-var controlDB = require('../app/controlDB.js');
+var controlDB = require('../app/controldb.js');
 
 controlDB.connect(path.join(appPath, '../app/db'));
 
