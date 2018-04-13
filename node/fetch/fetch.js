@@ -62,20 +62,21 @@ function checkGameStatus(matches) {
 
 
 function sendRequest(msg){
-                      
-    request.post(url, {
-        form: {
-            team: 'galo',
-            message: msg
-        }
-    }, function(error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body);
-    });
-            
+    return new Promise(function (resolve, reject) {                  
+        request.post(url, {
+            form: {
+                team: 'galo',
+                message: msg
+            }
+        }, function(error, response, body) {
+            if(!error && response.statusCode == 200) {
+                resolve("'success':true");
+            } else {
+                reject("'success':false");
+            }
+        });
+    })
 }
-
 
 function runApi(){
     return new Promise(function (resolve, reject) {
