@@ -47,18 +47,14 @@ describe('Push service', function() {
 
     });
 
-    describe('getSubscription funtion', function(){
+    describe('getSubscription function', function(){
 
-        it('should get data from database', function(done){
+        it('should get data from database', async () => {
            assert.equal(typeof push.getSubscriptionsFromDatabase, 'function');
-           push.getSubscriptionsFromDatabase(function(data){
-               assert.equal(typeof data, 'object');
-               data[0].should.include.keys(
+           const result = await push.getSubscriptionsFromDatabase();
+           result[0].should.include.keys(
                    'endpoint', 'expirationTime', 'key256', 'keyAuth', 'subscribeDate', 'unsubscribeDate'
-               );
-               done();
-           });            
-
+           );
         });
 
     });
