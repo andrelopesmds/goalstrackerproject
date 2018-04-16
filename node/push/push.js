@@ -9,25 +9,30 @@ var controlDB = require('../app/controldb.js');
 controlDB.connect(path.join(appPath, '../app/db'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.post('/', function(req, res) {
 
-    var team = req.body.team;
-    var message = req.body.message;
-
-    if (team && message){
-
-        getSubscriptionsFromDatabase(sendMsg, message);
+    Promise.all([
+        validateRequest(req),
+        getSubscriptionsFromDatabase()
+    ])
+    .then(function (data) {
+        var message = data[0];
+        var subscriptions = data[1];
+        
+        sendMsg(subscriptions, message);
 
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({'success': true}));
-    } else {
-
+        
+    })
+    .catch(function (err){
         // bad request
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
         res.send({'success': false});
-    }
+        console.log("Error: "+ err);
+    })
+  
 
 })
 
@@ -45,6 +50,21 @@ webpush.setVapidDetails(
     vapidKeys.privateKey
 );
 
+
+function validateRequest(req){
+    // check if the request has the fields required: title, body, icon
+    return new Promise(function (resolve, reject) {
+        var obj = JSON.parse(req.body.message);
+        if (obj.title && obj.body && obj.icon) {
+            resolve(JSON.stringify(obj));
+        } else {
+            reject("The request does not have the required fields");
+            console.log(req.body);
+        }
+    });
+}
+
+
 function triggerPushMsg(subscription, dataToSend) {
     return webpush.sendNotification(subscription, dataToSend)
         .catch((err) => {
@@ -59,13 +79,11 @@ function triggerPushMsg(subscription, dataToSend) {
 };
 
 function getSubscriptionsFromDatabase(callback, message) {
-
-    controlDB.getUsers(function(subscriptions) {
-
-        callback(subscriptions, message);
+    return new Promise(function (resolve, reject){   
+        controlDB.getUsers(function(subscriptions) {
+            resolve(subscriptions);
+        })
     });
-
-
 }
 
 function sendMsg(data, message) {
