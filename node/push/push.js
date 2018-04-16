@@ -54,7 +54,6 @@ webpush.setVapidDetails(
 
 function sendMsg(data, message) {
 
-    count = 0;
     for (let i = 0; i < data.length; i++) {
 
         const subscription = {
