@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrelms1/goalstrackerproject.git"
+    "url": "git+https://github.com/andrelopesmds/goalstrackerproject.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/andrelms1/goalstrackerproject/issues"
+    "url": "https://github.com/andrelopesmds/goalstrackerproject/issues"
   },
-  "homepage": "https://github.com/andrelms1/goalstrackerproject#readme",
+  "homepage": "https://github.com/andrelopesmds/goalstrackerproject#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
@@ -28,7 +28,7 @@
     "nock": "^9.2.5",
     "request": "^2.83.0",
     "serve-static": "^1.13.1",
-    "sports-live": "github:andrelms1/sports-live#team2",
+    "sports-live": "github:andrelopesmds/sports-live#team2",
     "sqlite3": "^3.1.13",
     "timer-jobs": "^0.1.0",
     "web-push": "^3.2.5"
