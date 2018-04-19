@@ -5,7 +5,7 @@ function subscribe() {
         if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
 
             if (window.confirm('Seu navagador não suporta o envio de notificações, mas você pode utilizar o SIGA O GALO no Google Chorme.')) {
-                window.location.href='https://www.google.com/chrome/browser/index.html';
+                window.location.href='https://itunes.apple.com/br/app/google-chrome/id535886823?mt=8';
             };
 
         } else {
