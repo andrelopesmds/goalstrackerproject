@@ -1,7 +1,18 @@
- function subscribe() {
+function subscribe() {
 
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-        alert("Seu navegador não suporta o envio de notificações!");
+
+        if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+
+            if (window.confirm('Seu navagador não suporta o envio de notificações, mas você pode utilizar o SIGA O GALO no Google Chorme.')) {
+                window.location.href='https://www.google.com/chrome/browser/index.html';
+            };
+
+        } else {
+            alert("Seu navegador não suporta o envio de notificações!");
+        }
+
+
         document.getElementById("buttonId").disabled = true;
     } else {
 
