@@ -6,13 +6,29 @@ var expect = chai.expect;
 
 chai.use(chaiHttp);
 
-var validSubscription = {"endpoint":"https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP","expirationTime":null,"keys":{"p256dh":"BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=","auth":"GS_k7K70ihQtA1GvfAZ8wA=="}};
+var validSubscription = {
+    "endpoint" :
+        "https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP",
+    "expirationTime" : null,
+    "keys" : {
+        "p256dh" :
+            "BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=",
+        "auth" : "GS_k7K70ihQtA1GvfAZ8wA=="
+    }
+};
 
-var invalidSubscription = {"end":"https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP","expirationTime":null,"keys":{"p256dh":"BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=","auth":"GS_k7K70ihQtA1GvfAZ8wA=="}};
-
+var invalidSubscription = {
+    "end" :
+        "https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP",
+    "expirationTime" : null,
+    "keys" : {
+        "p256dh" :
+            "BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=",
+        "auth" : "GS_k7K70ihQtA1GvfAZ8wA=="
+    }
+};
 
 describe('App service', function() {
-
     it('should respond to post valid subscription', function(done) {
         chai.request(server)
             .post('/api/save-subscription/')
@@ -41,24 +57,21 @@ describe('App service', function() {
 
     // why it does not work if I put it at the end ?????
     it('should respond to get statistics', function(done) {
-        chai.request(server)
-            .get('/statistics/')
-            .end(function(err, res) {
-                // there should be no errors
-                should.not.exist(err);
-                // there should be a 200 status code
-                res.should.have.status(200);
-                // response should be json
-                res.type.should.equal('application/json');
-                // JSON response body should have a key-value pair of {"status":"success"}
-                res.body.status.should.equal('success');
-                // the first obj in dates array should have the right keys
-                res.body.data[0].should.include.keys(
-                    'subscribeDate', 'unsubscribeDate'  
-                );
+        chai.request(server).get('/statistics/').end(function(err, res) {
+            // there should be no errors
+            should.not.exist(err);
+            // there should be a 200 status code
+            res.should.have.status(200);
+            // response should be json
+            res.type.should.equal('application/json');
+            // JSON response body should have a key-value pair of
+            // {"status":"success"}
+            res.body.status.should.equal('success');
+            // the first obj in dates array should have the right keys
+            res.body.data[0].should.include.keys('subscribeDate',
+                                                 'unsubscribeDate');
 
             done();
-            });
+        });
     });
-
 });
