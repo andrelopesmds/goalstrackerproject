@@ -8,22 +8,20 @@ var expect = chai.expect;
 chai.use(chaiHttp);
 
 var json = {
-    "body": "Galo x Marias",
-    "title": "The game started",
-    "icon": "images/ball.png"
+    "body" : "Galo x Marias",
+    "title" : "The game started",
+    "icon" : "images/ball.png"
 }
 
 var msg = JSON.stringify(json);
 
 describe('Push service', function() {
-
     describe('should respond to post request', function() {
-
-        it('200 - valid post request', function(done){
+        it('200 - valid post request', function(done) {
             chai.request(push.app)
                 .post('/')
                 .type('form')
-                .send({'team': 'Galo', 'message' : msg})
+                .send({'team' : 'Galo', 'message' : msg})
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     res.should.have.status(200);
@@ -35,7 +33,7 @@ describe('Push service', function() {
             chai.request(push.app)
                 .post('/')
                 .type('form')
-                .send({'team': 'Galo'})
+                .send({'team' : 'Galo'})
                 .end(function(err, res) {
                     should.not.exist(err);
                     res.should.have.status(400);
@@ -44,20 +42,15 @@ describe('Push service', function() {
                     done();
                 });
         });
-
     });
 
-    describe('getSubscription function', function(){
-
+    describe('getSubscription function', function() {
         it('should get data from database', async () => {
-           assert.equal(typeof push.getSubscriptionsFromDatabase, 'function');
-           const result = await push.getSubscriptionsFromDatabase();
-           result[0].should.include.keys(
-                   'endpoint', 'expirationTime', 'key256', 'keyAuth', 'subscribeDate', 'unsubscribeDate'
-           );
+            assert.equal(typeof push.getSubscriptionsFromDatabase, 'function');
+            const result = await push.getSubscriptionsFromDatabase();
+            result[0].should.include.keys('endpoint', 'expirationTime',
+                                          'key256', 'keyAuth', 'subscribeDate',
+                                          'unsubscribeDate');
         });
-
     });
-
 });
-
