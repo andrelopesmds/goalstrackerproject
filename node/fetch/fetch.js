@@ -6,42 +6,37 @@ var request = require('request');
 var url = 'http://localhost:3000';
 
 // global variables
-var buffer;  
+var buffer;
 var score;
 
-var fetchGoals = new TimerJob({ interval: jobTime}, function(done) {
-
+var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
     return runApi()
-    .then(function (matches) {
-        return checkGameStatus(matches);
-    })
-    .then(function (msg) {
-        if(msg) {
-            sendRequest(msg);
-        }
-    })
-    .catch(function (err) {
-        console.log("It failed: ", err);
-    })
-    .then(function () {
-        console.log('...');
-        done();
-    })
+        .then(function(matches) { return checkGameStatus(matches); })
+        .then(function(msg) {
+            if (msg) {
+                sendRequest(msg);
+            }
+        })
+        .catch(function(err) { console.log("It failed: ", err); })
+        .then(function() {
+            console.log('...');
+            done();
+        })
 });
-
 
 fetchGoals.start();
 
 function checkGameStatus(matches) {
 
-    if(matches) {
+    if (matches) {
 
         for (i = 0; i < matches.length; i++) {
- 
+
             if (matches[i].team1 == team || matches[i].team2 == team) {
 
-                if (buffer != matches[i].currentStatus || score != matches[i].score) {
-                       
+                if (buffer != matches[i].currentStatus ||
+                    score != matches[i].score) {
+
                     buffer = matches[i].currentStatus;
                     score = matches[i].score;
                     var msg = configMessage(matches[i]);
@@ -49,39 +44,30 @@ function checkGameStatus(matches) {
                     console.log(matches[i].currentStatus);
                     return msg;
                 }
-
             }
-
         }
-
     }
 
     return null;
-
 }
 
-
-function sendRequest(msg){
-    return new Promise(function (resolve, reject) {                  
-        request.post(url, {
-            form: {
-                team: 'galo',
-                message: msg
-            }
-        }, function(error, response, body) {
-            if(!error && response.statusCode == 200) {
-                resolve("'success':true");
-            } else {
-                reject("'success':false");
-            }
-        });
+function sendRequest(msg) {
+    return new Promise(function(resolve, reject) {
+        request.post(url, {form : {team : 'galo', message : msg}},
+                     function(error, response, body) {
+                         if (!error && response.statusCode == 200) {
+                             resolve("'success':true");
+                         } else {
+                             reject("'success':false");
+                         }
+                     });
     })
 }
 
-function runApi(){
-    return new Promise(function (resolve, reject) {
+function runApi() {
+    return new Promise(function(resolve, reject) {
         sportsLive.getAllMatches("soccer", function(err, matches) {
-            if (err) { 
+            if (err) {
                 console.log(err.message);
                 reject(err);
             } else {
@@ -108,43 +94,39 @@ function configMessage(data) {
     } else {
 
         switch (data.currentStatus) {
-            case 'Kick Off':
-                var title = "Começa o jogo!\n";
-                var body = data.team1 + " x " + data.team2;
-                var icon = "images/galo.png";
-                break;
-            case 'Halftime':
-                var title = "Fim do primeiro tempo!\n";
-                var body = data.team1 + " " + data.score + " " + data.team2;
-                var icon = "images/time.png";
-                break;
-            case '2nd Half Started':
-                var title = "Começa o segundo tempo!\n";
-                var body = data.team1 + " " + data.score + " " + data.team2;
-                var icon = "images/time.png";
-                break;
-            case 'Match Postponed':
-                var title = "Jogo adiado!\n";
-                var body = data.team1 + " x " + data.team2;
-                var icon = "images/time.png";
-                break;
-            case 'Match Finished':
-                var title = "Fim de jogo!\n";
-                var body = data.team1 + " " + data.score + " " + data.team2;
-                var icon = "images/time.png";
-                break;
-            default:
-                var title = "Galo!";
-                var body = "Galo!";
-                var icon = "images/galo.png";
+        case 'Kick Off':
+            var title = "Começa o jogo!\n";
+            var body = data.team1 + " x " + data.team2;
+            var icon = "images/galo.png";
+            break;
+        case 'Halftime':
+            var title = "Fim do primeiro tempo!\n";
+            var body = data.team1 + " " + data.score + " " + data.team2;
+            var icon = "images/time.png";
+            break;
+        case '2nd Half Started':
+            var title = "Começa o segundo tempo!\n";
+            var body = data.team1 + " " + data.score + " " + data.team2;
+            var icon = "images/time.png";
+            break;
+        case 'Match Postponed':
+            var title = "Jogo adiado!\n";
+            var body = data.team1 + " x " + data.team2;
+            var icon = "images/time.png";
+            break;
+        case 'Match Finished':
+            var title = "Fim de jogo!\n";
+            var body = data.team1 + " " + data.score + " " + data.team2;
+            var icon = "images/time.png";
+            break;
+        default:
+            var title = "Galo!";
+            var body = "Galo!";
+            var icon = "images/galo.png";
         }
     }
 
-    var json = {
-        "title": title,
-        "body": body,
-        "icon": icon
-    }
+    var json = {"title" : title, "body" : body, "icon" : icon}
 
     var data = JSON.stringify(json);
 
