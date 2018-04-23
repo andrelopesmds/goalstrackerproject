@@ -67,7 +67,7 @@ function sendMsg(data, message) {
     }
 }
 
-function getSubscriptionsFromDatabase(callback, message) {
+function getSubscriptionsFromDatabase() {
     return new Promise(function(resolve, reject) {
         controlDB.getUsers(function(subscriptions) { resolve(subscriptions); })
     });

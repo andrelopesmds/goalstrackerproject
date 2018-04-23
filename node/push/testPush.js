@@ -2,8 +2,8 @@
 var request = require('request');
 
 var json = {
-    "body" : "Galo x Marias",
-    "title" : "The game started",
+    "body" : "Galo x Cruzeiro",
+    "title" : "The game has started",
     "icon" : "images/ball.png"
 }
 
