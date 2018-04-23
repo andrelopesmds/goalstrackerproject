@@ -8,12 +8,16 @@ var expect = chai.expect;
 chai.use(chaiHttp);
 
 var json = {
-    "body" : "Galo x Marias",
-    "title" : "The game started",
+    "body" : "Galo x Cruzeiro",
+    "title" : "The game has started",
     "icon" : "images/ball.png"
 }
 
 var msg = JSON.stringify(json);
+
+var validReq = {'body' : {'message' : msg}};
+var invalidReq = {'body' : {'message' : 'wrong format message'}};
+var invalidReq2 = {'body' : 'wrong format message'};
 
 describe('Push service', function() {
     describe('should respond to post request', function() {
@@ -52,5 +56,23 @@ describe('Push service', function() {
                                           'key256', 'keyAuth', 'subscribeDate',
                                           'unsubscribeDate');
         });
+    });
+
+    describe('validateRequest function', function() {
+        it('should return the message string if request is valid ', function() {
+            assert.equal(typeof push.validateRequest, 'function');
+            assert.equal(typeof push.validateRequest(validReq), 'string');
+            assert.equal(push.validateRequest(validReq), msg);
+        });
+
+        it('should return null if request is not valid ', function() {
+            assert.equal(push.validateRequest(invalidReq), null);
+            assert.equal(push.validateRequest(invalidReq2), null);
+        });
+    });
+
+    describe('sendMsg function', function() {
+        it('should ... ? ',
+           function() { assert.equal(typeof push.sendMsg, 'function'); });
     });
 });

@@ -67,7 +67,7 @@ function sendMsg(data, message) {
     }
 }
 
-function getSubscriptionsFromDatabase(callback, message) {
+function getSubscriptionsFromDatabase() {
     return new Promise(function(resolve, reject) {
         controlDB.getUsers(function(subscriptions) { resolve(subscriptions); })
     });
@@ -80,10 +80,14 @@ function removeSubscriptionFromDatabase(subscription) {
 function validateRequest(req) {
     // check if the request has the fields required: title, body, icon
     if (req.body.message) {
-        var obj = JSON.parse(req.body.message);
-        if (obj.title && obj.body && obj.icon) {
-            return JSON.stringify(obj);
-        } else {
+        try {
+            var obj = JSON.parse(req.body.message);
+            if (obj.title && obj.body && obj.icon) {
+                return JSON.stringify(obj);
+            } else {
+                return null;
+            }
+        } catch (e) {
             return null;
         }
     } else {
@@ -93,5 +97,7 @@ function validateRequest(req) {
 
 var push = {};
 push.app = app;
+push.validateRequest = validateRequest;
+push.sendMsg = sendMsg;
 push.getSubscriptionsFromDatabase = getSubscriptionsFromDatabase;
 module.exports = push; // for testing
