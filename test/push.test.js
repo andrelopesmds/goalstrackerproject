@@ -52,6 +52,7 @@ describe('Push service', function() {
         it('should get data from database', async () => {
             assert.equal(typeof push.getSubscriptionsFromDatabase, 'function');
             const result = await push.getSubscriptionsFromDatabase();
+            console.log("log: ", result);
             result[0].should.include.keys('endpoint', 'expirationTime',
                                           'key256', 'keyAuth', 'subscribeDate',
                                           'unsubscribeDate');
