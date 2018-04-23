@@ -72,7 +72,11 @@ describe('Push service', function() {
     });
 
     describe('sendMsg function', function() {
-        it('should ... ? ',
-           function() { assert.equal(typeof push.sendMsg, 'function'); });
+        it('should ... ? ', async () => {
+            assert.equal(typeof push.sendMsg, 'function');
+            const data = await push.getSubscriptionsFromDatabase();
+            const result = await push.sendMsg(data, msg);
+            result.forEach(function(item) { expect(item).should.not.be.null; });
+        });
     });
 });
