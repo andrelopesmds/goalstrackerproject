@@ -14,8 +14,10 @@ app.post('/', function(req, res) {
 
     if (message) {
         return getSubscriptionsFromDatabase()
-            .then(function(subscriptions) {
-                sendMsg(subscriptions, message);
+            .then(function(
+                subscriptions) { return sendMsg(subscriptions, message); })
+            .then(function(result) {
+                console.log("result: ", result);
 
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({'success' : true}));
@@ -47,24 +49,33 @@ webpush.setVapidDetails('mailto:web-push-book@gauntface.com',
 
 function sendMsg(data, message) {
 
-    for (let i = 0; i < data.length; i++) {
+    var promises = [];
 
-        const subscription =
-        {
+    for (let i = 0; i < data.length; i++) {
+        const subscription = {
             "endpoint" : data[i].endpoint,
             "expirationTime" : data[i].expirationTime,
             "keys" : {"p256dh" : data[i].key256, "auth" : data[i].keyAuth}
         }
 
-        webpush.sendNotification(subscription, message)
-            .catch((err) => {
-                if (err.statusCode === 410) {
-                    return removeSubscriptionFromDatabase(subscription);
-                } else {
-                    console.log('Subscription is no longer valid: ', err);
-                }
-            })
+        var promise =
+            webpush.sendNotification(subscription, message)
+                .then((resp) => { return resp.statusCode; })
+                .catch((err) => {
+                    if (err.statusCode === 410) {
+                        try {
+                            removeSubscriptionFromDatabase(subscription);
+                        } catch (e) {
+                            console.log("can not remove subscription ", e);
+                        }
+                    } else {
+                        console.log('Subscription is no longer valid: ', err);
+                    }
+                    return err.statusCode;
+                })
+        promises.push(promise);
     }
+    return Promise.all(promises);
 }
 
 function getSubscriptionsFromDatabase() {
@@ -80,10 +91,14 @@ function removeSubscriptionFromDatabase(subscription) {
 function validateRequest(req) {
     // check if the request has the fields required: title, body, icon
     if (req.body.message) {
-        var obj = JSON.parse(req.body.message);
-        if (obj.title && obj.body && obj.icon) {
-            return JSON.stringify(obj);
-        } else {
+        try {
+            var obj = JSON.parse(req.body.message);
+            if (obj.title && obj.body && obj.icon) {
+                return JSON.stringify(obj);
+            } else {
+                return null;
+            }
+        } catch (e) {
             return null;
         }
     } else {
@@ -93,5 +108,7 @@ function validateRequest(req) {
 
 var push = {};
 push.app = app;
+push.validateRequest = validateRequest;
+push.sendMsg = sendMsg;
 push.getSubscriptionsFromDatabase = getSubscriptionsFromDatabase;
 module.exports = push; // for testing
