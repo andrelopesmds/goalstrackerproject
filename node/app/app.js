@@ -8,7 +8,8 @@ var appPath = __dirname;
 const path = require('path');
 
 // Connect to DB and create visitors table if it does't exist
-controlDB.createDB(appPath + '/db/');
+// controlDB.createDB(appPath + '/db/');
+controlDB.createdb();
 
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json())
@@ -36,6 +37,7 @@ app.post('/api/save-subscription/', function(req, res) {
 
 app.get('/statistics/', function(req, res) {
     controlDB.getSubscriptionDates(function(data) {
+        console.log(data);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({'status' : 'success', 'data' : data}));
     });
