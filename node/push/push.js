@@ -4,11 +4,12 @@ var app = express()
 var appPath = __dirname;
 const path = require('path');
 var bodyParser = require('body-parser')
-var controlDB = require('../app/controldb.js');
+var controlDB = require('./controldb.js');
 
-controlDB.connect(path.join(appPath, '../app/db'));
+controlDB.connect();
 
 app.use(bodyParser.urlencoded({extended : false}));
+
 app.post('/', function(req, res) {
     var message = validateRequest(req);
 
@@ -49,6 +50,7 @@ function sendMsg(data, message) {
 
     for (let i = 0; i < data.length; i++) {
 
+        const id = data[i]._id;
         const subscription =
         {
             "endpoint" : data[i].endpoint,
@@ -59,7 +61,7 @@ function sendMsg(data, message) {
         webpush.sendNotification(subscription, message)
             .catch((err) => {
                 if (err.statusCode === 410) {
-                    return removeSubscriptionFromDatabase(subscription);
+                    return removeSubscriptionFromDatabase(id);
                 } else {
                     console.log('Subscription is no longer valid: ', err);
                 }
