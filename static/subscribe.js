@@ -92,10 +92,7 @@ function sendToServer(subscription) {
            })
         .then(function(response) {
             if (response.ok) {
-
-                document.getElementById("p1").style.display = "none";
-                document.getElementById("p2").style.display = "";
-                document.getElementById("p3").style.display = "";
+                detectUser();
 
             } else {
                 alert(
