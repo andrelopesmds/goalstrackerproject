@@ -8,7 +8,7 @@ var expect = chai.expect;
 chai.use(chaiHttp);
 
 var json = {
-    "body" : "Galo x Marias",
+    "body" : "Galo x Cruzeiro",
     "title" : "The game started",
     "icon" : "images/ball.png"
 }

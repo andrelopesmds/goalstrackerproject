@@ -18,6 +18,15 @@ var game = {
 var games = [ game ];
 
 describe('Fetch service', function() {
+    describe('checkTeam function', function() {
+        it('should return true if the team matches the string , ', function() {
+            assert.equal(typeof fetch.checkTeam, 'function');
+            assert.equal(fetch.checkTeam('Atletico Mineiro'), true);
+            assert.equal(fetch.checkTeam('Atletico-MG'), true);
+            assert.equal(fetch.checkTeam('Atletico-PR'), false);
+        })
+    })
+
     describe('runApi function', function() {
         this.timeout(5000);
 

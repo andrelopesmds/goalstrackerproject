@@ -1,9 +1,11 @@
 var TimerJob = require('timer-jobs');
 var jobTime = 120000; // set the time in ms
 var sportsLive = require('sports-live');
-var team = 'Atletico Mineiro';
+const teamName = 'Atletico Mineiro';
+const teamName2 = 'Atletico-MG';
 var request = require('request');
 var url = 'http://localhost:3000';
+var score = require('string-score');
 
 // global variables
 var buffer;
@@ -32,7 +34,7 @@ function checkGameStatus(matches) {
 
         for (i = 0; i < matches.length; i++) {
 
-            if (matches[i].team1 == team || matches[i].team2 == team) {
+            if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
 
                 if (buffer != matches[i].currentStatus ||
                     score != matches[i].score) {
@@ -133,9 +135,25 @@ function configMessage(data) {
     return data;
 }
 
+function checkTeam(team) {
+    var response;
+    if (typeof team == 'string') {
+        if (score(teamName, team, 0.5) > 0.5 ||
+            score(teamName2, team, 0.5) > 0.5) {
+            response = true;
+        } else {
+            response = false;
+        }
+    } else {
+        response = false;
+    }
+    return response;
+}
+
 var fetch = {};
 fetch.configMessage = configMessage;
 fetch.runApi = runApi;
 fetch.checkGameStatus = checkGameStatus;
 fetch.sendRequest = sendRequest;
+fetch.checkTeam = checkTeam;
 module.exports = fetch;

@@ -1,47 +1,50 @@
 {
-  "name": "goalstrackerproject",
-  "version": "1.0.0",
-  "description": "Pet project",
-  "main": "app.js",
-  "scripts": {
-    "test": "mocha --exit",
-    "precommit": "check-clang-format \"yarn format\"",
-    "format": "git-clang-format"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andrelopesmds/goalstrackerproject.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/andrelopesmds/goalstrackerproject/issues"
-  },
-  "homepage": "https://github.com/andrelopesmds/goalstrackerproject#readme",
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
-    "clang-format": "^1.2.3",
-    "data-validate": "^1.0.2",
-    "express": "^4.16.1",
-    "formidable": "^1.1.1",
-    "forms": "^1.3.0",
-    "js-beautify": "^1.7.5",
-    "mongodb": "^3.0.7",
-    "nock": "^9.2.5",
-    "request": "^2.83.0",
-    "serve-static": "^1.13.1",
-    "sports-live": "github:andrelopesmds/sports-live#team2",
-    "sqlite3": "^3.1.13",
-    "timer-jobs": "^0.1.0",
-    "web-push": "^3.2.5"
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "devDependencies": {
-    "husky": "^0.14.3",
-    "mocha": "^5.0.5"
-  }
+    "name" : "goalstrackerproject",
+             "version" : "1.0.0",
+                         "description" : "Pet project",
+                                         "main" : "app.js",
+                                                  "scripts"
+        : {
+            "test" : "mocha --exit",
+            "precommit" : "check-clang-format \"yarn format\"",
+            "format" : "git-clang-format"
+        },
+          "repository" : {
+              "type" : "git",
+              "url" :
+                  "git+https://github.com/andrelopesmds/goalstrackerproject.git"
+          },
+                         "author" : "",
+                                    "license" : "ISC",
+                                                "bugs"
+        : {
+            "url" :
+                "https://github.com/andrelopesmds/goalstrackerproject/issues"
+        },
+          "homepage"
+        : "https://github.com/andrelopesmds/goalstrackerproject#readme",
+          "dependencies" : {
+              "body-parser" : "^1.18.2",
+              "chai" : "^4.1.2",
+              "chai-http" : "^4.0.0",
+              "clang-format" : "^1.2.3",
+              "data-validate" : "^1.0.2",
+              "express" : "^4.16.1",
+              "formidable" : "^1.1.1",
+              "forms" : "^1.3.0",
+              "js-beautify" : "^1.7.5",
+              "mongodb" : "^3.0.7",
+              "nock" : "^9.2.5",
+              "request" : "^2.83.0",
+              "serve-static" : "^1.13.1",
+              "sports-live" : "github:andrelopesmds/sports-live#team2",
+              "sqlite3" : "^3.1.13",
+              "string-score" : "^1.0.1",
+              "timer-jobs" : "^0.1.0",
+              "web-push" : "^3.2.5"
+          },
+                           "directories" : {"lib" : "lib"},
+                                           "devDependencies" : {
+        "husky" : "^0.14.3", "mocha" : "^5.0.5"
+    }
 }
