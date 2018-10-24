@@ -5,7 +5,7 @@ var TimerJob = require('timer-jobs')
 const url = 'http://localhost:3000';
 const jobTime = 120000;
 const countryName = 'brazil';
-const teamName = 'gremio';
+const teamName = 'atletico-mineiro';
 
 var lastLiveStatus = false;
 var lastScoreStatus;
