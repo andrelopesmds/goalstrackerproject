@@ -5,9 +5,10 @@ var TimerJob = require('timer-jobs')
 const url = 'http://localhost:3000';
 const jobTime = 120000;
 const countryName = 'brazil';
-const teamName = 'atletico-mineiro';
+const teamName = 'gremio';
 
-var lastGameStatus;
+var lastLiveStatus = false;
+var lastScoreStatus;
 
 var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
     return matches(countryName, teamName)
@@ -15,6 +16,7 @@ var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
         .then(function(msg) {
             if (msg) {
                 sendRequest(msg);
+                console.log(msg);
             }
         })
         .catch(function(err) { console.log("It failed: ", err); })
@@ -32,10 +34,20 @@ function checkGameStatus(matches) {
     if (matches && matches.length > 0) {
         var liveMatch = matches.find(function(match) { return match.live; });
 
-        if (liveMatch && lastGameStatus != liveMatch.game) {
-            lastGameStatus = liveMatch.game;
+        if (!lastLiveStatus && liveMatch && !liveMatch.played) {
+            response = configMessage(liveMatch.game, 0);
 
-            response = configMessage(liveMatch);
+            lastLiveStatus = true;
+            lastScoreStatus = liveMatch.game;
+        } else if (lastLiveStatus && liveMatch &&
+                   lastScoreStatus != liveMatch.game) {
+            response = configMessage(liveMatch.game, 1);
+
+            lastScoreStatus = liveMatch.game;
+        } else if (lastLiveStatus && (!liveMatch || liveMatch.played)) {
+            response = configMessage(lastScoreStatus, 2);
+
+            lastLiveStatus = false;
         }
     }
     return response;
@@ -54,12 +66,23 @@ function sendRequest(msg) {
     })
 }
 
-function configMessage(data) {
-    var json = {
-        'title' : data.game,
-        'body' : data.competition,
-        'icon' : 'images/ball.png'
-    };
+function configMessage(body, msgType) {
+    var json = {'body' : body};
+
+    switch (msgType) {
+    case 0:
+        json.title = 'Começa o jogo!';
+        json.icon = 'images/time.png';
+        break;
+    case 1:
+        json.title = 'Gooool!';
+        json.icon = 'images/ball.png';
+        break;
+    case 2:
+        json.title = 'Fim de jogo!';
+        json.icon = 'images/time.png';
+        break;
+    }
 
     return JSON.stringify(json);
 }
