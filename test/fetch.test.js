@@ -30,13 +30,13 @@ describe('Fetch service', function() {
         it('should return the correct string in Portuguese', function() {
             assert.equal(typeof fetch, 'object');
             assert.equal(typeof fetch.configMessage, 'function');
-            assert.equal(typeof fetch.configMessage(match), 'string');
-            assert.equal(JSON.parse(fetch.configMessage(match)).title,
+            assert.equal(typeof fetch.configMessage(match.game), 'string');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 0)).title,
+                         'Começa o jogo!');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 1)).body,
                          'Atletico Mineiro 2 x 0 Cruzeiro');
-            assert.equal(JSON.parse(fetch.configMessage(match)).body,
-                         'Copa do brasil');
-            assert.equal(JSON.parse(fetch.configMessage(match)).icon,
-                         'images/ball.png');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 2)).icon,
+                         'images/time.png');
         })
     })
 
