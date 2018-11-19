@@ -1,40 +1,40 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var AWS = require("aws-sdk");
 
-var dbName = "mydb";
-var collectionName = "visitors";
-var dbo;
+const tableName = "Visitors";
 
-exports.connect =
-    function() {
-    MongoClient.connect(url, function(err, db) {
+AWS.config.update({region : "us-east-1"});
+
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+exports.getUsers =
+    function(callback) {
+    var params = {
+        TableName : tableName,
+        ExpressionAttributeValues : {":n" : null},
+        FilterExpression : "unsubscribeDate = :n"
+    };
+
+    docClient.scan(params, function(err, data) {
         if (err)
             throw err;
-        dbo = db.db(dbName);
-        console.log("Connected to collection ", collectionName);
+        callback(data.Items);
     });
 }
 
-    exports.getUsers =
-        function(callback) {
-    var query = {unsubscribeDate : null};
-    dbo.collection(collectionName).find(query).toArray(function(err, result) {
-        if (err)
-            throw err;
-        callback(result);
-    });
-}
-
-        exports.removeSubscription = function(id) {
+    exports.removeSubscription = function(endpoint) {
     var date = new Date();
     var dateISO = date.toISOString();
+    var params = {
+        TableName : tableName,
+        Key : {"endpoint" : endpoint},
+        ExpressionAttributeValues : {":x" : dateISO},
+        UpdateExpression : "set unsubscribeDate = :x"
+    };
 
-    var query = {_id : id};
-    var newvalues = {$set : {unsubscribeDate : dateISO}};
-    dbo.collection(collectionName)
-        .updateOne(query, newvalues, function(err, res) {
-            if (err)
-                throw err;
-            console.log("User successfully unsubscribed!");
-        });
+    docClient.update(params, function(err, data) {
+        if (err)
+            throw err;
+
+        console.log(data);
+    });
 }
