@@ -19,6 +19,7 @@
     },
     "homepage": "https://github.com/andrelopesmds/goalstrackerproject#readme",
     "dependencies": {
+        "aws-sdk": "^2.358.0",
         "body-parser": "^1.18.2",
         "chai": "^4.1.2",
         "chai-http": "^4.0.0",
