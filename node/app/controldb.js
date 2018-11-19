@@ -1,70 +1,46 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var AWS = require("aws-sdk");
 
-var dbName = "mydb";
-var collectionName = "visitors";
-var dbo;
+const tableName = "Visitors";
 
-exports.createdb =
-    function() {
-    MongoClient.connect(url, function(err, db) {
-        if (err)
-            throw err;
-        dbo = db.db(dbName);
-        dbo.createCollection(collectionName, function(err, res) {
-            if (err)
-                throw err;
-            console.log("Created/connected to collection Users!");
-        });
-    });
-}
+AWS.config.update({
+    region: "us-east-1"
+});
 
-    exports.insert =
-        function(endpoint, expirationTime, key256, keyAuth) {
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+exports.insert = function(endpoint, expirationTime, key256, keyAuth) {
     var date = new Date();
     var dateISO = date.toISOString();
 
-    var myObj = {
-        endpoint : endpoint,
-        expirationTime : expirationTime,
-        key256 : key256,
-        keyAuth : keyAuth,
-        subscribeDate : dateISO,
-        unsubscribeDate : null
+    var params = {
+        TableName: tableName,
+        Item: {
+            "endpoint": endpoint,
+            "expirationTime": expirationTime,
+            "key256": key256,
+            "keyAuth": keyAuth,
+            "subscribeDate": dateISO,
+            "unsubscribeDate": null
+        }
     };
-    dbo.collection(collectionName).insertOne(myObj, function(err, res) {
-        if (err)
+
+    docClient.put(params, function(err, data) {
+        if(err)
             throw err;
-        console.log("1 visitor inserted");
+        console.log("1 visitor inserted!");
+    }); 
+}
+
+exports.getSubscriptionDates = function(callback) {
+    var params = {
+        TableName: tableName
+    };
+
+
+    docClient.scan(params, function(err, data) {
+        if(err)
+            throw err;
+        callback(data.Items);
     });
 }
 
-        exports.getSubscriptionDates =
-            function(callback) {
-    var projection = {
-        projection : {_id : 0, subscribeDate : 1, unsubscribeDate : 1}
-    };
-    dbo.collection(collectionName)
-        .find({}, projection)
-        .toArray(function(err, result) {
-            if (err)
-                throw err;
-            callback(result);
-        });
-}
-
-            exports.select = function() {
-    var dbo;
-    MongoClient.connect(url, function(err, db) {
-        if (err)
-            throw err;
-        dbo = db.db(dbName);
-        dbo.collection(collectionName)
-            .find({}, {_id : 0})
-            .toArray(function(err, result) {
-                if (err)
-                    throw err;
-                console.log(result);
-            });
-    });
-}

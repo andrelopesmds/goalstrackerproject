@@ -2,14 +2,7 @@ var express = require('express')
 var serveStatic = require('serve-static')
 var bodyParser = require('body-parser')
 var app = express()
-var validate = require('data-validate');
 var controlDB = require('./controldb.js');
-var appPath = __dirname;
-const path = require('path');
-
-// Connect to DB and create visitors table if it does't exist
-// controlDB.createDB(appPath + '/db/');
-controlDB.createdb();
 
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json())
