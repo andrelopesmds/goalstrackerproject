@@ -30,7 +30,6 @@ app.post('/api/save-subscription/', function(req, res) {
 
 app.get('/statistics/', function(req, res) {
     controlDB.getSubscriptionDates(function(data) {
-        console.log(data);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({'status' : 'success', 'data' : data}));
     });
