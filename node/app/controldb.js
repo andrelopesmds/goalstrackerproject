@@ -1,6 +1,10 @@
 var AWS = require("aws-sdk");
 
-const tableName = "Visitors";
+var tableName = "VisitorsTest";
+
+if (process.env.NODE_ENV == "production") {
+    tableName = "Visitors";
+}
 
 AWS.config.update({
     region : "us-east-1",
