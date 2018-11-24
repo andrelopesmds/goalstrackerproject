@@ -55,7 +55,6 @@ describe('App service', function() {
             });
     });
 
-    // why it does not work if I put it at the end ?????
     it('should respond to get statistics', function(done) {
         chai.request(server).get('/statistics/').end(function(err, res) {
             // there should be no errors
