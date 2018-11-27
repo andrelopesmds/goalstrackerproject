@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andrelopesmds/goalstrackerproject.svg?branch=master)](https://travis-ci.org/andrelms1/goalstrackerproject)
+[![Build Status](https://travis-ci.org/andrelopesmds/goalstrackerproject.svg?branch=master)](https://travis-ci.org/andrelopesmds/goalstrackerproject)
 
 Tracks your favorite team and sends web push notifications
 when a match starts, ends or the team scores a goal.
