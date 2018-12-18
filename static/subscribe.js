@@ -53,22 +53,20 @@ function registerServiceWorker() {
                         if (e.target.state == "activated") {
                             // use pushManger for subscribing here.
                             subscribeUserToPush(reg);
-                            console.log(
-                                'Service worker registered and activated.');
+                            console.log('Service worker registered and activated.');
                         }
                     });
                 }
             },
             function(err) {
-                console.error('unsuccessful registration with ', workerFileName,
-                              err);
+                console.error('unsuccessful registration with ', workerFileName, err);
             });
 }
 
 function subscribeUserToPush(registration) {
     const subscribeOptions = {
-        userVisibleOnly : true,
-        applicationServerKey : urlBase64ToUint8Array(
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
             'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4')
     };
     return registration.pushManager.subscribe(subscribeOptions)
@@ -86,10 +84,12 @@ function sendToServer(subscription) {
     console.log(subscription);
 
     return fetch('/api/save-subscription/', {
-               method : 'POST',
-               headers : {'Content-Type' : 'application/json'},
-               body : subscription
-           })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: subscription
+        })
         .then(function(response) {
             if (response.ok) {
                 detectUser();
@@ -101,14 +101,13 @@ function sendToServer(subscription) {
         })
         .catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' +
-                        error.message);
+                error.message);
         });
 }
 
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 =
-        (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
     for (let i = 0; i < rawData.length; ++i) {

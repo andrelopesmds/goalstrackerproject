@@ -6,15 +6,17 @@ var expect = chai.expect;
 var nock = require('nock');
 var url = 'http://localhost:3000';
 
-var interceptor = nock(url).post('/').reply(200, {'success' : true});
+var interceptor = nock(url).post('/').reply(200, {
+    'success': true
+});
 
 var match = {
-    game : 'Atletico Mineiro 2 x 0 Cruzeiro',
-    competition : 'Copa do brasil',
-    live : true
+    game: 'Atletico Mineiro 2 x 0 Cruzeiro',
+    competition: 'Copa do brasil',
+    live: true
 }
 
-var matches = [ match ];
+var matches = [match];
 
 describe('Fetch service', function() {
     describe('runApi function', function() {
@@ -31,22 +33,19 @@ describe('Fetch service', function() {
             assert.equal(typeof fetch, 'object');
             assert.equal(typeof fetch.configMessage, 'function');
             assert.equal(typeof fetch.configMessage(match.game), 'string');
-            assert.equal(JSON.parse(fetch.configMessage(match.game, 0)).title,
-                         'Começa o jogo!');
-            assert.equal(JSON.parse(fetch.configMessage(match.game, 1)).body,
-                         'Atletico Mineiro 2 x 0 Cruzeiro');
-            assert.equal(JSON.parse(fetch.configMessage(match.game, 2)).icon,
-                         'images/time.png');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 0)).title, 'Começa o jogo!');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 1)).body, 'Atletico Mineiro 2 x 0 Cruzeiro');
+            assert.equal(JSON.parse(fetch.configMessage(match.game, 2)).icon, 'images/time.png');
         })
     })
 
     describe('checkGameStatus function', function() {
         it('should return a string if there is a new status in the game and null otherwise',
-           function() {
-               assert.equal(typeof fetch.checkGameStatus, 'function');
-               assert.equal(fetch.checkGameStatus(), null);
-               assert.equal(typeof fetch.checkGameStatus(matches), 'string');
-           })
+            function() {
+                assert.equal(typeof fetch.checkGameStatus, 'function');
+                assert.equal(fetch.checkGameStatus(), null);
+                assert.equal(typeof fetch.checkGameStatus(matches), 'string');
+            })
     })
 
     describe('sendRequest function', function() {
