@@ -4,7 +4,9 @@ var bodyParser = require('body-parser')
 var app = express()
 var controlDB = require('./controldb.js');
 
-app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json())
 
 app.post('/api/save-subscription/', function(req, res) {
@@ -19,19 +21,26 @@ app.post('/api/save-subscription/', function(req, res) {
         controlDB.insert(endpoint, expirationTime, key256, keyAuth);
 
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({success : true}));
+        res.send(JSON.stringify({
+            success: true
+        }));
     } else {
 
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
-        res.send(JSON.stringify({success : false}));
+        res.send(JSON.stringify({
+            success: false
+        }));
     }
 })
 
 app.get('/statistics/', function(req, res) {
     controlDB.getSubscriptionDates(function(data) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({'status' : 'success', 'data' : data}));
+        res.send(JSON.stringify({
+            'status': 'success',
+            'data': data
+        }));
     });
 })
 

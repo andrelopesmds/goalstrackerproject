@@ -4,9 +4,7 @@
     "description": "Pet project",
     "main": "app.js",
     "scripts": {
-        "test": "mocha --exit",
-        "precommit": "check-clang-format \"yarn format\"",
-        "format": "git-clang-format"
+        "test": "mocha --exit"
     },
     "repository": {
         "type": "git",

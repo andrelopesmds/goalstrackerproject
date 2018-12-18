@@ -7,18 +7,19 @@ if (process.env.NODE_ENV == "production") {
 }
 
 AWS.config.update({
-    region : "us-east-1",
-    accessKeyId : process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey : process.env.AWS_SECRET_ACCESS_KEY
+    region: "us-east-1",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.getUsers =
-    function(callback) {
+exports.getUsers = function(callback) {
     var params = {
-        TableName : tableName,
-        ExpressionAttributeValues : {":n" : null},
-        FilterExpression : "unsubscribeDate = :n"
+        TableName: tableName,
+        ExpressionAttributeValues: {
+            ":n": null
+        },
+        FilterExpression: "unsubscribeDate = :n"
     };
 
     docClient.scan(params, function(err, data) {
@@ -28,14 +29,18 @@ exports.getUsers =
     });
 }
 
-    exports.removeSubscription = function(endpoint) {
+exports.removeSubscription = function(endpoint) {
     var date = new Date();
     var dateISO = date.toISOString();
     var params = {
-        TableName : tableName,
-        Key : {"endpoint" : endpoint},
-        ExpressionAttributeValues : {":x" : dateISO},
-        UpdateExpression : "set unsubscribeDate = :x"
+        TableName: tableName,
+        Key: {
+            "endpoint": endpoint
+        },
+        ExpressionAttributeValues: {
+            ":x": dateISO
+        },
+        UpdateExpression: "set unsubscribeDate = :x"
     };
 
     docClient.update(params, function(err, data) {

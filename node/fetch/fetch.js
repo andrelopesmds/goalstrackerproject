@@ -10,16 +10,22 @@ const teamName = 'atletico-mineiro';
 var lastLiveStatus = false;
 var lastScoreStatus;
 
-var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
+var fetchGoals = new TimerJob({
+    interval: jobTime
+}, function(done) {
     return matches(countryName, teamName)
-        .then(function(matches) { return checkGameStatus(matches); })
+        .then(function(matches) {
+            return checkGameStatus(matches);
+        })
         .then(function(msg) {
             if (msg) {
                 sendRequest(msg);
                 console.log(msg);
             }
         })
-        .catch(function(err) { console.log("It failed: ", err); })
+        .catch(function(err) {
+            console.log("It failed: ", err);
+        })
         .then(function() {
             console.log('...');
             done();
@@ -32,7 +38,9 @@ function checkGameStatus(matches) {
     var response = null;
 
     if (matches && matches.length > 0) {
-        var liveMatch = matches.find(function(match) { return match.live; });
+        var liveMatch = matches.find(function(match) {
+            return match.live;
+        });
 
         if (!lastLiveStatus && liveMatch && !liveMatch.played) {
             response = configMessage(liveMatch.game, 0);
@@ -40,7 +48,7 @@ function checkGameStatus(matches) {
             lastLiveStatus = true;
             lastScoreStatus = liveMatch.game;
         } else if (lastLiveStatus && liveMatch &&
-                   lastScoreStatus != liveMatch.game) {
+            lastScoreStatus != liveMatch.game) {
             response = configMessage(liveMatch.game, 1);
 
             lastScoreStatus = liveMatch.game;
@@ -55,33 +63,40 @@ function checkGameStatus(matches) {
 
 function sendRequest(msg) {
     return new Promise(function(resolve, reject) {
-        request.post(url, {form : {team : 'galo', message : msg}},
-                     function(error, response, body) {
-                         if (!error && response.statusCode == 200) {
-                             resolve("'success':true");
-                         } else {
-                             reject("'success':false");
-                         }
-                     });
+        request.post(url, {
+                form: {
+                    team: 'galo',
+                    message: msg
+                }
+            },
+            function(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    resolve("'success':true");
+                } else {
+                    reject("'success':false");
+                }
+            });
     })
 }
 
 function configMessage(body, msgType) {
-    var json = {'body' : body};
+    var json = {
+        'body': body
+    };
 
     switch (msgType) {
-    case 0:
-        json.title = 'Começa o jogo!';
-        json.icon = 'images/time.png';
-        break;
-    case 1:
-        json.title = 'Gooool!';
-        json.icon = 'images/ball.png';
-        break;
-    case 2:
-        json.title = 'Fim de jogo!';
-        json.icon = 'images/time.png';
-        break;
+        case 0:
+            json.title = 'Começa o jogo!';
+            json.icon = 'images/time.png';
+            break;
+        case 1:
+            json.title = 'Gooool!';
+            json.icon = 'images/ball.png';
+            break;
+        case 2:
+            json.title = 'Fim de jogo!';
+            json.icon = 'images/time.png';
+            break;
     }
 
     return JSON.stringify(json);

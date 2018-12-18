@@ -8,9 +8,9 @@ var collectionName = "visitors";
 var dbo;
 
 AWS.config.update({
-    region : "us-east-1",
-    accessKeyId : process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey : process.env.AWS_SECRET_ACCESS_KEY
+    region: "us-east-1",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
@@ -28,15 +28,17 @@ MongoClient.connect(url, function(err, db) {
 });
 
 function InsertIntoDynamoDB(data) {
-    var params = {TableName : tableName};
+    var params = {
+        TableName: tableName
+    };
     for (let i = 0; i < data.length; i++) {
         params.Item = {
-            "endpoint" : data[i].endpoint,
-            "expirationTime" : data[i].expirationTime,
-            "key256" : data[i].key256,
-            "keyAuth" : data[i].keyAuth,
-            "subscribeDate" : data[i].subscribeDate,
-            "unsubscribeDate" : data[i].unsubscribeDate
+            "endpoint": data[i].endpoint,
+            "expirationTime": data[i].expirationTime,
+            "key256": data[i].key256,
+            "keyAuth": data[i].keyAuth,
+            "subscribeDate": data[i].subscribeDate,
+            "unsubscribeDate": data[i].unsubscribeDate
         };
         docClient.put(params, function(err, data) {
             if (err)
