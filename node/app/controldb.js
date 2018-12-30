@@ -39,7 +39,8 @@ exports.insert = function(endpoint, expirationTime, key256, keyAuth) {
 
 exports.getSubscriptionDates = function(callback) {
     var params = {
-        TableName: tableName
+        TableName: tableName,
+        ProjectionExpression: "subscribeDate, unsubscribeDate"
     };
 
     docClient.scan(params, function(err, data) {
