@@ -39,9 +39,8 @@ function getStatistics() {
             return response.json();
         })
         .then(function(obj) {
-            return makePoints(obj.data);
-        })
-        .then(function(points) {
+            var points = makePoints(obj.data);
+
             show(points);
         })
         .catch(function(error) {
