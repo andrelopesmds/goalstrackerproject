@@ -23,9 +23,29 @@ exports.getUsers = function(callback) {
     };
 
     docClient.scan(params, function(err, data) {
-        if (err)
-            throw err;
-        callback(data.Items);
+        if (err) {
+            console.log(err);
+        } else {
+            callback(data.Items);
+        }
+    });
+}
+
+exports.getUser = function(endpoint, callback) {
+    var params = {
+        TableName: tableName,
+        ExpressionAttributeValues: {
+            ":n": endpoint
+        },
+        FilterExpression: "endpoint = :n"
+    };
+
+    docClient.scan(params, function(err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            callback(data.Items);
+        }
     });
 }
 
