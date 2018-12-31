@@ -17,15 +17,24 @@ app.post('/api/save-subscription/', function(req, res) {
 
     // endpoint and keys are required, expirationTime is optional
     if (endpoint && key256 && keyAuth) {
+        controlDB.insert(endpoint, expirationTime, key256, keyAuth, function(result) {
 
-        controlDB.insert(endpoint, expirationTime, key256, keyAuth);
+            if (result) {
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({
+                    success: true
+                }));
 
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-            success: true
-        }));
+            } else {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(400)
+                res.send(JSON.stringify({
+                    success: false
+                }));
+            }
+        });
+
     } else {
-
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
         res.send(JSON.stringify({

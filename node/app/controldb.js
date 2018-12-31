@@ -14,7 +14,7 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.insert = function(endpoint, expirationTime, key256, keyAuth) {
+exports.insert = function(endpoint, expirationTime, key256, keyAuth, callback) {
     var date = new Date();
     var dateISO = date.toISOString();
 
@@ -31,9 +31,13 @@ exports.insert = function(endpoint, expirationTime, key256, keyAuth) {
     };
 
     docClient.put(params, function(err, data) {
-        if (err)
-            throw err;
-        console.log("1 visitor inserted!");
+        if (err) {
+            callback(false);
+
+        } else {
+            callback(true);
+
+        }
     });
 }
 
