@@ -3,6 +3,12 @@ var chaiHttp = require('chai-http');
 var server = require('../node/app/app.js');
 var should = chai.should();
 var expect = chai.expect;
+var nock = require('nock');
+var url = 'http://localhost:3000';
+
+var interceptor = nock(url).post('/').reply(200, {
+    'success': true
+});
 
 chai.use(chaiHttp);
 

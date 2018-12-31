@@ -3,6 +3,8 @@ var serveStatic = require('serve-static')
 var bodyParser = require('body-parser')
 var app = express()
 var controlDB = require('./controldb.js');
+var request = require('request');
+var pushServiceUrl = 'http://localhost:3000';
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -17,15 +19,26 @@ app.post('/api/save-subscription/', function(req, res) {
 
     // endpoint and keys are required, expirationTime is optional
     if (endpoint && key256 && keyAuth) {
+        controlDB.insert(endpoint, expirationTime, key256, keyAuth, function(result) {
 
-        controlDB.insert(endpoint, expirationTime, key256, keyAuth);
+            if (result) {
+                sendHelloWorldMessage();
 
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-            success: true
-        }));
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({
+                    success: true
+                }));
+
+            } else {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(400)
+                res.send(JSON.stringify({
+                    success: false
+                }));
+            }
+        });
+
     } else {
-
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
         res.send(JSON.stringify({
@@ -43,6 +56,28 @@ app.get('/statistics/', function(req, res) {
         }));
     });
 })
+
+
+function sendHelloWorldMessage() {
+    var json = {
+        "body": "Bem vindo",
+        "title": "Aqui é Galo",
+        "icon": "images/galo.png"
+    }
+
+    var msg = JSON.stringify(json);
+
+    request.post(pushServiceUrl, {
+        form: {
+            team: 'galo',
+            message: msg
+        }
+     }, function(error, response, body) {
+         console.log('error: ', error);
+         console.log('statusCode: ', response && response.statusCode);
+         console.log('body: ', body);
+     });
+}
 
 app.listen(8080, 'localhost')
 
