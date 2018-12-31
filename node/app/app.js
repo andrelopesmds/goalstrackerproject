@@ -22,7 +22,7 @@ app.post('/api/save-subscription/', function(req, res) {
         controlDB.insert(endpoint, expirationTime, key256, keyAuth, function(result) {
 
             if (result) {
-                sendHelloWorldMessage();
+                sendHelloWorldMessage(endpoint);
 
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({
@@ -58,7 +58,7 @@ app.get('/statistics/', function(req, res) {
 })
 
 
-function sendHelloWorldMessage() {
+function sendHelloWorldMessage(endpoint) {
     var json = {
         "body": "Bem vindo",
         "title": "Aqui é Galo",
@@ -67,16 +67,17 @@ function sendHelloWorldMessage() {
 
     var msg = JSON.stringify(json);
 
-    request.post(pushServiceUrl, {
+    request.post(pushServiceUrl + '/welcomeMessage', {
         form: {
             team: 'galo',
-            message: msg
+            message: msg,
+            endpoint: endpoint
         }
-     }, function(error, response, body) {
-         console.log('error: ', error);
-         console.log('statusCode: ', response && response.statusCode);
-         console.log('body: ', body);
-     });
+    }, function(error, response, body) {
+        console.log('error: ', error);
+        console.log('statusCode: ', response && response.statusCode);
+        console.log('body: ', body);
+    });
 }
 
 app.listen(8080, 'localhost')

@@ -22,8 +22,8 @@ app.post('/', function(req, res) {
                 }));
             })
             .catch(function(err) {
-                // server error, can't get subscriptions or send messages
                 console.log(err);
+
                 res.setHeader('Content-Type', 'application/json');
                 res.status(500)
                 res.send({
@@ -31,7 +31,39 @@ app.post('/', function(req, res) {
                 });
             })
     } else {
-        // invalid request - one of the required fields is empty
+        res.setHeader('Content-Type', 'application/json');
+        res.status(400)
+        res.send({
+            'success': false
+        });
+    }
+})
+
+app.post('/welcomeMessage', function(req, res) {
+    var endpoint = req.body.endpoint;
+    var message = req.body.message;
+
+    if (endpoint && message) {
+        return getSubscriptionFromDatabase(endpoint)
+            .then(function(subscriptions) {
+                sendMsg(subscriptions, message);
+
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({
+                    'success': true
+                }));
+            })
+            .catch(function(err) {
+                console.log(err);
+
+                res.setHeader('Content-Type', 'application/json');
+                res.status(500)
+                res.send({
+                    'success': false
+                });
+            });
+
+    } else {
         res.setHeader('Content-Type', 'application/json');
         res.status(400)
         res.send({
@@ -78,6 +110,14 @@ function sendMsg(data, message) {
 function getSubscriptionsFromDatabase() {
     return new Promise(function(resolve, reject) {
         controlDB.getUsers(function(subscriptions) {
+            resolve(subscriptions);
+        })
+    });
+}
+
+function getSubscriptionFromDatabase(endpoint) {
+    return new Promise(function(resolve, reject) {
+        controlDB.getUser(endpoint, function(subscriptions) {
             resolve(subscriptions);
         })
     });
