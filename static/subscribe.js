@@ -59,7 +59,7 @@ function registerServiceWorker() {
                 }
             },
             function(err) {
-                console.error('unsuccessful registration with ', workerFileName, err);
+                console.error('unsuccessful registration with ', 'service-worker.js', err);
             });
 }
 
