@@ -4,6 +4,13 @@ var app = express()
 var bodyParser = require('body-parser')
 var controlDB = require('./controldb.js');
 
+const vapidKeys = {
+    publicKey: process.env.PUBLIC_KEY,
+    privateKey: process.env.PRIVATE_KEY
+};
+
+webpush.setVapidDetails('mailto:web-push-book@gauntface.com', vapidKeys.publicKey, vapidKeys.privateKey);
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -73,13 +80,6 @@ app.post('/welcomeMessage', function(req, res) {
 })
 
 app.listen(3000, 'localhost')
-
-const vapidKeys = {
-    publicKey: process.env.PUBLIC_KEY,
-    privateKey: process.env.PRIVATE_KEY
-};
-
-webpush.setVapidDetails('mailto:web-push-book@gauntface.com', vapidKeys.publicKey, vapidKeys.privateKey);
 
 function sendMsg(data, message) {
 
