@@ -1,13 +1,17 @@
+const argv = require('yargs').argv;
+const listenPort = argv.listenPort;
 const webpush = require('web-push');
+const vapidKeys = {
+    publicKey: process.env.PUBLIC_KEY,
+    privateKey: process.env.PRIVATE_KEY
+
+};
+
 var express = require('express')
 var app = express()
 var bodyParser = require('body-parser')
 var controlDB = require('./controldb.js');
 
-const vapidKeys = {
-    publicKey: process.env.PUBLIC_KEY,
-    privateKey: process.env.PRIVATE_KEY
-};
 
 webpush.setVapidDetails('mailto:web-push-book@gauntface.com', vapidKeys.publicKey, vapidKeys.privateKey);
 
@@ -79,7 +83,7 @@ app.post('/welcomeMessage', function(req, res) {
     }
 })
 
-app.listen(3000, 'localhost')
+app.listen(listenPort, 'localhost')
 
 function sendMsg(data, message) {
 

@@ -1,14 +1,18 @@
+const argv = require('yargs').argv;
+
 var express = require('express')
 var serveStatic = require('serve-static')
 var bodyParser = require('body-parser')
 var app = express()
 var controlDB = require('./controldb.js');
 var request = require('request');
-var pushServiceUrl = 'http://localhost:3000';
+var pushServiceUrl = 'http://localhost:' + argv.pushPort;
+var listenPort = argv.listenPort;
 
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
 app.use(bodyParser.json())
 
 app.post('/api/save-subscription/', function(req, res) {
@@ -80,6 +84,6 @@ function sendHelloWorldMessage(endpoint) {
     });
 }
 
-app.listen(8080, 'localhost')
+app.listen(listenPort, 'localhost')
 
 module.exports = app; // for testing

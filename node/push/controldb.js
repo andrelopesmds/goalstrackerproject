@@ -1,9 +1,11 @@
+const argv = require('yargs').argv;
+
 var AWS = require("aws-sdk");
 
 var tableName = "VisitorsTest";
 
 if (process.env.NODE_ENV == "production") {
-    tableName = "Visitors";
+    tableName = argv.tableName;
 }
 
 AWS.config.update({
@@ -11,6 +13,7 @@ AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
+
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.getUsers = function(callback) {
