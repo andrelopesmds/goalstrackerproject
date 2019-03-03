@@ -1,9 +1,11 @@
+const argv = require('yargs').argv;
+
 var AWS = require("aws-sdk");
 
 var tableName = "VisitorsTest";
 
 if (process.env.NODE_ENV == "production") {
-    tableName = "Visitors";
+    tableName = argv.tableName;
 }
 
 AWS.config.update({
