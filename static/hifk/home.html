@@ -1,13 +1,53 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="With this app you can follow HIFK and you will not lose any goal of HIFK!">
 
-  <title>Hello World - HIFk</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Follow HIFK</title>
+    <link rel="icon" href="images/hifk.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
 </head>
-<body>
-    <h1>We are working on it!</h1>
+
+<body onload="detectUser()">
+
+    <div id="home" class="bg">
+
+        <!-- Menu  -->
+        <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+            <a href="#home" class="btn  btn-danger">HOME</a>
+            <a href="#about" class="btn  btn-danger">ABOUT</a>
+        </nav>
+
+        <div id="buttons">
+            <div class="">
+                <p onclick="subscribe()" id="p1" class="bt btn btn-lg btn-danger">Click here and follow HIFK!</p>
+                <p id="p2"><img src="images/hifk.png" height="70" width="70"></p>
+                <p id="p3" class="bt btn btn-lg btn-danger">Registration completed!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container" id="about">
+        <div style="margin-top:50px">
+            <h1>ABOUT</h1>
+            <p><b>FOLLOW HIFK</b> allows you to follow <b>HIFK</b> using your smartphone or computer, without installing any app.</p>
+            <p>With <b>FOLLOW HIFK</b> you will receive messages when <b>HIFK</b> scores a goal. It is free! Do not lose any goal of <b>HIFK</b>!</p>
+            <p>It is necessary that you agree to receive notifications.</p>
+        </div>
+    </div>
+
+    <script src="detectuser.js"></script>
+    <script src="subscribe.js"></script>
+
 </body>
+
 </html>
