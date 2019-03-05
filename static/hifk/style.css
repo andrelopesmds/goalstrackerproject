@@ -1,0 +1,49 @@
+body, html {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.bg { 
+  background-image: url("images/stadium.jpg");
+
+  height: 100%; 
+  width: 100%; 
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  display: table;
+}
+
+#buttons {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.btn {
+  margin: 5px;
+}
+
+.navbar {
+  text-align: left;
+}
+  
+#p2, #p3 {
+  display: none;
+}
+
+html,body, #about {
+  background-color: white;
+  background-size: 100% 100%;    
+  background-repeat: no-repeat;
+  color: red;
+  font-family: "Itim", "cursive";
+  font-size: large;
+}
+
+
