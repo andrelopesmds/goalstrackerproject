@@ -8,6 +8,7 @@ var controlDB = require('./controldb.js');
 var request = require('request');
 var pushServiceUrl = 'http://localhost:' + argv.pushPort;
 var listenPort = argv.listenPort;
+var team = argv.teamName;
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -63,17 +64,35 @@ app.get('/statistics/', function(req, res) {
 
 
 function sendHelloWorldMessage(endpoint) {
-    var json = {
-        "body": "Bem vindo",
-        "title": "Aqui é Galo",
-        "icon": "images/galo.png"
+    var json;
+
+    if (team === 'galo') {
+        json = {
+            "body": "Bem vindo",
+            "title": "Aqui é Galo",
+            "icon": "images/galo.png"
+        };
+
+    } else if (team === 'hifk') {
+        json = {
+            "body": "Welcome",
+            "title": "HIFK app",
+            "icon": "images/hifk.png"
+        }
+
+    } else {
+        json = {
+            "body": "Welcome",
+            "title": "This is a test",
+            "icon": "images/galo.png"
+        }
+
     }
 
     var msg = JSON.stringify(json);
 
     request.post(pushServiceUrl + '/welcomeMessage', {
         form: {
-            team: 'galo',
             message: msg,
             endpoint: endpoint
         }
