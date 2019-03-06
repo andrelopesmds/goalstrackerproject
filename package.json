@@ -32,6 +32,8 @@
         "nock": "^9.2.5",
         "request": "^2.83.0",
         "serve-static": "^1.13.1",
+        "sports-live": "^1.0.1",
+        "string-score": "^1.0.1",
         "timer-jobs": "^0.1.0",
         "web-push": "^3.2.5",
         "yargs": "^13.2.1"
