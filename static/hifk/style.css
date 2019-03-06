@@ -38,11 +38,11 @@ html {
 }
 
 html,body, #about {
-  background-color: white;
+  background-color: black;
   background-size: 100% 100%;    
   background-repeat: no-repeat;
   color: red;
-  font-family: "Itim", "cursive";
+  font-family: "din-condensed", sans-serif;
   font-size: large;
 }
 
