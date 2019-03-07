@@ -32,13 +32,9 @@ var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
 fetchGoals.start();
 
 function checkGameStatus(matches) {
-
     if (matches) {
-
         for (i = 0; i < matches.length; i++) {
-
             if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
-
                 if (buffer != matches[i].currentStatus ||
                     score != matches[i].score) {
 
@@ -52,12 +48,10 @@ function checkGameStatus(matches) {
             }
         }
     }
-
     return null;
 }
 
 function sendRequest(msg) {
-
     return new Promise(function(resolve, reject) {
         request.post(url, {
             form : {
@@ -89,21 +83,17 @@ function runApi() {
 }
 
 function configMessage(data) {
-
     if (data.currentStatus.includes(data.team1)) {
-
         var title = data.team1 + 'scores a goal!';
         var body = data.team1 + " " + data.score + " " + data.team2;
         var icon = "images/hifk.png";
 
     } else if (data.currentStatus.includes(data.team2)) {
-
         var title = message = data.team2 + 'scores a goal!';
         var body = data.team1 + " " + data.score + " " + data.team2;
         var icon = "images/hifk.png";
 
     } else {
-
         switch (data.currentStatus) {
         case 'Kick Off':
             var title = "Game started!\n";
@@ -144,7 +134,6 @@ function configMessage(data) {
     }
 
     var data = JSON.stringify(json);
-
     return data;
 }
 
