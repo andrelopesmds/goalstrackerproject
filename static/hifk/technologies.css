@@ -1,11 +1,9 @@
 body, html {
-  height: 100%;
+  background-color: black;
 }
 
 
-.bg { 
-  
-  background-color: black;
+.bg {
   height: 100%; 
   width: 100%; 
 }
@@ -24,4 +22,8 @@ h3 {
 .item {
   display: flex;
   padding: 20px;
+}
+
+.github {
+  cursor: pointer;
 }
