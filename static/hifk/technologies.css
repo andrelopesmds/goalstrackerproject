@@ -1,0 +1,27 @@
+body, html {
+  height: 100%;
+}
+
+
+.bg { 
+  
+  background-color: black;
+  height: 100%; 
+  width: 100%; 
+}
+
+img {
+  height: 25px;
+  width: 25px;
+}
+
+h3 {
+  padding-left: 24px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.item {
+  display: flex;
+  padding: 20px;
+}
