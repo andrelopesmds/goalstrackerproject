@@ -1,16 +1,15 @@
 var request = require('request');
 
 var json = {
-    "body": "This is a test message",
-    "title": "Aqui é Galo",
-    "icon": "images/galo.png"
+    "body": "The match has just started!",
+    "title": "HIFK x Pelicans",
+    "icon": "images/hifk.png"
 }
 
 var msg = JSON.stringify(json);
 
-request.post('http://localhost:3000', {
+request.post('http://localhost:3001', {
         form: {
-            team: 'galo',
             message: msg
         }
     },
