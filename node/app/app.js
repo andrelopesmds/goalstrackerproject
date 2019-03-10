@@ -75,8 +75,8 @@ function sendHelloWorldMessage(endpoint) {
 
     } else if (team === 'hifk') {
         json = {
-            "body": "Welcome to watch HIFK",
-            "title": "You joined the crowd! Go HIFK!",
+            "title": "Welcome to watch HIFK",
+            "body": "You joined the crowd! Go HIFK!",
             "icon": "images/hifk.png"
         }
 
