@@ -7,3 +7,16 @@ User subscribes to web notifications on a responsive website
 developed using Bootstrap. A crawler running on the server
 side harversters the web for matches events. Another service
 notifies the subscribers when an event occours.
+
+<table cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" valign="center">
+      <img src="screenshots/subscription.jpeg" alt="the picture is not yet loaded." style="width:580px;"/>
+      <br />
+    </td>
+    <td align="center" valign="center">
+      <img src="screenshots/message.jpeg" alt="the picture is not yet loaded." style="width:580px;"/>
+      <br />
+    </td>
+  </tr>
+</table>
