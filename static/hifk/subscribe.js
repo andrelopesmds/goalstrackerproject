@@ -60,7 +60,7 @@ function subscribeUserToPush(registration) {
 function sendToServer(subscription) {
     console.log(subscription);
 
-    return fetch('/api/save-subscription/', {
+    return fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
