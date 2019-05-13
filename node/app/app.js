@@ -1,108 +1,42 @@
-const argv = require('yargs').argv;
+const AWS                   = require('aws-sdk');
+const response              = require('./response.js');
+const subscriptionValidator = require('./subscription-validator.js');
 
-var express = require('express')
-var serveStatic = require('serve-static')
-var bodyParser = require('body-parser')
-var app = express()
-var controlDB = require('./controldb.js');
-var request = require('request');
-var pushServiceUrl = 'http://localhost:' + argv.pushPort;
-var listenPort = argv.listenPort;
-var team = argv.teamName;
 
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
+exports.handler = function (event, context, callback) {
+    const docClient = new AWS.DynamoDB.DocumentClient();
 
-app.use(bodyParser.json())
-
-app.post('/api/save-subscription/', function(req, res) {
-    var endpoint = req.body.endpoint;
-    var expirationTime = req.body.expirationTime;
-    var key256 = req.body.keys.p256dh;
-    var keyAuth = req.body.keys.auth;
-
-    // endpoint and keys are required, expirationTime is optional
-    if (endpoint && key256 && keyAuth) {
-        controlDB.insert(endpoint, expirationTime, key256, keyAuth, function(result) {
-
-            if (result) {
-                sendHelloWorldMessage(endpoint);
-
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify({
-                    success: true
-                }));
-
-            } else {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(400)
-                res.send(JSON.stringify({
-                    success: false
-                }));
-            }
-        });
-
+    if (!subscriptionValidator.isValid(event)) {
+        callback(null, response.badRequest);
     } else {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(400)
-        res.send(JSON.stringify({
-            success: false
-        }));
+	    var parameters = createParameters(event);
+		
+		docClient.put(parameters, function(err, data) {
+			if (err) {
+				console.log(err);
+				callback(null, response.internalError);
+			}
+			
+			callback(null, response.created);				
+		});
     }
-})
+};
 
-app.get('/statistics/', function(req, res) {
-    controlDB.getSubscriptionDates(function(data) {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify({
-            'status': 'success',
-            'data': data
-        }));
-    });
-})
+function createParameters(event) {
+	let date = new Date();
+	let dateISO = date.toISOString();
 
+	let parameters = {
+		TableName: process.env.tableName,
+		Item: {
+			"endpoint": event.endpoint,
+			"expirationTime": event.expirationTime,
+			"key256": event.keys.p256dh,
+			"keyAuth": event.keys.auth,
+			"subscribeDate": dateISO,
+			"unsubscribeDate": null
+		}
+	};
 
-function sendHelloWorldMessage(endpoint) {
-    var json;
-
-    if (team === 'galo') {
-        json = {
-            "body": "Bem vindo",
-            "title": "Aqui é Galo",
-            "icon": "images/galo.png"
-        };
-
-    } else if (team === 'hifk') {
-        json = {
-            "title": "HIFK",
-            "body": "You joined the crowd! Go HIFK!",
-            "icon": "images/hifk.png"
-        }
-
-    } else {
-        json = {
-            "body": "Welcome",
-            "title": "This is a test",
-            "icon": "images/galo.png"
-        }
-
-    }
-
-    var msg = JSON.stringify(json);
-
-    request.post(pushServiceUrl + '/welcomeMessage', {
-        form: {
-            message: msg,
-            endpoint: endpoint
-        }
-    }, function(error, response, body) {
-        console.log('error: ', error);
-        console.log('statusCode: ', response && response.statusCode);
-        console.log('body: ', body);
-    });
+    return parameters;
 }
-
-app.listen(listenPort, 'localhost')
-
-module.exports = app; // for testing
