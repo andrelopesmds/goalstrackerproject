@@ -1,30 +1,32 @@
-const argv = require('yargs').argv;
-const listenPort = argv.listenPort;
-const webpush = require('web-push');
+const bodyParser = require('body-parser')
+const controlDB  = require('./controldb.js');
+const express    = require('express')
+const webpush    = require('web-push');
+
+const app = express()
+const PORT = 80;
+
+
 const vapidKeys = {
     publicKey: process.env.PUBLIC_KEY,
     privateKey: process.env.PRIVATE_KEY
-
 };
 
-var express = require('express')
-var app = express()
-var bodyParser = require('body-parser')
-var controlDB = require('./controldb.js');
+webpush.setVapidDetails(
+    'mailto:web-push-book@gauntface.com',
+    vapidKeys.publicKey,
+    vapidKeys.privateKey
+);
 
+app.use(bodyParser.urlencoded({ extended: false }));
 
-webpush.setVapidDetails('mailto:web-push-book@gauntface.com', vapidKeys.publicKey, vapidKeys.privateKey);
-
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
 
 app.post('/', function(req, res) {
-    var message = validateRequest(req);
+    let message = validateRequest(req);
 
     if (message) {
         return getSubscriptionsFromDatabase()
-            .then(function(subscriptions) {
+            .then(subscriptions => {
                 sendMsg(subscriptions, message);
 
                 res.setHeader('Content-Type', 'application/json');
@@ -32,7 +34,7 @@ app.post('/', function(req, res) {
                     'success': true
                 }));
             })
-            .catch(function(err) {
+            .catch(err => {
                 console.log(err);
 
                 res.setHeader('Content-Type', 'application/json');
@@ -51,12 +53,12 @@ app.post('/', function(req, res) {
 })
 
 app.post('/welcomeMessage', function(req, res) {
-    var endpoint = req.body.endpoint;
-    var message = req.body.message;
+    let endpoint = req.body.endpoint;
+    let message = req.body.message;
 
     if (endpoint && message) {
         return getSubscriptionFromDatabase(endpoint)
-            .then(function(subscriptions) {
+            .then(subscriptions => {
                 sendMsg(subscriptions, message);
 
                 res.setHeader('Content-Type', 'application/json');
@@ -64,7 +66,7 @@ app.post('/welcomeMessage', function(req, res) {
                     'success': true
                 }));
             })
-            .catch(function(err) {
+            .catch(err => {
                 console.log(err);
 
                 res.setHeader('Content-Type', 'application/json');
@@ -83,12 +85,10 @@ app.post('/welcomeMessage', function(req, res) {
     }
 })
 
-app.listen(listenPort, 'localhost')
+app.listen(PORT)
 
 function sendMsg(data, message) {
-
     for (let i = 0; i < data.length; i++) {
-
         const endpoint = data[i].endpoint;
         const subscription = {
             "endpoint": data[i].endpoint,
@@ -102,7 +102,6 @@ function sendMsg(data, message) {
         webpush.sendNotification(subscription, message)
             .catch((err) => {
                 if (err.statusCode === 410) {
-
                     return removeSubscriptionFromDatabase(endpoint);
                 } else {
                     console.log('Subscription is no longer valid: ', err);
@@ -132,9 +131,8 @@ function removeSubscriptionFromDatabase(subscription) {
 }
 
 function validateRequest(req) {
-    // check if the request has the fields required: title, body, icon
     if (req.body.message) {
-        var obj = JSON.parse(req.body.message);
+        let obj = JSON.parse(req.body.message);
         if (obj.title && obj.body && obj.icon) {
             return JSON.stringify(obj);
         } else {
