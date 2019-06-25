@@ -4,7 +4,7 @@ const express    = require('express')
 const webpush    = require('web-push');
 
 const app = express()
-const PORT = 80;
+const PORT = 8080;
 
 
 const vapidKeys = {
