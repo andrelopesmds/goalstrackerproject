@@ -1,32 +1,22 @@
+const URL = 'https://5azvp958r9.execute-api.us-east-1.amazonaws.com/prod';
+
 function subscribe() {
-
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-
-        if (/Safari/.test(navigator.userAgent) &&
-            /Apple Computer/.teste(navigator.vendor)) {
-
-            if (window.confirm(
-                    'Seu navagador não suporta o envio de notificações, mas você pode utilizar o SIGA O GALO no Google Chorme.')) {
-
-                window.location.href =
-                    'https://itunes.apple.com/br/app/google-chrome/id535886823?mt=8';
+        if (/Safari/.test(navigator.userAgent) && /Apple Computer/.teste(navigator.vendor)) {
+            if (window.confirm('Seu navagador não suporta o envio de notificações, mas você pode utilizar o SIGA O GALO no Google Chorme.')) {
+                window.location.href = 'https://itunes.apple.com/br/app/google-chrome/id535886823?mt=8';
             }
-
         } else {
-
             alert("Seu navegador não suporta o envio de notificações!");
         }
 
         document.getElementById("buttonId").disabled = true;
-
     } else {
-
         registerServiceWorker();
     }
 }
 
 function registerServiceWorker() {
-
     navigator.serviceWorker.register('service-worker.js')
         .then(
             function(reg) {
@@ -80,10 +70,7 @@ function subscribeUserToPush(registration) {
 }
 
 function sendToServer(subscription) {
-
-    console.log(subscription);
-
-    return fetch('/api/save-subscription/', {
+    return fetch(URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
