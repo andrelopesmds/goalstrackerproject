@@ -1,0 +1,27 @@
+{
+  "name": "fetch",
+  "version": "1.0.0",
+  "description": "fetch service",
+  "main": "fetch.js",
+  "scripts": {
+    "test": "PUSH_URL=http://localhost mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "livesoccertv-parser": "^5.3.0",
+    "request": "^2.88.0",
+    "timer-jobs": "^0.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/andrelopesmds/goalstrackerproject.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andrelopesmds/goalstrackerproject/issues"
+  },
+  "homepage": "https://github.com/andrelopesmds/goalstrackerproject#readme"
+}
