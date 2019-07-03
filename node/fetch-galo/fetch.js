@@ -1,18 +1,22 @@
-var matches = require('livesoccertv-parser')
-var request = require('request')
-var TimerJob = require('timer-jobs')
+const matches = require('livesoccertv-parser')
+const request = require('request')
+const TimerJob = require('timer-jobs')
 
-const url = 'http://localhost:3000';
-const jobTime = 120000;
+const URL = process.env.PUSH_URL;
+const INTERVAL = process.env.JOB_INTERVAL;
+const ENVIRONMENT = process.env.NODE_ENV;
+
+const jobConfig = {
+    interval: INTERVAL
+};
+
 const countryName = 'brazil';
 const teamName = 'atletico-mineiro';
 
 var lastLiveStatus = false;
 var lastScoreStatus;
 
-var fetchGoals = new TimerJob({
-    interval: jobTime
-}, function(done) {
+var fetchGoals = new TimerJob(jobConfig, function(done) {
     return matches(countryName, teamName)
         .then(function(matches) {
             return checkGameStatus(matches);
@@ -32,13 +36,15 @@ var fetchGoals = new TimerJob({
         })
 });
 
-fetchGoals.start();
+if (ENVIRONMENT === 'production') {
+    fetchGoals.start();
+}
 
 function checkGameStatus(matches) {
-    var response = null;
+    let response = null;
 
     if (matches && matches.length > 0) {
-        var liveMatch = matches.find(function(match) {
+        let liveMatch = matches.find(function(match) {
             return match.live;
         });
 
@@ -58,29 +64,31 @@ function checkGameStatus(matches) {
             lastLiveStatus = false;
         }
     }
+
     return response;
 }
 
 function sendRequest(msg) {
     return new Promise(function(resolve, reject) {
-        request.post(url, {
-                form: {
-                    team: 'galo',
-                    message: msg
-                }
-            },
-            function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    resolve("'success':true");
-                } else {
-                    reject("'success':false");
-                }
-            });
-    })
+        let obj = {
+            form: {
+                team: 'galo',
+                message: msg
+            }
+        };
+        
+        request.post(URL, obj, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                resolve("'success':true");
+            } else {
+                reject("'success':false");
+            }
+        });
+    });
 }
 
 function configMessage(body, msgType) {
-    var json = {
+    let json = {
         'body': body
     };
 
