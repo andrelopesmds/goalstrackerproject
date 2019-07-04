@@ -4,6 +4,16 @@ matrix:
       node_js:
         - "9"
       before_install:
+        - cd node/app/
+      install: 
+        - npm install
+      script:
+        - npm test
+      
+    - language: node_js
+      node_js:
+        - "9"
+      before_install:
         - cd node/push/
       install: 
         - npm install
