@@ -2,8 +2,8 @@ const assert = require('assert');
 
 describe('test', function() {
   describe('#test', function() {
-    it('app2 tested ok', function() {
-      assert.equal(4, 4);
+    it('app1 tested ok', function() {
+      assert.equal(3, 3);
     });
   });
 });

@@ -4,7 +4,7 @@
   "description": "fetch service",
   "main": "fetch.js",
   "scripts": {
-    "test": "PUSH_URL=http://localhost mocha"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
