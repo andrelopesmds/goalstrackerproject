@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "aws-sdk": "^2.488.0",
     "mocha": "^6.1.4"
   }
 }
