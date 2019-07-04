@@ -1,10 +1,10 @@
+const app = require('../app.js');
 const assert = require('assert');
-const server = require('../node/app/app.js');
+const AWS = require('aws-sdk');
 
-var AWS = require('aws-sdk');
 var AWSMock = require('aws-sdk-mock');
 AWSMock.setSDKInstance(AWS);
- 
+
 AWSMock.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
     callback(null, {
         statusCode: 201,
@@ -30,16 +30,22 @@ const invalidSubscription = {
     }
 };
 
+
 describe('App service', function() {
+    it('import module correctly', function() {
+        assert.equal(typeof app, 'object');
+        assert.equal(typeof app.handler, 'function');
+    });
+    
     it('should respond with bad request for invalid subscriptions', function() {
-        server.handler(invalidSubscription, null, function(err, result) {
+        app.handler(invalidSubscription, null, function(err, result) {
             assert.equal(result.statusCode, 400);
         });
     });
-
+ 
     it('should respond with created for a valid subscription', function() {
-        server.handler(validSubscription, null, function(err, result) {
+        app.handler(validSubscription, null, function(err, result) {
             assert.equal(result.statusCode, 201);
         });
-    });
+    });   
 });
