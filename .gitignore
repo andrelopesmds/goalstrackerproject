@@ -1,4 +1,4 @@
-node_modules
-node/fetch/node_modules
+node/app/node_modules
+node/fetch-galo/node_modules
 node/push/node_modules
 env-and-keys
