@@ -1,6 +1,7 @@
+const AWS = require('aws-sdk');
+
 const app = require('../app.js');
 const assert = require('assert');
-const AWS = require('aws-sdk');
 
 var AWSMock = require('aws-sdk-mock');
 AWSMock.setSDKInstance(AWS);
@@ -37,15 +38,14 @@ describe('App service', function() {
         assert.equal(typeof app.handler, 'function');
     });
     
-    it('should respond with bad request for invalid subscriptions', function() {
-        app.handler(invalidSubscription, null, function(err, result) {
-            assert.equal(result.statusCode, 400);
-        });
+    it('should respond with bad request for invalid subscriptions', async function() {
+        const result = await app.handler(invalidSubscription);
+        assert.equal(result.statusCode, 400);
     });
  
-    it('should respond with created for a valid subscription', function() {
-        app.handler(validSubscription, null, function(err, result) {
-            assert.equal(result.statusCode, 201);
-        });
+    it('should respond with created for a valid subscription', async function() {
+        const result = await app.handler(validSubscription);
+        console.log(result);
+        assert.equal(result.statusCode, 201);
     });   
 });
