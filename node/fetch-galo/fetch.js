@@ -3,12 +3,11 @@ const matches = require('livesoccertv-parser')
 
 const AWS = require("aws-sdk");
 
-
-const COUNTRY = process.env.COUNTRY;     // brazil
-const TEAM = process.env.TEAM;           // atletico-mineiro 
-const INTERVAL = process.env.JOB_INTERVAL;    // 2
-const ENVIRONMENT = process.env.NODE_ENV;     // production
-const LAMBDA_NAME = process.env.LAMBDA_NAME;  //'galo-push';
+const COUNTRY = process.env.COUNTRY;
+const TEAM = process.env.TEAM;
+const INTERVAL = process.env.JOB_INTERVAL;
+const ENVIRONMENT = process.env.NODE_ENV;
+const LAMBDA_NAME = process.env.LAMBDA_NAME;
 
 var lastLiveStatus = false;
 var lastScoreStatus;
