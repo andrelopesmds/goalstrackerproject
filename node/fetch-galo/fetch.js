@@ -1,43 +1,58 @@
+const cronJob = require('cron').CronJob;
 const matches = require('livesoccertv-parser')
-const request = require('request')
-const TimerJob = require('timer-jobs')
 
-const URL = process.env.PUSH_URL;
-const INTERVAL = process.env.JOB_INTERVAL;
-const ENVIRONMENT = process.env.NODE_ENV;
+const AWS = require("aws-sdk");
 
-const jobConfig = {
-    interval: INTERVAL
-};
 
-const countryName = 'brazil';
-const teamName = 'atletico-mineiro';
+const COUNTRY = process.env.COUNTRY;     // brazil
+const TEAM = process.env.TEAM;           // atletico-mineiro 
+const INTERVAL = process.env.JOB_INTERVAL;    // 2
+const ENVIRONMENT = process.env.NODE_ENV;     // production
+const LAMBDA_NAME = process.env.LAMBDA_NAME;  //'galo-push';
 
 var lastLiveStatus = false;
 var lastScoreStatus;
 
-var fetchGoals = new TimerJob(jobConfig, function(done) {
-    return matches(countryName, teamName)
-        .then(function(matches) {
-            return checkGameStatus(matches);
-        })
-        .then(function(msg) {
-            if (msg) {
-                sendRequest(msg);
-                console.log(msg);
-            }
-        })
-        .catch(function(err) {
-            console.log("It failed: ", err);
-        })
-        .then(function() {
-            console.log('...');
-            done();
-        })
+
+const job = new cronJob('0 */' + INTERVAL + ' * * * *', function() {
+	fetchGoals();
 });
 
 if (ENVIRONMENT === 'production') {
-    fetchGoals.start();
+    job.start();
+}
+
+async function fetchGoals() {
+    let results = await matches(COUNTRY, TEAM);
+
+    let msg = checkGameStatus(results);
+
+    if (msg) {
+        send(msg);
+    }
+}
+
+async function send(msg) {
+    return new Promise((resolve, reject) => {
+        const lambda = new AWS.Lambda({
+            region: 'us-east-1'
+        });
+
+        let params = {
+            FunctionName: LAMBDA_NAME,
+            InvocationType: 'RequestResponse',
+            Payload: msg
+        };
+
+        lambda.invoke(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(data)
+            }
+        });
+    });
 }
 
 function checkGameStatus(matches) {
@@ -68,25 +83,6 @@ function checkGameStatus(matches) {
     return response;
 }
 
-function sendRequest(msg) {
-    return new Promise(function(resolve, reject) {
-        let obj = {
-            form: {
-                team: 'galo',
-                message: msg
-            }
-        };
-        
-        request.post(URL, obj, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                resolve("'success':true");
-            } else {
-                reject("'success':false");
-            }
-        });
-    });
-}
-
 function configMessage(body, msgType) {
     let json = {
         'body': body
@@ -114,5 +110,5 @@ var fetch = {};
 fetch.matches = matches;
 fetch.configMessage = configMessage;
 fetch.checkGameStatus = checkGameStatus;
-fetch.sendRequest = sendRequest;
+fetch.send = send;
 module.exports = fetch;

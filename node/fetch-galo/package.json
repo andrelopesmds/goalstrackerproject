@@ -4,16 +4,17 @@
   "description": "fetch service",
   "main": "fetch.js",
   "scripts": {
-    "test": "PUSH_URL=http://localhost mocha"
+    "test": "JOB_INTERVAL=1 COUNTRY=brazil TEAM=atletico-mineiro LAMBDA_NAME=xxx mocha"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "livesoccertv-parser": "^5.3.0",
-    "request": "^2.88.0",
-    "timer-jobs": "^0.1.0"
+    "cron": "^1.7.1",
+    "livesoccertv-parser": "^5.3.0"
   },
   "devDependencies": {
+    "aws-sdk": "^2.493.0",
+    "aws-sdk-mock": "^4.5.0",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "nock": "^10.0.6"

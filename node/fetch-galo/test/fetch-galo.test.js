@@ -1,16 +1,25 @@
-var assert = require('assert');
-var fetch = require('../fetch.js');
-var chai = require('chai');
-var should = chai.should();
-var expect = chai.expect;
-var nock = require('nock');
-var url = 'http://localhost';
+const AWS = require('aws-sdk');
 
-var interceptor = nock(url).post('/').reply(200, {
-    'success': true
+const assert = require('assert');
+const fetch = require('../fetch.js');
+const chai = require('chai');
+const should = chai.should();
+const expect = chai.expect;
+
+const COUNTRY = process.env.COUNTRY;
+const TEAM = process.env.TEAM;
+
+var AWSMock = require('aws-sdk-mock');
+AWSMock.setSDKInstance(AWS);
+
+AWSMock.mock('Lambda', 'invoke', function(params, callback) {
+    callback(null, {
+        statusCode: 201,
+        message: 'Message successfully triggered!'
+    });
 });
 
-var match = {
+const match = {
     game: 'Atletico Mineiro 2 x 0 Cruzeiro',
     competition: 'Copa do brasil',
     live: true
@@ -19,12 +28,14 @@ var match = {
 var matches = [match];
 
 describe('Fetch service', function() {
-    describe('runApi function', function() {
-        this.timeout(5000);
-
+    describe('call api', function() {
         it('should return an array with the data of the matches', async () => {
-            const result = await fetch.matches('brazil', 'atletico-mineiro')
-            result[0].should.include.keys('game', 'live', 'competition');
+            const result = await fetch.matches(COUNTRY, TEAM);
+            expect(result).to.not.be.undefined;
+            expect(result).to.have.lengthOf.at.least(1);
+            result.forEach(r => {
+                r.should.include.keys('game', 'live', 'competition');
+            });
         });
     })
 
@@ -50,9 +61,10 @@ describe('Fetch service', function() {
 
     describe('sendRequest function', function() {
         it('should send a request', async () => {
-            assert.equal(typeof fetch.sendRequest, 'function');
-            const result = await fetch.sendRequest('some message');
-            expect(result).to.equal("'success':true");
+            assert.equal(typeof fetch.send, 'function');
+            const result = await fetch.send(JSON.stringify({test: 'message'}));
+            expect(result).to.not.be.undefined;
+            expect(result.statusCode).to.equal(201);
         })
     })
 })
