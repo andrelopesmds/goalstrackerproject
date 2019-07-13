@@ -3,24 +3,38 @@ const response = require('./response.js');
 const subscriptionValidator = require('./subscription-validator.js');
 
 
-exports.handler = function(event, context, callback) {
-    const docClient = new AWS.DynamoDB.DocumentClient();
-
-    if (!subscriptionValidator.isValid(event)) {
-        callback(null, response.badRequest);
-    } else {
-        var parameters = createParameters(event);
-
-        docClient.put(parameters, function(err, data) {
-            if (err) {
-                console.log(err);
-                callback(null, response.internalError);
-            }
-
-            callback(null, response.created);
-        });
+exports.handler = async (event) => {
+    try {
+        var result = await subscribe(event);
     }
+    catch (err) {
+        console.log(err);
+        return err;
+    }
+    return result;
 };
+
+async function subscribe(event) {
+    return new Promise((resolve, reject) => {
+        const docClient = new AWS.DynamoDB.DocumentClient();
+
+        if (!subscriptionValidator.isValid(event)) {
+            reject(response.badRequest);
+        } else {
+            let parameters = createParameters(event);
+
+            docClient.put(parameters, function(err, data) {
+                if (err) {
+                    reject(response.internalError);
+                }
+
+                resolve(response.created);
+            });
+        }
+    });
+}
+
+
 
 function createParameters(event) {
     let date = new Date();
@@ -29,12 +43,12 @@ function createParameters(event) {
     let parameters = {
         TableName: process.env.tableName,
         Item: {
-            "endpoint": event.endpoint,
-            "expirationTime": event.expirationTime,
-            "key256": event.keys.p256dh,
-            "keyAuth": event.keys.auth,
-            "subscribeDate": dateISO,
-            "unsubscribeDate": null
+            'endpoint': event.endpoint,
+            'expirationTime': event.expirationTime,
+            'key256': event.keys.p256dh,
+            'keyAuth': event.keys.auth,
+            'subscribeDate': dateISO,
+            'unsubscribeDate': null
         }
     };
 
