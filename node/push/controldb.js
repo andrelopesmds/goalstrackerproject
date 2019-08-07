@@ -1,61 +1,31 @@
-const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.TABLE_NAME;
 
-exports.getUsers = function(callback) {
-    var params = {
-        TableName: tableName,
-        ExpressionAttributeValues: {
-            ":n": null
-        },
-        FilterExpression: "unsubscribeDate = :n"
-    };
+async function getSubscriptions(docClient) {
+    return new Promise(function(resolve, reject) {
+        var params = {
+            TableName: tableName,
+            ExpressionAttributeValues: {
+                ":n": null
+            },
+            FilterExpression: "unsubscribeDate = :n"
+        };
 
-    docClient.scan(params, function(err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            callback(data.Items);
-        }
+        docClient.scan(params, function(err, data) {
+            if (err) throw err;
+
+            resolve(data.Items);
+        });
     });
 }
 
-exports.getUser = function(endpoint, callback) {
-    var params = {
-        TableName: tableName,
-        ExpressionAttributeValues: {
-            ":n": endpoint
-        },
-        FilterExpression: "endpoint = :n"
-    };
-
-    docClient.scan(params, function(err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            callback(data.Items);
-        }
+async function removeInvalidSubscriptions(docClient, result) {
+    return new Promise(function(resolve, reject) {
+        // todo
+        resolve();
     });
 }
 
-exports.removeSubscription = function(endpoint) {
-    var date = new Date();
-    var dateISO = date.toISOString();
-    var params = {
-        TableName: tableName,
-        Key: {
-            "endpoint": endpoint
-        },
-        ExpressionAttributeValues: {
-            ":x": dateISO
-        },
-        UpdateExpression: "set unsubscribeDate = :x"
-    };
-
-    docClient.update(params, function(err, data) {
-        if (err)
-            throw err;
-
-        console.log("1 visitor updated!");
-    });
-}
+var controldb = {};
+controldb.getSubscriptions = getSubscriptions;
+controldb.removeInvalidSubscriptions = removeInvalidSubscriptions;
+module.exports = controldb;

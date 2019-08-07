@@ -1,7 +1,11 @@
 #!/bin/bash
 
-npm install
+rm -rf node_modules
 
-zip -r push.zip .
+npm install --production
+
+zip -r push.zip . -x *.sh* *.json* "test/*"
 
 aws lambda update-function-code --function-name galo-push --zip-file fileb://push.zip
+
+rm -rf push.zip
