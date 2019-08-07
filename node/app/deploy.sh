@@ -1,6 +1,8 @@
 #!/bin/bash
 
-zip -r app.zip .
+rm -rf node_modules
+
+zip -r app.zip . -x *.sh* *.json*  "test/*"
 
 aws lambda update-function-code --function-name galo-subscriber --zip-file fileb://app.zip
 
