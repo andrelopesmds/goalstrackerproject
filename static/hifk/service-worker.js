@@ -3,7 +3,7 @@ self.addEventListener('push', function(event) {
 
         var json = JSON.parse(event.data.text());
         var title = json.title;
-        var badge = 'images/hifk.png';
+        var badge = 'images/hifkBadge.png';
 
 
         const options = {
