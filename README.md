@@ -11,7 +11,7 @@ notifies the subscribers when an event occours.
 <table cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: none;">
   <tr>
     <td align="center" valign="center">
-      <img src="screenshots/subscription.jpeg" alt="the picture is not yet loaded." style="height:750px; width:580px;"/>
+      <img src="screenshots/subscription.jpg" alt="the picture is not yet loaded." style="height:750px; width:580px;"/>
       <br />
     </td>
     <td align="center" valign="center">
