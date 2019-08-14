@@ -1,7 +1,10 @@
-const AWS = require('aws-sdk');
-
-const app = require('../app.js');
-const assert = require('assert');
+const AWS       = require('aws-sdk');
+const app       = require('../app.js');
+const assert    = require('assert');
+const chai      = require('chai');
+const constants = require('./constants.js');
+const expect    = chai.expect;
+const response  = require('../response.js');
 
 var AWSMock = require('aws-sdk-mock');
 AWSMock.setSDKInstance(AWS);
@@ -13,39 +16,29 @@ AWSMock.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
     });
 });
 
-const validSubscription = {
-    "endpoint": "https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP",
-    "expirationTime": null,
-    "keys": {
-        "p256dh": "BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=",
-        "auth": "GS_k7K70ihQtA1GvfAZ8wA=="
-    }
-};
-
-const invalidSubscription = {
-    "end": "https://fcm.googleapis.com/fcm/send/f0WEtgCFsks:APA91bE8uTa15e4A-VX1O4OvynXOd8SxgrjQbRggP34jCn8reIIaVAEie7LSEDniALhNcwYwuV3JsKfEjx91N8BzRlgfQTswpY_W1slM-JIpMyHaz2HCwxKenBzTCwHgvSocdPSMk3SP",
-    "expirationTime": null,
-    "keys": {
-        "p256dh": "BLt_51HXUHl0FQ1Zc8fFaFKWMX0OJt5uu55dVb89cEeWMt3jBbBNqE7nrwIl9t4H1e7scL6KYSQNMbXrIr_hXb8=",
-        "auth": "GS_k7K70ihQtA1GvfAZ8wA=="
-    }
-};
-
 
 describe('App service', function() {
-    it('import module correctly', function() {
+    it('should import module/constants correctly', function() {
         assert.equal(typeof app, 'object');
         assert.equal(typeof app.handler, 'function');
+        assert.equal(typeof constants, 'object');
+        assert.equal(typeof constants.validSubscriptions, 'object');
+        assert.equal(typeof constants.invalidSubscriptions, 'object');
+        expect(constants.validSubscriptions.length).to.be.above(0);
+        expect(constants.invalidSubscriptions.length).to.be.above(0);
     });
     
     it('should respond with bad request for invalid subscriptions', async function() {
-        const result = await app.handler(invalidSubscription);
-        assert.equal(result.statusCode, 400);
+        for(const subscription of constants.invalidSubscriptions) {
+            const result = await app.handler(subscription);
+            assert.equal(result.statusCode, response.badRequest.statusCode);
+        };
     });
  
-    it('should respond with created for a valid subscription', async function() {
-        const result = await app.handler(validSubscription);
-        console.log(result);
-        assert.equal(result.statusCode, 201);
+    it('should respond with created for a valid subscriptions', async function() {
+        for(const subscription of constants.validSubscriptions) {
+            const result = await app.handler(subscription);
+            assert.equal(result.statusCode, response.created.statusCode);
+        }
     });   
 });
