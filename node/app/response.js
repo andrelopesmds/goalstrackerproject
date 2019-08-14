@@ -1,14 +1,18 @@
-exports.created = {
+var response = {};
+
+response.created = {
     statusCode: 201,
     message: 'Subscription successfully created!'
 };
 
-exports.badRequest = {
+response.badRequest = {
     statusCode: 400,
     message: 'Bad request'
 };
 
-exports.internalError = {
+response.internalError = {
     statusCode: 500,
     message: 'Internal server error'
 };
+
+module.exports = response;
