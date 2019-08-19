@@ -7,11 +7,19 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "LAMBDA_NAME=xxx JOB_INTERVAL=1 mocha"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "aws-sdk": "^2.512.0",
+    "aws-sdk-mock": "^4.5.0",
+    "chai": "^4.2.0",
     "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "cron": "^1.7.1",
+    "sports-live": "^1.0.1",
+    "string-score": "^1.0.1"
   }
 }

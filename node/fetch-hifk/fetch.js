@@ -1,77 +1,83 @@
-var argv = require('yargs').argv;
+const AWS         = require('aws-sdk');
+const cronJob     = require('cron').CronJob;
+const sportsLive  = require('sports-live');
+const stringScore = require('string-score');
 
-var TimerJob = require('timer-jobs');
-var jobTime = 1000;
-var sportsLive = require('sports-live');
-const teamName = 'IFK Helsinki';
-const teamName2 = 'HIFK Helsinki';
-var request = require('request');
-var url = 'http://localhost:' + argv.pushPort;
-var stringScore = require('string-score');
+const ENVIRONMENT = process.env.NODE_ENV;
+const INTERVAL    = process.env.JOB_INTERVAL;
+const LAMBDA_NAME = process.env.LAMBDA_NAME;
+
+const TEAM     = 'HIFK Helsinki';
+const TEAM2    = 'IFK Helsinki';
+const SPORT    = 'hockey';
+const DISTANCE = 0.5;
 
 var buffer;
 var score;
 
-var fetchGoals = new TimerJob({interval : jobTime}, function(done) {
-    return runApi()
-        .then(function(matches) {
-            return checkGameStatus(matches);
-        })
-        .then(function(msg) {
-            if (msg) {
-                sendRequest(msg);
-            }
-        })
-        .catch(function(err) { console.log("It failed: ", err); })
-        .then(function() {
-            console.log('...');
-            done();
-        })
+
+const job = new cronJob('0 */' + INTERVAL + ' * * * *', function() {
+    fetchGoals();
 });
 
-fetchGoals.start();
+if (ENVIRONMENT === 'production') {
+    job.start();
+}
+
+async function fetchGoals() {
+    let results = await runApi();
+    console.log(results);    
+    let msg = checkGameStatus(results);
+
+    if(msg) {
+        sendRequest(msg);
+    }
+}
 
 function checkGameStatus(matches) {
-    if (matches) {
-        for (i = 0; i < matches.length; i++) {
-            if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
-                if (buffer != matches[i].currentStatus ||
-                    score != matches[i].score) {
-
-                    buffer = matches[i].currentStatus;
-                    score = matches[i].score;
-                    var msg = configMessage(matches[i]);
-                    console.log('new status in this game!');
-                    console.log(matches[i].currentStatus);
-                    return msg;
-                }
+    for (i = 0; i < matches.length; i++) {
+        if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
+            if (buffer != matches[i].currentStatus || score != matches[i].score) {
+                buffer = matches[i].currentStatus;
+                score = matches[i].score;
+                var msg = configMessage(matches[i]);
+                console.log('new status in this game!');
+                console.log(matches[i].currentStatus);
+                return msg;
             }
         }
     }
+    
+
     return null;
 }
 
 function sendRequest(msg) {
-    return new Promise(function(resolve, reject) {
-        request.post(url, {
-            form : {
-                message : msg
-            }
-
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                resolve("'success':true");
-                         
-            } else {
-                reject("'success':false");
-            }
+    return new Promise((resolve, reject) => {
+        const lambda = new AWS.Lambda({
+            region: 'us-east-1'
         });
-    })
+
+        let params = {
+            FunctionName: LAMBDA_NAME,
+            InvocationType: 'RequestResponse',
+            Payload: msg
+        };
+
+        lambda.invoke(params, function(err, data) {
+            if(err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        }); 
+    });
 }
 
 function runApi() {
-    return new Promise(function(resolve, reject) {
-        sportsLive.getAllMatches("hockey", function(err, matches) {
+    return new Promise((resolve, reject) => {
+        sportsLive.getAllMatches(SPORT, function(err, matches) {
             if (err) {
                 console.log(err.message);
                 reject(err);
@@ -79,7 +85,7 @@ function runApi() {
                 resolve(matches);
             }
         });
-    })
+    });
 }
 
 function configMessage(data) {
@@ -140,8 +146,8 @@ function configMessage(data) {
 function checkTeam(team) {
     var response;
     if (typeof team == 'string') {
-        if (stringScore(teamName, team, 0.5) > 0.5 ||
-            stringScore(teamName2, team, 0.5) > 0.5) {
+        if (stringScore(TEAM, team, DISTANCE) > DISTANCE ||
+            stringScore(TEAM2, team, DISTANCE) > DISTANCE) {
             response = true;
         } else {
             response = false;
