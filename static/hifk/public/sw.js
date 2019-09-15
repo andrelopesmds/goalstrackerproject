@@ -1,10 +1,8 @@
 self.addEventListener('push', function(event) {
     if (event.data) {
-
         var json = JSON.parse(event.data.text());
         var title = json.title;
         var badge = 'images/hifkBadge.png';
-
 
         const options = {
             "icon": json.icon,

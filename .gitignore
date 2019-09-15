@@ -4,4 +4,6 @@ node/fetch-galo/env.txt
 node/fetch-hifk/node_modules
 node/fetch-hifk/env.txt
 node/push/node_modules
+static/hifk/node_modules
+static/hifk/build/
 env-and-keys
