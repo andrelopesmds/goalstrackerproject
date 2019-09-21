@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button'
 const url = 'https://vgdmfvp2pk.execute-api.us-east-1.amazonaws.com/dev';
 
 
-class App extends React.Component {
-    constructor(props) {
+class App extends React.Component<any, any> {
+    constructor(props: any) {
         super(props);
         this.state = { subscriptionDone: false };
     }
@@ -33,7 +33,7 @@ class App extends React.Component {
         }
     }
 
-    registerValidSW(swUrl) {
+    registerValidSW(swUrl: string) {
         navigator.serviceWorker
             .register(swUrl)
             .then(registration => {
@@ -61,14 +61,14 @@ class App extends React.Component {
         else this.setState({ subscriptionDone: false })
     }
     
-    subscribe(registration) {
+    subscribe(registration: any) {
         const subscribeOptions = {
             userVisibleOnly: true,
             applicationServerKey: this.urlBase64ToUint8Array('BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4')
         };
     
         return registration.pushManager.subscribe(subscribeOptions)
-            .then(pushSubscription => {
+            .then((pushSubscription: any) => {
                 var data = JSON.stringify(pushSubscription);
                 console.log('Received PushSubscription: ', data);
                 return this.sendToServer(data);
@@ -76,10 +76,12 @@ class App extends React.Component {
             .then(() => {
                 this.detectUser();
             })
-            .catch(err => console.log(err));
+            .catch(function (err: any) {
+                console.log(err)
+            });
     }
     
-    sendToServer(subscription) {
+    sendToServer(subscription: any) {
         return new Promise((resolve, reject) => {
             fetch(url, {
                 method: 'POST',
@@ -101,7 +103,7 @@ class App extends React.Component {
         });
     }
     
-    urlBase64ToUint8Array(base64String) {
+    urlBase64ToUint8Array(base64String: string) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
         const rawData = window.atob(base64);
