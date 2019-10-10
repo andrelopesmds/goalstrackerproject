@@ -26,28 +26,19 @@ if (ENVIRONMENT === 'production') {
 
 async function fetchGoals() {
     let results = await runApi();
-    console.log(results);    
     let msg = checkGameStatus(results);
 
-    if(msg) {
-        sendRequest(msg);
-    }
+    if (msg) sendRequest(msg);
 }
 
 function checkGameStatus(matches) {
     for (i = 0; i < matches.length; i++) {
-        if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
-            if (buffer != matches[i].currentStatus || score != matches[i].score) {
-                buffer = matches[i].currentStatus;
-                score = matches[i].score;
-                var msg = configMessage(matches[i]);
-                console.log('new status in this game!');
-                console.log(matches[i].currentStatus);
-                return msg;
-            }
+        if ((checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) && (buffer != matches[i].currentStatus || score != matches[i].score)) {
+             buffer = matches[i].currentStatus;
+             score = matches[i].score;
+             return configMessage(matches[i]);
         }
     }
-    
 
     return null;
 }
@@ -66,7 +57,6 @@ function sendRequest(msg) {
 
         lambda.invoke(params, function(err, data) {
             if(err) {
-                console.log(err);
                 reject(err);
             } else {
                 resolve(data);
@@ -79,7 +69,6 @@ function runApi() {
     return new Promise((resolve, reject) => {
         sportsLive.getAllMatches(SPORT, function(err, matches) {
             if (err) {
-                console.log(err.message);
                 reject(err);
             } else {
                 resolve(matches);
@@ -144,17 +133,11 @@ function configMessage(data) {
 }
 
 function checkTeam(team) {
-    var response;
-    if (typeof team == 'string') {
-        if (stringScore(TEAM, team, DISTANCE) > DISTANCE ||
-            stringScore(TEAM2, team, DISTANCE) > DISTANCE) {
-            response = true;
-        } else {
-            response = false;
-        }
-    } else {
-        response = false;
+    let response = false;
+    if ((typeof team == 'string') && (stringScore(TEAM, team, DISTANCE) > DISTANCE || stringScore(TEAM2, team, DISTANCE) > DISTANCE)) {
+        response = true;
     }
+
     return response;
 }
 

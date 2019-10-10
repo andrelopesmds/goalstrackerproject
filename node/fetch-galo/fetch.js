@@ -26,9 +26,7 @@ async function fetchGoals() {
 
     let msg = checkGameStatus(results);
 
-    if (msg) {
-        send(msg);
-    }
+    if (msg) send(msg);
 }
 
 async function send(msg) {
@@ -45,7 +43,6 @@ async function send(msg) {
 
         lambda.invoke(params, function(err, data) {
             if (err) {
-                console.log(err);
                 reject(err);
             } else {
                 resolve(data)
