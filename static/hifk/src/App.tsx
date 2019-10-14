@@ -17,42 +17,44 @@ class App extends React.Component<any, any> {
     }
 
     register() {
-        if ('serviceWorker' in navigator) {
-            const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-            
-            if (publicUrl.origin !== window.location.origin) {
-                console.log(`The public url(${publicUrl.origin}) is on a different origin from what(${window.location.origin}) the page is served on`);
-                return;
-            }
-    
-            const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
-            this.registerValidSW(swUrl);
-        } else {
-            // todo alert here
-            console.log('Your browser does not support service workers.');
+        if (!('serviceWorker' in navigator)) {
+            alert('Your browser does not support service workers.');
+            return;
         }
-    }
 
-    registerValidSW(swUrl: string) {
-        navigator.serviceWorker
-            .register(swUrl)
-            .then(registration => {
-                registration.onupdatefound = () => {
-                    const installingWorker = registration.installing;
-                    if (installingWorker == null) {
-                        return;
-                    }
+        navigator.serviceWorker.register('sw.js')
+
+        navigator.serviceWorker.ready
+        .then(registration => {
+            const base64String = 'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4'
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const applicationServerKey = new Uint8Array(rawData.length);
     
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'activated') {
-                            this.subscribe(registration);
-                        }
-                    };
-                };
-            })
-            .catch(error => {
-                console.error('Error during service worker registration:', error);
-            });
+            for (let i = 0; i < rawData.length; ++i) {
+                applicationServerKey[i] = rawData.charCodeAt(i);
+            }
+
+            const subscribeOptions = {
+                userVisibleOnly: true,
+                applicationServerKey: applicationServerKey
+            };
+
+            return registration.pushManager.subscribe(subscribeOptions)
+        })
+        .then((pushSubscription: any) => {
+            var data = JSON.stringify(pushSubscription);
+            console.log('Received PushSubscription: ', data);
+            return this.sendToServer(data);
+        })
+        .then(() => {
+            this.detectUser();
+        })
+        .catch(error => {
+            alert('Error during your registration');
+            console.error('Error during service worker registration:', error);
+        });
     }
 
     detectUser() {
@@ -60,36 +62,16 @@ class App extends React.Component<any, any> {
 
         else this.setState({ subscriptionDone: false })
     }
-    
-    subscribe(registration: any) {
-        const subscribeOptions = {
-            userVisibleOnly: true,
-            applicationServerKey: this.urlBase64ToUint8Array('BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4')
-        };
-    
-        return registration.pushManager.subscribe(subscribeOptions)
-            .then((pushSubscription: any) => {
-                var data = JSON.stringify(pushSubscription);
-                console.log('Received PushSubscription: ', data);
-                return this.sendToServer(data);
-            })
-            .then(() => {
-                this.detectUser();
-            })
-            .catch(function (err: any) {
-                console.log(err)
-            });
-    }
-    
+
     sendToServer(subscription: any) {
         return new Promise((resolve, reject) => {
-            fetch(url, {
+            const parameters = {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: subscription
-            })
+            };
+
+            fetch(url, parameters)
             .then((response) => {
                 if (response.ok) {
                     resolve();
@@ -97,25 +79,12 @@ class App extends React.Component<any, any> {
                     reject('Something wrong happened. Please contact support.');
                 }
             })
-            .catch(function(error) {
+            .catch((error) => {
                 reject('There has been a problem with your fetch operation: ' + error.message);
             });
         });
     }
-    
-    urlBase64ToUint8Array(base64String: string) {
-        const padding = '='.repeat((4 - base64String.length % 4) % 4);
-        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-        const rawData = window.atob(base64);
-        const outputArray = new Uint8Array(rawData.length);
-    
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-    
-        return outputArray;
-    }
-    
+
     unregister() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then(registration => {
@@ -132,7 +101,6 @@ class App extends React.Component<any, any> {
                         { this.state.subscriptionDone ? null : <p><Button onClick={this.register.bind(this)} variant="contained" color="primary">Click here and watch HIFK!</Button></p> }
                         { this.state.subscriptionDone ? <p><img src={logo} className="App-logo" alt="logo"/></p> : null }
                         { this.state.subscriptionDone ? <p><Button variant="contained" color="primary">Registration completed!</Button></p> : null }
-                        { this.state.subscriptionDone ? <p><Button onClick={this.unregister} variant="contained" color="primary">Unsubscribe</Button></p> : null }
                     </div>
                 </header>
             </div>
