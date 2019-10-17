@@ -78,47 +78,41 @@ function runApi() {
 }
 
 function configMessage(data) {
+    var icon = 'hifk';
+
     if (data.currentStatus.includes(data.team1)) {
         var title = data.team1 + 'scores a goal!';
         var body = data.team1 + " " + data.score + " " + data.team2;
-        var icon = "images/hifk.png";
 
     } else if (data.currentStatus.includes(data.team2)) {
         var title = message = data.team2 + 'scores a goal!';
         var body = data.team1 + " " + data.score + " " + data.team2;
-        var icon = "images/hifk.png";
 
     } else {
         switch (data.currentStatus) {
         case 'Kick Off':
             var title = "Game started!\n";
             var body = data.team1 + " x " + data.team2;
-            var icon = "images/hifk.png";
             break;
         case 'E/p1':
             var title = "End of first period!\n";
             var body = data.team1 + " " + data.score + " " + data.team2;
-            var icon = "images/hifk.png";
             break;
         case 'E/p2':
             var title = "End of first period!\n";
             var body = data.team1 + " " + data.score + " " + data.team2;
-            var icon = "images/hifk.png";
             break;
         case 'Match Postponed':
             var title = "Match Postponed!\n";
             var body = data.team1 + " x " + data.team2;
-            var icon = "images/hifk.png";
             break;
         case 'Match Finished':
             var title = "Match Finished!\n";
             var body = data.team1 + " " + data.score + " " + data.team2;
-            var icon = "images/hifk.png";
             break;
         default:
             var title = data.currentStatus;
             var body = data.team1 + " " + data.score + " " + data.team2;
-            var icon = "images/hifk.png";
         }
     }
 
