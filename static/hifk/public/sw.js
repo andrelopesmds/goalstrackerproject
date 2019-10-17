@@ -1,13 +1,16 @@
 self.addEventListener('push', function(event) {
+    const iconPath = 'hifk.png';
+    const badgePath = 'hifkBadge.png';
+
     if (event.data) {
-        var json = JSON.parse(event.data.text());
-        var title = json.title;
-        var badge = 'images/hifkBadge.png';
+        let notification = JSON.parse(event.data.text());
+
+        let title = notification.title;
 
         const options = {
-            "icon": json.icon,
-            "body": json.body,
-            "badge": badge
+            "badge": badgePath,
+            "body": notification.body,
+            "icon": notification.icon = 'hifk' ? iconPath : null
         };
 
         const promiseChain = self.registration.showNotification(title, options);
