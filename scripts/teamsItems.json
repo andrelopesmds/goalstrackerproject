@@ -1,0 +1,53 @@
+{
+    "Teams": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "Code": {"S": "1"},
+                    "team": {"S": "hifk"},
+                    "sport": {"S": "ice hockey"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "Code": {"S": "2"},
+                    "team": {"S": "atletico mg"},
+                    "sport": {"S": "football"},
+                    "league": {"S": "brasileirão"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "Code": {"S": "3"},
+                    "team": {"S": "cruzeiro"},
+                    "sport": {"S": "football"},
+                    "league": {"S": "brasileirão"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "Code": {"S": "4"},
+                    "team": {"S": "juventus"},
+                    "sport": {"S": "football"},
+                    "league": {"S": "serie a"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "Code": {"S": "5"},
+                    "team": {"S": "real madrid"},
+                    "sport": {"S": "football"},
+                    "league": {"S": "la liga"}
+                }
+            }
+        }
+    ]
+}

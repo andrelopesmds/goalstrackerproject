@@ -1,0 +1,19 @@
+{
+    "TableName": "Users",
+    "KeySchema": [
+        {
+            "KeyType": "HASH",
+            "AttributeName": "Endpoint"
+        }
+    ],
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "Endpoint",
+            "AttributeType": "S"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "WriteCapacityUnits": 1,
+        "ReadCapacityUnits": 1
+    }
+}
