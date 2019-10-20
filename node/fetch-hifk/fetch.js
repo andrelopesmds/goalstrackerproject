@@ -12,8 +12,10 @@ const TEAM2    = 'IFK Helsinki';
 const SPORT    = 'hockey';
 const DISTANCE = 0.5;
 
-var buffer;
-var score;
+var context = {
+    buffer: '',
+    score: ''
+};
 
 
 const job = new cronJob('0 */' + INTERVAL + ' * * * *', function() {
@@ -26,17 +28,17 @@ if (ENVIRONMENT === 'production') {
 
 async function fetchGoals() {
     let results = await runApi();
-    let msg = checkGameStatus(results);
+    let msg = checkGameStatus(results, context);
 
     if (msg) sendRequest(msg);
 }
 
-function checkGameStatus(matches) {
+function checkGameStatus(matches, ctx) {
     for (i = 0; i < matches.length; i++) {
-        if ((checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) && (buffer != matches[i].currentStatus || score != matches[i].score)) {
-             buffer = matches[i].currentStatus;
-             score = matches[i].score;
-             return configMessage(matches[i]);
+        if ((checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) && (ctx.buffer != matches[i].currentStatus || ctx.score != matches[i].score)) {
+            ctx.buffer = matches[i].currentStatus;
+            ctx.score = matches[i].score;
+            return configMessage(matches[i]);
         }
     }
 
