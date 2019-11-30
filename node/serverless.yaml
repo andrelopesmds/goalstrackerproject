@@ -8,9 +8,11 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
+        - dynamodb:Scan
         - dynamodb:PutItem
       Resource:
         - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
+        - { "Fn::GetAtt": ["EventsTable", "Arn" ] }
 
 functions:
   subscriber:
@@ -20,6 +22,11 @@ functions:
           path: subscription
           method: post
           cors: true
+
+  fetch:
+    handler: fetch/index.handler
+    events:
+      - schedule: rate(1 minute)
 
 package:
   exclude:
@@ -37,6 +44,24 @@ resources:
         KeySchema:
           - AttributeName: endpoint
             KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: EventsTable
+        AttributeDefinitions:
+          - AttributeName: team1
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: team1
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
