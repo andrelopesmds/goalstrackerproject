@@ -1,0 +1,7 @@
+{
+  "httpMethod": "POST",
+  "headers": {},
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "body": "{\"route\": \"1077N\", \"mode\": \"train\"}"
+}

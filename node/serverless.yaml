@@ -1,0 +1,42 @@
+service: goals-tracker-project
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: eu-north-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
+
+functions:
+  subscriber:
+    handler: subscriber/index.handler
+    events:
+      - http:
+          path: subscription
+          method: post
+          cors: true
+
+package:
+  exclude:
+    - "node_modules/aws-sdk/**"
+
+resources:
+  Resources:
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: SubscriptionsTable
+        AttributeDefinitions:
+          - AttributeName: endpoint
+            AttributeType: S
+        KeySchema:
+          - AttributeName: endpoint
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
