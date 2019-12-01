@@ -3,7 +3,7 @@ import logo from './hifk.png';
 import './App.css';
 import Button from '@material-ui/core/Button'
 
-const url = 'https://vgdmfvp2pk.execute-api.us-east-1.amazonaws.com/dev';
+const url = 'https://4egurxs7ph.execute-api.eu-north-1.amazonaws.com/dev/subscription';
 
 
 class App extends React.Component<any, any> {
@@ -26,7 +26,7 @@ class App extends React.Component<any, any> {
 
         navigator.serviceWorker.ready
         .then(registration => {
-            const base64String = 'BB_UaOpdFIEjEWMyhhd4QQcFDwlaftDy605YjzatvFlCoYMvjpFUFHNy_KoGpRcoOBxUzDN2_8svehppzOolYP4'
+            const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
             const padding = '='.repeat((4 - base64String.length % 4) % 4);
             const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
             const rawData = window.atob(base64);

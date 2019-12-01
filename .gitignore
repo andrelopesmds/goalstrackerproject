@@ -1,4 +1,5 @@
 node/.serverless
+node/variables.yml
 node/node_modules
 static/hifk/node_modules
 static/hifk/build/

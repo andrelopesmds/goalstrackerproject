@@ -23,6 +23,26 @@ async function saveSubscription(subscription) {
   }
 }
 
+async function getSubscriptions() {
+  const params = {
+    TableName: subscriptionsTable,
+    //ProjectionExpression: 'team1, team2, score, currentStatus',
+    ScanIndexForward: false,
+    ConsistentRead: false,
+  };
+
+  let data = null;
+  try {
+    const result = await docClient.scan(params).promise();
+    data = result.Items;
+  } catch (error) {
+    console.log(`Error when getting events: ${JSON.stringify(error)}`);
+    throw error;
+  }
+
+  return data;
+}
+
 async function saveEvent(event) {
   event.timestamp = new Date().toISOString();
   
@@ -71,6 +91,7 @@ async function getEvents(minutesToTrack) {
 
 module.exports = {
     saveSubscription,
+    getSubscriptions,
     saveEvent,
     getEvents,
 };

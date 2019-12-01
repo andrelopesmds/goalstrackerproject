@@ -17,10 +17,17 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
         - { "Fn::GetAtt": ["EventsTable", "Arn" ] }
+    - Effect: "Allow"
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
 
 functions:
   dispatcher:
     handler: dispatcher/index.handler
+    environment:
+      pushFunction: "${self:service}-${self:provider.stage}-push"
     events:
       - stream: arn:aws:dynamodb:eu-north-1:125523035986:table/EventsTable/stream/2019-12-01T18:06:59.133
       - stream:
@@ -32,7 +39,6 @@ functions:
         batchSize: 1
         startingPosition: LATEST
         enabled: true
-
 
   subscriber:
     handler: subscriber/index.handler
@@ -46,6 +52,12 @@ functions:
     handler: fetch/index.handler
     events:
       - schedule: rate(1 minute)
+
+  push:
+    handler: push/index.handler
+    environment:
+      publicKey: ${file(./variables.yml):publicKey}
+      privateKey: ${file(./variables.yml):privateKey}
 
 package:
   exclude:

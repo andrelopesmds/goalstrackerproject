@@ -1,11 +1,43 @@
 'use strict';
 
+const aws = require('aws-sdk');
+const lambda = new aws.Lambda();
+const dynamodb = require('../lib/dynamodb');
+const pushFunction = process.env.pushFunction;
+
 module.exports.handler = async (event) => {
     const obj = createEventObject(event);
 
+    const subscriptions = await dynamodb.getSubscriptions();
+
+    console.log(subscriptions);
     console.log('Event which will be sent')
     console.log(obj);
+    console.log(pushFunction)
+
+    const ok = await sendPush(obj, subscriptions[0]);
+    console.log('ok')
+    console.log(ok);
 };
+
+async function sendPush(obj, subscription) {
+    return new Promise((resolve, reject) => {
+        const params = {
+            FunctionName: pushFunction,
+            InvocationType: 'Event',
+            Payload: JSON.stringify({obj: obj, subscription: subscription}),
+        };
+
+        lambda.invoke(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+} 
 
 function createEventObject(event) {
     try {
