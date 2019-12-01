@@ -10,11 +10,30 @@ provider:
       Action:
         - dynamodb:Scan
         - dynamodb:PutItem
+        - dynamodb:ListStreams
+        - dynamodb:DescribeTable
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
       Resource:
         - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
         - { "Fn::GetAtt": ["EventsTable", "Arn" ] }
 
 functions:
+  dispatcher:
+    handler: dispatcher/index.handler
+    events:
+      - stream: arn:aws:dynamodb:eu-north-1:125523035986:table/EventsTable/stream/2019-12-01T18:06:59.133
+      - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - EventsTable
+            - StreamArn
+        batchSize: 1
+        startingPosition: LATEST
+        enabled: true
+
+
   subscriber:
     handler: subscriber/index.handler
     events:
@@ -65,3 +84,5 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE

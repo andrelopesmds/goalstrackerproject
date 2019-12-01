@@ -6,7 +6,7 @@ const dynamodb = require('../lib/dynamodb');
 const underscore = require('underscore');
 
 const TEAM     = 'HIFK Helsinki';
-const TEAM2    = 'Salavat Yulaye';
+const TEAM2    = 'ESV Kaufbeuren';
 const SPORT    = 'hockey';
 const DISTANCE = 0.5;
 const MINUTESTOTRACK = 60 * 24;
