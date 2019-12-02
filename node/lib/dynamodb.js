@@ -2,8 +2,8 @@
 
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-const subscriptionsTable = 'SubscriptionsTable';
-const eventsTable = 'EventsTable';
+const subscriptionsTable = process.env.SUBSCRIPTIONS_TABLE;
+const eventsTable = process.env.EVENTS_TABLE;
 
 async function saveSubscription(subscription) {
   subscription.subscribeDate = new Date().toISOString();

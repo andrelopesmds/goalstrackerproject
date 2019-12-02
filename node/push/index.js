@@ -26,8 +26,8 @@ module.exports.handler = async (event) => {
 
 async function sendPushNotification(event) {
     let message = {
-        title: event.obj.score,
-        body: event.obj.team1
+        title: event.obj.currentStatus,
+        body: `${event.obj.team1} ${event.obj.score} ${event.obj.team2}`
     }
     var payload = JSON.stringify(message);
 

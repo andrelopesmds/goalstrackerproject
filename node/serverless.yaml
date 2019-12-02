@@ -3,8 +3,11 @@ service: goals-tracker-project
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: eu-north-1
+  environment:
+    EVENTS_TABLE: { Ref: EventsTable }
+    SUBSCRIPTIONS_TABLE: { Ref: SubscriptionsTable }
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -29,16 +32,12 @@ functions:
     environment:
       pushFunction: "${self:service}-${self:provider.stage}-push"
     events:
-      - stream: arn:aws:dynamodb:eu-north-1:125523035986:table/EventsTable/stream/2019-12-01T18:06:59.133
       - stream:
-        type: dynamodb
-        arn:
-          Fn::GetAtt:
-            - EventsTable
-            - StreamArn
-        batchSize: 1
-        startingPosition: LATEST
-        enabled: true
+          type: dynamodb
+          arn: { Fn::GetAtt: [EventsTable, StreamArn] }
+          batchSize: 1
+          startingPosition: LATEST
+          enabled: true
 
   subscriber:
     handler: subscriber/index.handler
@@ -68,7 +67,7 @@ resources:
     SubscriptionsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: SubscriptionsTable
+        TableName: "${self:provider.stage}-SubscriptionsTable"
         AttributeDefinitions:
           - AttributeName: endpoint
             AttributeType: S
@@ -82,7 +81,7 @@ resources:
     EventsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: EventsTable
+        TableName: "${self:provider.stage}-EventsTable"
         AttributeDefinitions:
           - AttributeName: team1
             AttributeType: S

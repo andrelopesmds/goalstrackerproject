@@ -15,9 +15,14 @@ module.exports.handler = async (event) => {
     console.log(obj);
     console.log(pushFunction)
 
-    const ok = await sendPush(obj, subscriptions[0]);
-    console.log('ok')
-    console.log(ok);
+    const results = [];
+    for (let i = 0; i < subscriptions.length; i++) {
+        let result = await sendPush(obj, subscriptions[i]);
+        results.push(result);
+    }
+
+    console.log('Results')
+    console.log(results);
 };
 
 async function sendPush(obj, subscription) {
@@ -30,8 +35,8 @@ async function sendPush(obj, subscription) {
 
         lambda.invoke(params, function(err, data) {
             if (err) {
-                console.log(err);
-                reject(err);
+                console.log(`Error when sending push notification: ${JSON.stringify(err)}`);
+                throw err;
             } else {
                 resolve(true);
             }
