@@ -37,14 +37,12 @@ async function fetchGoals() {
     let result = filterResult(results);
 
     if (result) {
-        let event = configMessage(result);
-        // get events db
         const events = await dynamodb.getEvents(MINUTESTOTRACK);
-        // check if exists
-        const isNewEvent = checkEventIsNew(events, event);
+
+        const isNewEvent = checkEventIsNew(events, result);
+
         if (isNewEvent) {
-            // update db
-            await dynamodb.saveEvent(event);
+            await dynamodb.saveEvent(result);
         }
     }
 }
@@ -79,54 +77,6 @@ function runApi() {
             }
         });
     });
-}
-
-function configMessage(data) {
-    var icon = 'hifk';
-
-    if (data.currentStatus.includes(data.team1)) {
-        var title = data.team1 + 'scores a goal!';
-        var body = data.team1 + " " + data.score + " " + data.team2;
-
-    } else if (data.currentStatus.includes(data.team2)) {
-        var title = message = data.team2 + 'scores a goal!';
-        var body = data.team1 + " " + data.score + " " + data.team2;
-
-    } else {
-        switch (data.currentStatus) {
-        case 'Kick Off':
-            var title = "Game started!\n";
-            var body = data.team1 + " x " + data.team2;
-            break;
-        case 'E/p1':
-            var title = "End of first period!\n";
-            var body = data.team1 + " " + data.score + " " + data.team2;
-            break;
-        case 'E/p2':
-            var title = "End of first period!\n";
-            var body = data.team1 + " " + data.score + " " + data.team2;
-            break;
-        case 'Match Postponed':
-            var title = "Match Postponed!\n";
-            var body = data.team1 + " x " + data.team2;
-            break;
-        case 'Match Finished':
-            var title = "Match Finished!\n";
-            var body = data.team1 + " " + data.score + " " + data.team2;
-            break;
-        default:
-            var title = data.currentStatus;
-            var body = data.team1 + " " + data.score + " " + data.team2;
-        }
-    }
-
-    var json = {
-        'title' : title,
-        'body' : body,
-        'icon' : icon
-    }
-
-    return data;
 }
 
 function checkTeam(team) {
