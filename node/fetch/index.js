@@ -5,7 +5,7 @@ const stringScore = require('string-score');
 const dynamodb = require('../lib/dynamodb');
 const underscore = require('underscore');
 
-const TEAM     = 'SKA-Neva';
+const TEAM     = 'HIFK Helsinki';
 const TEAM2    = 'IFK Helsinki';
 const SPORT    = 'hockey';
 const DISTANCE = 0.5;
