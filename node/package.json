@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.624.0",
+    "mocha": "^7.0.1"
+  },
+  "dependencies": {
+    "sports-live": "^1.0.1",
+    "string-score": "^1.0.1",
+    "underscore": "^1.9.2",
+    "web-push": "^3.4.3"
+  }
+}
