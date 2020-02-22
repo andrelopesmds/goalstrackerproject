@@ -3,8 +3,8 @@
 const webpush = require('web-push');
 
 const vapidKeys = {
-    publicKey: process.env.publicKey,
-    privateKey: process.env.privateKey
+    publicKey: process.env.PUBLIC_KEY,
+    privateKey: process.env.PRIVATE_KEY
 };
 
 webpush.setVapidDetails(
