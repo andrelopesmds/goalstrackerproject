@@ -21,12 +21,8 @@ User subscribes to web push notifications on a responsive website. A crawler run
 
 ## Architecture
 
-The application runs on AWS. S3 bucket is used to host the static Frontend. When the users subscribes, a service worker is installed on the browser and its endpoint is sent to the backend. The request reaches the API Gateway and then a Lambda function saves the subscription into DynamoDB. Meanwhile, there is a docker container, running inside an EC2 instance, harversting the web for matches events. Once an event of the team is detected, it calls another Lambda funtion to gather active user's endpoints and send web push notifications to them. On the browser, the service worker pop ups the notifications.
+The application runs on AWS. An S3 bucket hosts the static Frontend. When the user subscribes to the service, a service worker is installed on the browser and its subscription is sent to the Backend. The request reaches the API Gateway and then a lambda function (Subscriber) saves the subscription into DynamoDB. Meanwhile, CloudWatch starts a crawler (Fetch) every certain minutes in order to harverst the web for matches events and then saves them into DynamoDB. Once an event is added, DynamoDB triggers a Lambda function (Dispatcher) to gather active user's endpoints and sends a pair of event/subscription to another lambda (Push). Finally, the lambda (Push) sends the web push notification to the browser. On the browser, the service worker pop ups the notification.
 
 <p align="center">
   <img src="images/architecture.png" alt="the picture has not been loaded yet."/>
 </p>
-
-Note: Currently, we support two teams: Galo (brazilian football) and HIFK (finnish ice hockey), that's why there are two different static pages and web crawlers.
-
-
