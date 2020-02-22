@@ -62,6 +62,7 @@ package:
   exclude:
     - "node_modules/aws-sdk/**"
     - "variables.yml"
+    - "node/.eslintrc.json"
 
 resources:
   Resources:

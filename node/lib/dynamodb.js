@@ -8,7 +8,7 @@ const eventsTable = process.env.EVENTS_TABLE;
 async function saveSubscription(subscription) {
   subscription.subscribeDate = new Date().toISOString();
   subscription.unsubscribeDate = null;
-  
+
   const parameters = {
     TableName: subscriptionsTable,
     Item: subscription,
@@ -26,7 +26,6 @@ async function saveSubscription(subscription) {
 async function getSubscriptions() {
   const params = {
     TableName: subscriptionsTable,
-    //ProjectionExpression: 'team1, team2, score, currentStatus',
     ScanIndexForward: false,
     ConsistentRead: false,
   };
@@ -45,7 +44,7 @@ async function getSubscriptions() {
 
 async function saveEvent(event) {
   event.timestamp = new Date().toISOString();
-  
+
   const parameters = {
     TableName: eventsTable,
     Item: event,
@@ -71,7 +70,7 @@ async function getEvents(minutesToTrack) {
     ExpressionAttributeValues: {
       ':timestamp': timestamp,
     },
-    FilterExpression: "#timestamp > :timestamp",
+    FilterExpression: '#timestamp > :timestamp',
     ProjectionExpression: 'team1, team2, score, currentStatus',
     ScanIndexForward: false,
     ConsistentRead: false,
@@ -90,8 +89,8 @@ async function getEvents(minutesToTrack) {
 }
 
 module.exports = {
-    saveSubscription,
-    getSubscriptions,
-    saveEvent,
-    getEvents,
+  saveSubscription,
+  getSubscriptions,
+  saveEvent,
+  getEvents,
 };
