@@ -1,0 +1,99 @@
+service: goals-tracker-project
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-north-1
+  environment:
+    EVENTS_TABLE: { Ref: EventsTable }
+    SUBSCRIPTIONS_TABLE: { Ref: SubscriptionsTable }
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:ListStreams
+        - dynamodb:DescribeTable
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
+      Resource:
+        - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
+        - { "Fn::GetAtt": ["EventsTable", "Arn" ] }
+    - Effect: "Allow"
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
+
+functions:
+  dispatcher:
+    handler: dispatcher/index.handler
+    environment:
+      pushFunction: "${self:service}-${self:provider.stage}-push"
+    events:
+      - stream:
+          type: dynamodb
+          arn: { Fn::GetAtt: [EventsTable, StreamArn] }
+          batchSize: 1
+          startingPosition: LATEST
+          enabled: true
+
+  subscriber:
+    handler: subscriber/index.handler
+    events:
+      - http:
+          path: subscription
+          method: post
+          cors: true
+
+  fetch:
+    handler: fetch/index.handler
+    events:
+      - schedule: rate(1 minute)
+
+  push:
+    handler: push/index.handler
+    environment:
+      publicKey: ${file(./variables.yml):publicKey}
+      privateKey: ${file(./variables.yml):privateKey}
+
+package:
+  exclude:
+    - "node_modules/aws-sdk/**"
+
+resources:
+  Resources:
+    SubscriptionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${self:provider.stage}-SubscriptionsTable"
+        AttributeDefinitions:
+          - AttributeName: endpoint
+            AttributeType: S
+        KeySchema:
+          - AttributeName: endpoint
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${self:provider.stage}-EventsTable"
+        AttributeDefinitions:
+          - AttributeName: team1
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: team1
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE

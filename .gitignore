@@ -1,9 +1,5 @@
-node/app/node_modules
-node/fetch-galo/node_modules
-node/fetch-galo/env.txt
-node/fetch-hifk/node_modules
-node/fetch-hifk/env.txt
-node/push/node_modules
+node/.serverless
+node/variables.yml
+node/node_modules
 static/hifk/node_modules
 static/hifk/build/
-env-and-keys
