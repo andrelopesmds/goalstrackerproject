@@ -55,12 +55,13 @@ functions:
   push:
     handler: push/index.handler
     environment:
-      publicKey: ${file(./variables.yml):publicKey}
-      privateKey: ${file(./variables.yml):privateKey}
+      PUBLIC_KEY: ${file(./variables.yml):PUBLIC_KEY}
+      PRIVATE_KEY: ${file(./variables.yml):PRIVATE_KEY}
 
 package:
   exclude:
     - "node_modules/aws-sdk/**"
+    - "variables.yml"
 
 resources:
   Resources:
