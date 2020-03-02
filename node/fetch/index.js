@@ -12,7 +12,7 @@ const DISTANCE = 0.5;
 const MINUTESTOTRACK = 60 * 24;
 
 
-module.exports.handler = async () => {
+async function handler() {
   try {
     await fetchGoals();
   } catch (error) {
@@ -39,23 +39,19 @@ async function fetchGoals() {
   if (result) {
     const events = await dynamodb.getEvents(MINUTESTOTRACK);
 
-    const isNewEvent = checkEventIsNew(events, result);
-
-    if (isNewEvent) {
+    if (isNewEvent(events, result)) {
       await dynamodb.saveEvent(result);
     }
   }
 }
 
-function checkEventIsNew(events, event) {
+function isNewEvent(events, event) {
   for (let i = 0; i < events.length; i++) {
     if (underscore.isEqual(events[i], event)) {
-      console.log('return false');
       return false;
     }
   };
 
-  console.log('return true');
   return true;
 }
 
@@ -87,3 +83,9 @@ function checkTeam(team) {
 
   return response;
 }
+
+module.exports = {
+  handler,
+  runApi,
+  checkTeam,
+};
