@@ -1,11 +1,11 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
 const subscriptionsTable = process.env.SUBSCRIPTIONS_TABLE;
 const eventsTable = process.env.EVENTS_TABLE;
 
 async function saveSubscription(subscription) {
+  const docClient = new AWS.DynamoDB.DocumentClient();
   subscription.subscribeDate = new Date().toISOString();
   subscription.unsubscribeDate = null;
 
@@ -24,6 +24,7 @@ async function saveSubscription(subscription) {
 }
 
 async function getSubscriptions() {
+  const docClient = new AWS.DynamoDB.DocumentClient();
   const params = {
     TableName: subscriptionsTable,
     ScanIndexForward: false,
@@ -43,6 +44,7 @@ async function getSubscriptions() {
 }
 
 async function saveEvent(event) {
+  const docClient = new AWS.DynamoDB.DocumentClient();
   event.timestamp = new Date().toISOString();
 
   const parameters = {
@@ -60,6 +62,7 @@ async function saveEvent(event) {
 }
 
 async function getEvents(minutesToTrack) {
+  const docClient = new AWS.DynamoDB.DocumentClient();
   const timestamp = (new Date((new Date().getTime()) - minutesToTrack * 60000)).toISOString();
 
   const params = {
