@@ -7,13 +7,10 @@ const pushFunction = process.env.pushFunction;
 
 module.exports.handler = async (event) => {
   const obj = createEventObject(event);
+  console.log(`Event which will be sent: ${JSON.stringify(obj)}`);
 
   const subscriptions = await dynamodb.getSubscriptions();
-
   console.log(subscriptions);
-  console.log('Event which will be sent');
-  console.log(obj);
-  console.log(pushFunction);
 
   const results = [];
   for (let i = 0; i < subscriptions.length; i++) {
@@ -21,8 +18,7 @@ module.exports.handler = async (event) => {
     results.push(result);
   }
 
-  console.log('Results');
-  console.log(results);
+  console.log(`Job done. Results: ${JSON.stringify(results)}`);
 };
 
 async function sendPush(obj, subscription) {
