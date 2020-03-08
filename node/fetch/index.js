@@ -20,10 +20,7 @@ async function handler() {
     throw error;
   }
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({message: `Operation concluded!`}),
-  };
+  console.log(`Operation concluded!`);
 };
 
 

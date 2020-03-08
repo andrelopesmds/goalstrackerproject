@@ -20,6 +20,7 @@
     "mocha": "^7.0.1"
   },
   "dependencies": {
+    "dynamoose": "^1.11.1",
     "sports-live": "^1.0.1",
     "string-score": "^1.0.1",
     "underscore": "^1.9.2",
