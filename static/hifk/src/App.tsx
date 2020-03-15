@@ -118,13 +118,25 @@ class Buttons extends React.Component<any, any> {
     }
 
     render () {
-        return (
-            <div className="Buttons">
-                { this.props.subscriptionDone ? null : <p><Button onClick={this.handleClick} variant="contained" color="primary">Click here and watch HIFK!</Button></p> }
-                { this.props.subscriptionDone ? <p><img src={logo} className="App-logo" alt="logo"/></p> : null }
-                { this.props.subscriptionDone ? <p><Button variant="contained" color="primary">Registration completed!</Button></p> : null }
-            </div>
-        );
+        const subscriptionDone = this.props.subscriptionDone;
+        const clickableButton = <p><Button onClick={this.handleClick} variant="contained" color="primary">Click here and watch HIFK!</Button></p>;
+        const messageButton = <p><Button variant="contained" color="primary">Registration completed!</Button></p>;
+        const image = <p><img src={logo} className="App-logo" alt="logo"/></p>;
+
+        if (subscriptionDone) {
+            return (
+                <div className="Buttons">
+                    {image}
+                    {messageButton}
+                </div>
+            );
+        } else {
+            return (
+                <div className="Buttons">
+                    {clickableButton}
+                </div>
+            );
+        }
     }
 }
 
