@@ -3,7 +3,7 @@ import logo from './hifk.png';
 import './App.css';
 import Button from '@material-ui/core/Button'
 
-const url = 'https://4egurxs7ph.execute-api.eu-north-1.amazonaws.com/dev/subscription';
+const url = 'https://apistaging.goalstracker.info/subscription';
 
 
 class App extends React.Component<any, any> {
