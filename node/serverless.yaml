@@ -3,11 +3,12 @@ service: goals-tracker-project
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: ${opt:stage, 'dev'}
-  region: eu-north-1
+  stage: ${opt:stage, 'staging'}
+  region: us-east-1
   environment:
     EVENTS_TABLE: { Ref: EventsTable }
     SUBSCRIPTIONS_TABLE: { Ref: SubscriptionsTable }
+    TEAMS_TABLE: { Ref: TeamsTable }
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -20,6 +21,7 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
         - { "Fn::GetAtt": ["EventsTable", "Arn" ] }
+        - { "Fn::GetAtt": ["TeamsTable", "Arn" ] }
     - Effect: "Allow"
       Action:
         - lambda:InvokeFunction
@@ -46,6 +48,13 @@ functions:
           path: subscription
           method: post
           cors: true
+
+  teams:
+    handler: teams/index.handler
+    events:
+      - http:
+          path: teams
+          method: get
 
   fetch:
     handler: fetch/index.handler
@@ -99,3 +108,17 @@ resources:
           WriteCapacityUnits: 1
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+
+    TeamsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${self:provider.stage}-TeamsTable"
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

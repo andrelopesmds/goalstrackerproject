@@ -51,9 +51,15 @@ async function getEvents(minutesToTrack) {
   return data;
 }
 
+async function getTeams() {
+  const data = await schemas.TeamsModel.scan().all().exec();
+  return data;
+}
+
 module.exports = {
   saveSubscription,
   getSubscriptions,
   saveEvent,
   getEvents,
+  getTeams,
 };
