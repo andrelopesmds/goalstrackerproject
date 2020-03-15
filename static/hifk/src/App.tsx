@@ -1,25 +1,27 @@
 import React from 'react';
-import Logo from './hifk.png';
 import './App.css';
-import Button from '@material-ui/core/Button'
+import Buttons from './Buttons';
+import SubscriptionStatus from './SubscriptionStatus';
 
 const url = 'https://apistaging.goalstracker.info/subscription';
-
 
 class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = { userSubscribed: false };
+        this.state = { subscriptionStatus: SubscriptionStatus.NotSubscribed };
         this.register = this.register.bind(this);
     }
 
     componentDidMount() {
-        this.detectUser()
+        this.detectUser();
     }
 
     register() {
+        this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
+        
         if (!('serviceWorker' in navigator)) {
             alert('Your browser does not support service workers.');
+            this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
             return;
         }
 
@@ -39,12 +41,11 @@ class App extends React.Component<any, any> {
             console.log('Received PushSubscription: ', data);
             return this.sendToServer(data);
         })
-        .then(() => {
-            this.detectUser();
-        })
         .catch(error => {
             alert('Error during your registration');
-            console.error('Error during service worker registration:', error);
+        })
+        .then(() => {
+            this.detectUser();
         });
     }
 
@@ -63,9 +64,9 @@ class App extends React.Component<any, any> {
     }
 
     detectUser() {
-        if (Notification && Notification.permission === 'granted') this.setState({ userSubscribed: true });
+        if (Notification && Notification.permission === 'granted') this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
 
-        else this.setState({ userSubscribed: false })
+        else this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
     }
 
     sendToServer(subscription: any) {
@@ -103,44 +104,11 @@ class App extends React.Component<any, any> {
             <div className="App">
                 <header className="App-header">
                     <div className="Buttons">
-                        <Buttons onClick={this.register} userSubscribed={this.state.userSubscribed}/>
+                        <Buttons onClick={this.register} subscriptionStatus={this.state.subscriptionStatus}/>
                     </div>
                 </header>
             </div>
         );
-    }
-}
-
-class Buttons extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        this.props.onClick();
-    }
-
-    render () {
-        const userSubscribed = this.props.userSubscribed;
-        const clickableButton = <p><Button onClick={this.handleClick} variant="contained" color="primary">Click here and watch HIFK!</Button></p>;
-        const messageButton = <p><Button variant="contained" color="primary">Registration completed!</Button></p>;
-        const image = <p><img src={Logo} className="App-logo" alt="logo"/></p>;
-
-        if (userSubscribed) {
-            return (
-                <div className="Buttons">
-                    {image}
-                    {messageButton}
-                </div>
-            );
-        } else {
-            return (
-                <div className="Buttons">
-                    {clickableButton}
-                </div>
-            );
-        }
     }
 }
 
