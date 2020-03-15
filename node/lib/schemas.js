@@ -2,6 +2,7 @@ const dynamoose = require('dynamoose');
 
 const SUBSCRIPTIONS_TABLE = process.env.SUBSCRIPTIONS_TABLE;
 const EVENTS_TABLE = process.env.EVENTS_TABLE;
+const TEAMS_TABLE = process.env.TEAMS_TABLE;
 
 const Schema = dynamoose.Schema;
 
@@ -61,10 +62,24 @@ const eventsSchema = new Schema({
   },
 });
 
+const teamsSchema = new Schema({
+  id: {
+    type: String,
+    required: true,
+    hashKey: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+});
+
 const SubscriptionsModel = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
 const EventsModel = dynamoose.model(EVENTS_TABLE, eventsSchema);
+const TeamsModel = dynamoose.model(TEAMS_TABLE, teamsSchema);
 
 module.exports = {
   SubscriptionsModel,
   EventsModel,
+  TeamsModel,
 };
