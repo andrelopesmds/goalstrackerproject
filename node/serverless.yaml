@@ -55,6 +55,7 @@ functions:
       - http:
           path: teams
           method: get
+          cors: true
 
   fetch:
     handler: fetch/index.handler
