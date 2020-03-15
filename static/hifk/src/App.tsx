@@ -27,22 +27,12 @@ class App extends React.Component<any, any> {
 
         navigator.serviceWorker.ready
         .then(registration => {
-            const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-            const rawData = window.atob(base64);
-            const applicationServerKey = new Uint8Array(rawData.length);
-    
-            for (let i = 0; i < rawData.length; ++i) {
-                applicationServerKey[i] = rawData.charCodeAt(i);
-            }
-
             const subscribeOptions = {
                 userVisibleOnly: true,
-                applicationServerKey: applicationServerKey
+                applicationServerKey: this.getApplicationServerKey()
             };
 
-            return registration.pushManager.subscribe(subscribeOptions)
+            return registration.pushManager.subscribe(subscribeOptions);
         })
         .then((pushSubscription: any) => {
             var data = JSON.stringify(pushSubscription);
@@ -56,6 +46,20 @@ class App extends React.Component<any, any> {
             alert('Error during your registration');
             console.error('Error during service worker registration:', error);
         });
+    }
+
+    getApplicationServerKey():Uint8Array {
+        const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const rawData = window.atob(base64);
+        const applicationServerKey = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            applicationServerKey[i] = rawData.charCodeAt(i);
+        }
+
+        return applicationServerKey;
     }
 
     detectUser() {
