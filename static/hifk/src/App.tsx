@@ -1,24 +1,27 @@
 import React from 'react';
-import logo from './hifk.png';
 import './App.css';
-import Button from '@material-ui/core/Button'
+import Buttons from './Buttons';
+import SubscriptionStatus from './SubscriptionStatus';
 
-const url = 'https://4egurxs7ph.execute-api.eu-north-1.amazonaws.com/dev/subscription';
-
+const url = 'https://apistaging.goalstracker.info/subscription';
 
 class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = { subscriptionDone: false };
+        this.state = { subscriptionStatus: SubscriptionStatus.NotSubscribed };
+        this.register = this.register.bind(this);
     }
 
     componentDidMount() {
-        this.detectUser()
+        this.detectUser();
     }
 
     register() {
+        this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
+        
         if (!('serviceWorker' in navigator)) {
             alert('Your browser does not support service workers.');
+            this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
             return;
         }
 
@@ -26,41 +29,44 @@ class App extends React.Component<any, any> {
 
         navigator.serviceWorker.ready
         .then(registration => {
-            const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-            const rawData = window.atob(base64);
-            const applicationServerKey = new Uint8Array(rawData.length);
-    
-            for (let i = 0; i < rawData.length; ++i) {
-                applicationServerKey[i] = rawData.charCodeAt(i);
-            }
-
             const subscribeOptions = {
                 userVisibleOnly: true,
-                applicationServerKey: applicationServerKey
+                applicationServerKey: this.getApplicationServerKey()
             };
 
-            return registration.pushManager.subscribe(subscribeOptions)
+            return registration.pushManager.subscribe(subscribeOptions);
         })
         .then((pushSubscription: any) => {
             var data = JSON.stringify(pushSubscription);
             console.log('Received PushSubscription: ', data);
             return this.sendToServer(data);
         })
-        .then(() => {
-            this.detectUser();
-        })
         .catch(error => {
             alert('Error during your registration');
-            console.error('Error during service worker registration:', error);
+        })
+        .then(() => {
+            this.detectUser();
         });
     }
 
-    detectUser() {
-        if (Notification && Notification.permission === 'granted') this.setState({ subscriptionDone: true });
+    getApplicationServerKey():Uint8Array {
+        const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const rawData = window.atob(base64);
+        const applicationServerKey = new Uint8Array(rawData.length);
 
-        else this.setState({ subscriptionDone: false })
+        for (let i = 0; i < rawData.length; ++i) {
+            applicationServerKey[i] = rawData.charCodeAt(i);
+        }
+
+        return applicationServerKey;
+    }
+
+    detectUser() {
+        if (Notification && Notification.permission === 'granted') this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
+
+        else this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
     }
 
     sendToServer(subscription: any) {
@@ -98,9 +104,7 @@ class App extends React.Component<any, any> {
             <div className="App">
                 <header className="App-header">
                     <div className="Buttons">
-                        { this.state.subscriptionDone ? null : <p><Button onClick={this.register.bind(this)} variant="contained" color="primary">Click here and watch HIFK!</Button></p> }
-                        { this.state.subscriptionDone ? <p><img src={logo} className="App-logo" alt="logo"/></p> : null }
-                        { this.state.subscriptionDone ? <p><Button variant="contained" color="primary">Registration completed!</Button></p> : null }
+                        <Buttons onClick={this.register} subscriptionStatus={this.state.subscriptionStatus}/>
                     </div>
                 </header>
             </div>
