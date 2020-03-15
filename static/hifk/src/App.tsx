@@ -3,7 +3,7 @@ import './App.css';
 import Buttons from './Buttons';
 import SubscriptionStatus from './SubscriptionStatus';
 
-const url = 'https://apistaging.goalstracker.info/subscription';
+const url = 'https://apidev.goalstracker.info/subscription';
 
 class App extends React.Component<any, any> {
     constructor(props: any) {
