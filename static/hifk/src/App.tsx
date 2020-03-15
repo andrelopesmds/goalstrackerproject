@@ -10,6 +10,7 @@ class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = { subscriptionDone: false };
+        this.register = this.register.bind(this);
     }
 
     componentDidMount() {
@@ -98,11 +99,30 @@ class App extends React.Component<any, any> {
             <div className="App">
                 <header className="App-header">
                     <div className="Buttons">
-                        { this.state.subscriptionDone ? null : <p><Button onClick={this.register.bind(this)} variant="contained" color="primary">Click here and watch HIFK!</Button></p> }
-                        { this.state.subscriptionDone ? <p><img src={logo} className="App-logo" alt="logo"/></p> : null }
-                        { this.state.subscriptionDone ? <p><Button variant="contained" color="primary">Registration completed!</Button></p> : null }
+                        <Buttons onClick={this.register} subscriptionDone={this.state.subscriptionDone}/>
                     </div>
                 </header>
+            </div>
+        );
+    }
+}
+
+class Buttons extends React.Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.onClick();
+    }
+
+    render () {
+        return (
+            <div className="Buttons">
+                { this.props.subscriptionDone ? null : <p><Button onClick={this.handleClick} variant="contained" color="primary">Click here and watch HIFK!</Button></p> }
+                { this.props.subscriptionDone ? <p><img src={logo} className="App-logo" alt="logo"/></p> : null }
+                { this.props.subscriptionDone ? <p><Button variant="contained" color="primary">Registration completed!</Button></p> : null }
             </div>
         );
     }
