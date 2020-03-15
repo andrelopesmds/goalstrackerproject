@@ -3,7 +3,7 @@ service: goals-tracker-project
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: ${opt:stage, 'staging'}
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
     EVENTS_TABLE: { Ref: EventsTable }
