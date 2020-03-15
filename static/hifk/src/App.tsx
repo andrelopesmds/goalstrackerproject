@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './hifk.png';
+import Logo from './hifk.png';
 import './App.css';
 import Button from '@material-ui/core/Button'
 
@@ -9,7 +9,7 @@ const url = 'https://apistaging.goalstracker.info/subscription';
 class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = { subscriptionDone: false };
+        this.state = { userSubscribed: false };
         this.register = this.register.bind(this);
     }
 
@@ -59,9 +59,9 @@ class App extends React.Component<any, any> {
     }
 
     detectUser() {
-        if (Notification && Notification.permission === 'granted') this.setState({ subscriptionDone: true });
+        if (Notification && Notification.permission === 'granted') this.setState({ userSubscribed: true });
 
-        else this.setState({ subscriptionDone: false })
+        else this.setState({ userSubscribed: false })
     }
 
     sendToServer(subscription: any) {
@@ -99,7 +99,7 @@ class App extends React.Component<any, any> {
             <div className="App">
                 <header className="App-header">
                     <div className="Buttons">
-                        <Buttons onClick={this.register} subscriptionDone={this.state.subscriptionDone}/>
+                        <Buttons onClick={this.register} userSubscribed={this.state.userSubscribed}/>
                     </div>
                 </header>
             </div>
@@ -118,12 +118,12 @@ class Buttons extends React.Component<any, any> {
     }
 
     render () {
-        const subscriptionDone = this.props.subscriptionDone;
+        const userSubscribed = this.props.userSubscribed;
         const clickableButton = <p><Button onClick={this.handleClick} variant="contained" color="primary">Click here and watch HIFK!</Button></p>;
         const messageButton = <p><Button variant="contained" color="primary">Registration completed!</Button></p>;
-        const image = <p><img src={logo} className="App-logo" alt="logo"/></p>;
+        const image = <p><img src={Logo} className="App-logo" alt="logo"/></p>;
 
-        if (subscriptionDone) {
+        if (userSubscribed) {
             return (
                 <div className="Buttons">
                     {image}
