@@ -45,7 +45,7 @@ functions:
     handler: subscriber/index.handler
     events:
       - http:
-          path: subscription
+          path: subscriptions
           method: post
           cors: true
 
