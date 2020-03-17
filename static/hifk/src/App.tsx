@@ -1,22 +1,42 @@
 import React from 'react';
 import './App.css';
-import Buttons from './Buttons';
+import Buttons from './Buttons/Buttons';
 import SubscriptionStatus from './SubscriptionStatus';
+import { AvailableTeam } from './Utils/globalInterfaces';
+import { routes } from './environment';
 
-const url = 'https://apidev.goalstracker.info/subscription';
+interface AppStates {
+  subscriptionStatus: SubscriptionStatus,
+  availableTeams: AvailableTeam[]
+}
 
-class App extends React.Component<any, any> {
-    constructor(props: any) {
+interface AppProps { }
+
+class App extends React.Component<AppProps, AppStates> {
+    constructor(props: AppProps) {
         super(props);
-        this.state = { subscriptionStatus: SubscriptionStatus.NotSubscribed };
+        this.state = {
+          subscriptionStatus: SubscriptionStatus.NotSubscribed,
+          availableTeams: []
+        };
+       
         this.register = this.register.bind(this);
     }
 
     componentDidMount() {
         this.detectUser();
+        fetch(routes.teams)
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          const teams: AvailableTeam[] = data.teams;
+          this.setState({ availableTeams: teams });
+        });
     }
 
-    register() {
+    register(teamsIds: number[]) {
+        console.log(teamsIds);
         this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
         
         if (!('serviceWorker' in navigator)) {
@@ -39,13 +59,14 @@ class App extends React.Component<any, any> {
         .then((pushSubscription: any) => {
             var data = JSON.stringify(pushSubscription);
             console.log('Received PushSubscription: ', data);
-            return this.sendToServer(data);
-        })
-        .catch(error => {
-            alert('Error during your registration');
+            return this.sendToServer(data, teamsIds);
         })
         .then(() => {
-            this.detectUser();
+          this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
+        })
+        .catch(() => {
+            alert('Error during your registration');
+            this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed });
         });
     }
 
@@ -69,15 +90,18 @@ class App extends React.Component<any, any> {
         else this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
     }
 
-    sendToServer(subscription: any) {
+    sendToServer(subscription: any, teamsIds: number[]) {
         return new Promise((resolve, reject) => {
             const parameters = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: subscription
+                body: JSON.stringify({
+                  subscription: subscription,
+                  teamsIds: teamsIds
+                })
             };
 
-            fetch(url, parameters)
+            fetch(routes.subscription, parameters)
             .then((response) => {
                 if (response.ok) {
                     resolve();
@@ -104,7 +128,11 @@ class App extends React.Component<any, any> {
             <div className="App">
                 <header className="App-header">
                     <div className="Buttons">
-                        <Buttons onClick={this.register} subscriptionStatus={this.state.subscriptionStatus}/>
+                        <Buttons
+                          onClick={this.register}
+                          subscriptionStatus={this.state.subscriptionStatus}
+                          availableTeams={this.state.availableTeams}  
+                        />
                     </div>
                 </header>
             </div>

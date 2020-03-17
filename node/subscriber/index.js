@@ -17,7 +17,7 @@ module.exports.handler = async (event) => {
   try {
     await saveSubscription(event);
   } catch (error) {
-    console.log(`Error when subscribing new user: ${JSON.stringify(error)}`);
+    console.log(`Error when subscribing new user! Event: ${JSON.stringify(event)}`);
     throw error;
   }
 
@@ -25,33 +25,30 @@ module.exports.handler = async (event) => {
 };
 
 async function saveSubscription(event) {
-  const body = JSON.parse(event['body']);
-  if (!isSubscriptionValid(body)) {
+  const body = JSON.parse(event.body);
+  const subscription = JSON.parse(body.subscription);
+  // TODO
+  // const teamsIds = body.teamsIds;
+
+  if (!isSubscriptionValid(subscription)) {
     throw new Error('Subscription is not valid');
   }
 
-  await dynamodb.saveSubscription(body);
+  await dynamodb.saveSubscription(subscription);
 }
 
-function isSubscriptionValid(body) {
-  if (checkProperties(body, ['endpoint', 'keys']) && checkProperties(body.keys, ['p256dh', 'auth'])) {
-    return true;
+function isSubscriptionValid(subscription) {
+  if (!hasProperties(subscription, ['endpoint', 'keys']) || !hasProperties(subscription.keys, ['p256dh', 'auth'])) {
+    return false;
   }
 
-  if (!body.endpoint.includes('https')) {
-    return true;
-  }
-
-  return false;
-}
-
-function checkProperties(obj, propertiesList) {
-  for (let i = 0; i < propertiesList.length; i++) {
-    if (!obj.hasOwnProperty(propertiesList[i])) {
-      return false;
-    }
+  if (!subscription.endpoint.includes('https')) {
+    return false;
   }
 
   return true;
 }
 
+function hasProperties(obj, propertiesList) {
+  return propertiesList.every((property) => obj.hasOwnProperty(property));
+}
