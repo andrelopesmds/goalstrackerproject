@@ -1,14 +1,9 @@
 'use strict';
 
 const sportsLive = require('sports-live');
-const stringScore = require('string-score');
 const dynamodb = require('../lib/dynamodb');
-const underscore = require('underscore');
 
-const TEAM = 'HIFK Helsinki';
-const TEAM2 = 'IFK Helsinki';
 const SPORT = 'hockey';
-const DISTANCE = 0.5;
 const MINUTESTOTRACK = 60 * 24;
 
 
@@ -25,46 +20,78 @@ async function handler() {
 
 
 async function fetchGoals() {
+  const availableTeams = await dynamodb.getTeams();
+
   const results = await runApi();
-  if (results) {
-    console.log(results);
-  } else {
-    console.log('no results');
-  }
-  const result = filterResult(results);
 
-  if (result) {
-    const events = await dynamodb.getEvents(MINUTESTOTRACK);
+  const filteredResults = filterResultsAndIncludeIds(results, availableTeams);
 
-    if (isNewEvent(events, result)) {
-      await dynamodb.saveEvent(result);
+  if (filteredResults && filteredResults.length > 0) {
+    const recentlySavedEvents = await dynamodb.getEvents(MINUTESTOTRACK);
+
+    const notSavedEvents = filterNotSavedEvents(filteredResults, recentlySavedEvents);
+
+    if (notSavedEvents && notSavedEvents.length > 0) {
+      await dynamodb.saveEventList(notSavedEvents);
     }
   }
 }
 
-function isNewEvent(events, event) {
-  for (let i = 0; i < events.length; i++) {
-    if (underscore.isEqual(events[i], event)) {
-      return false;
-    }
-  };
+const filterNotSavedEvents = (filteredResults, recentlySavedEvents) => {
+  const notSavedEvents = [];
+  filteredResults.forEach((result) => {
+    let isNew = true;
 
-  return true;
-}
+    recentlySavedEvents.forEach((event) => {
+      if (isSameEvent(result, event)) {
+        isNew = false;
+      }
+    });
 
-function filterResult(matches) {
-  for (let i = 0; i < matches.length; i++) {
-    if (checkTeam(matches[i].team1) || checkTeam(matches[i].team2)) {
-      return matches[i];
+    if (isNew) {
+      notSavedEvents.push(result);
     }
-  }
-}
+  });
+
+  return notSavedEvents;
+};
+
+const isSameEvent = (resultWithIds, savedEvent) => {
+  const evaluatedKeys = ['team1', 'team2', 'currentStatus', 'score'];
+
+  let isSameEvent = true;
+  evaluatedKeys.forEach((key) => {
+    if (resultWithIds[key] !== savedEvent[key]) {
+      isSameEvent = false;
+    }
+  });
+
+  return isSameEvent;
+};
+
+const filterResultsAndIncludeIds = (results, availableTeams) => {
+  const filteredResults = [];
+  results.forEach((result) => {
+    availableTeams.forEach((team) => {
+      if ((team.name === result.team1) || (team.name === result.team2)) {
+        const newItem = result;
+        if (team.name === result.team1) {
+          newItem.team1Id = team.id;
+        } else {
+          newItem.team2Id = team.id;
+        }
+        filteredResults.push(newItem);
+      }
+    });
+  });
+  return filteredResults;
+};
 
 function runApi() {
   return new Promise((resolve, reject) => {
     sportsLive.getAllMatches(SPORT, function(err, matches) {
       if (err) {
-        reject(err);
+        throw err;
       } else {
         resolve(matches);
       }
@@ -72,17 +99,7 @@ function runApi() {
   });
 }
 
-function checkTeam(team) {
-  let response = false;
-  if ((typeof team == 'string') && (stringScore(TEAM, team, DISTANCE) > DISTANCE || stringScore(TEAM2, team, DISTANCE) > DISTANCE)) {
-    response = true;
-  }
-
-  return response;
-}
-
 module.exports = {
   handler,
   runApi,
-  checkTeam,
 };
