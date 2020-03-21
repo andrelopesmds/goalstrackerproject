@@ -17,7 +17,7 @@ module.exports.handler = async (event) => {
   try {
     await saveSubscription(event);
   } catch (error) {
-    console.log(`Error when subscribing new user! Event: ${JSON.stringify(event)}`);
+    console.log(`Error when subscribing new user! Event: ${JSON.stringify(event)}. Error:${JSON.stringify(error)}.`);
     throw error;
   }
 
@@ -27,17 +27,25 @@ module.exports.handler = async (event) => {
 async function saveSubscription(event) {
   const body = JSON.parse(event.body);
   const subscription = JSON.parse(body.subscription);
-  // TODO
-  // const teamsIds = body.teamsIds;
+  const teamsIds = body.teamsIds;
 
+  validateInput(subscription, teamsIds);
+
+  subscription.teamsIds = teamsIds;
+  await dynamodb.saveSubscription(subscription);
+}
+
+const validateInput = (subscription, teamsIds) => {
   if (!isSubscriptionValid(subscription)) {
     throw new Error('Subscription is not valid');
   }
 
-  await dynamodb.saveSubscription(subscription);
-}
+  if (!teamsIds || !(teamsIds.length > 0)) {
+    throw new Error('TeamsIds is not valid');
+  }
+};
 
-function isSubscriptionValid(subscription) {
+const isSubscriptionValid = (subscription) => {
   if (!hasProperties(subscription, ['endpoint', 'keys']) || !hasProperties(subscription.keys, ['p256dh', 'auth'])) {
     return false;
   }
@@ -47,8 +55,8 @@ function isSubscriptionValid(subscription) {
   }
 
   return true;
-}
+};
 
-function hasProperties(obj, propertiesList) {
+const hasProperties = (obj, propertiesList) => {
   return propertiesList.every((property) => obj.hasOwnProperty(property));
-}
+};
