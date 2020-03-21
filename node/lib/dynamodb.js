@@ -3,6 +3,7 @@
 const schemas = require('./schemas.js');
 
 async function saveSubscription(subscription) {
+  subscription.subscribeDate = new Date().toISOString();
   const subscriptionAttribute = new schemas.SubscriptionsModel(subscription);
 
   await subscriptionAttribute.save();
@@ -24,6 +25,7 @@ async function getSubscriptions() {
 }
 
 async function saveEvent(event) {
+  event.timestamp = new Date().toISOString();
   const eventAttribute = new schemas.EventsModel(event);
 
   await eventAttribute.save();

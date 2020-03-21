@@ -29,7 +29,6 @@ const subscriptionsSchema = new Schema({
   subscribeDate: {
     type: String,
     required: true,
-    default: new Date().toISOString(),
   },
   unsubscribeDate: {
     type: String,
@@ -57,7 +56,6 @@ const eventsSchema = new Schema({
   timestamp: {
     type: String,
     required: true,
-    default: new Date().toISOString(),
   },
   currentStatus: {
     type: String,
