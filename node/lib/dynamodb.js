@@ -32,6 +32,18 @@ async function saveEvent(event) {
   console.log(`Event saved: ${JSON.stringify(event)}`);
 }
 
+async function saveEventList(events) {
+  const listEvents = [];
+  events.forEach((event) => {
+    event.timestamp = new Date().toISOString();
+    const eventAttribute = new schemas.EventsModel(event);
+    listEvents.push(eventAttribute);
+  });
+
+  await schemas.EventsModel.batchPut(listEvents);
+  console.log(`Events saved: ${JSON.stringify(listEvents)}`);
+}
+
 async function getEvents(minutesToTrack) {
   const timestamp = (new Date((new Date().getTime()) - minutesToTrack * 60000)).toISOString();
   const filter = {
@@ -62,6 +74,7 @@ module.exports = {
   saveSubscription,
   getSubscriptions,
   saveEvent,
+  saveEventList,
   getEvents,
   getTeams,
 };
