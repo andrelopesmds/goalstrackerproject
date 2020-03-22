@@ -35,7 +35,8 @@ const subscriptionsSchema = new Schema({
     default: null,
   },
   teamsIds: {
-    type: Object,
+    type: String,
+    required: true,
   },
 });
 

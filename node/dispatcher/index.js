@@ -42,8 +42,7 @@ const filterSubscriptions = (subscriptions, idsList) => {
   const filteredSubscriptions = [];
   subscriptions.forEach((subscription) => {
     let containId = false;
-    console.log(subscription);
-    const subscriptionIdsList = getSubscriptionIdsList(subscription.teamsIds);
+    const subscriptionIdsList = subscription.teamsIds.split(',');
 
     subscriptionIdsList.forEach((subscriptionId) => {
       idsList.forEach((id) => {
@@ -91,7 +90,6 @@ function createEventObjectAndIdsList(event) {
     };
 
     const idsList = [];
-    console.log(imageOfEvent);
     if (imageOfEvent.team1Id) {
       idsList.push(imageOfEvent.team1Id.S);
     }
@@ -108,9 +106,3 @@ function createEventObjectAndIdsList(event) {
   }
 }
 
-function getSubscriptionIdsList(subscriptionIdsList) {
-  let list = subscriptionIdsList.replace('[', '');
-  list = list.replace(']', '');
-  list = list.split(',');
-  return list;
-}
