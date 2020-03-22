@@ -31,7 +31,7 @@ async function saveSubscription(event) {
 
   validateInput(subscription, teamsIds);
 
-  subscription.teamsIds = teamsIds;
+  subscription.teamsIds = teamsIds.toString();
   await dynamodb.saveSubscription(subscription);
 }
 
