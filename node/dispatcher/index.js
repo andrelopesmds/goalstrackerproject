@@ -17,23 +17,49 @@ module.exports.handler = async (event) => {
 };
 
 async function processEvent(event) {
-  const obj = createEventObjectWithIds(event);
+  const [obj, idsList] = createEventObjectAndIdsList(event);
+  console.log('idsList');
+  console.log(idsList);
   console.log(`Event which will be sent: ${JSON.stringify(obj)}`);
 
   const subscriptions = await dynamodb.getSubscriptions();
+  const filteredSubscriptions = filterSubscriptions(subscriptions, idsList);
   console.log(subscriptions);
-  subscriptions.forEach((s) => {
+  console.log(filteredSubscriptions);
+  filteredSubscriptions.forEach((s) => {
     delete s.teamsIds;
   });
 
   const results = [];
-  for (let i = 0; i < subscriptions.length; i++) {
-    const result = await sendPush(obj, subscriptions[i]);
+  for (let i = 0; i < filteredSubscriptions.length; i++) {
+    const result = await sendPush(obj, filteredSubscriptions[i]);
     results.push(result);
   }
 
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
 }
+
+const filterSubscriptions = (subscriptions, idsList) => {
+  const filteredSubscriptions = [];
+  subscriptions.forEach((subscription) => {
+    const containId = false;
+    const subscriptionIdsList = getSubscriptionIdsList(subscription.teamsIds);
+
+    subscriptionIdsList.forEach((subscriptionId) => {
+      idsList.forEach((id) => {
+        if (subscriptionId == id) {
+          containId = true;
+        }
+      });
+    });
+
+    if (containId) {
+      filteredSubscriptions.push(subscription);
+    }
+  });
+
+  return filteredSubscriptions;
+};
 
 async function sendPush(obj, subscription) {
   return new Promise((resolve, reject) => {
@@ -54,17 +80,37 @@ async function sendPush(obj, subscription) {
   });
 }
 
-function createEventObjectWithIds(event) {
-  // todo ids
+function createEventObjectAndIdsList(event) {
   try {
-    return {
-      team1: event.Records[0].dynamodb.NewImage.team1.S,
-      team2: event.Records[0].dynamodb.NewImage.team2.S,
-      score: event.Records[0].dynamodb.NewImage.score.S,
-      currentStatus: event.Records[0].dynamodb.NewImage.currentStatus.S,
+    const imageOfEvent = event.Records[0].dynamodb.NewImage;
+    const eventObj = {
+      team1: imageOfEvent.team1.S,
+      team2: imageOfEvent.team2.S,
+      score: imageOfEvent.score.S,
+      currentStatus: imageOfEvent.currentStatus.S,
     };
+
+    const idsList = [];
+    console.log(imageOfEvent);
+    if (imageOfEvent.team1Id) {
+      idsList.push(imageOfEvent.team1Id.S);
+    }
+    if (imageOfEvent.team2Id) {
+      idsList.push(imageOfEvent.team2Id.S);
+    }
+
+    return [
+      eventObj,
+      idsList,
+    ];
   } catch (error) {
-    console.log(`Error processing dynamodb event: ${JSON.stringify(error)}`);
-    throw error;
+    throw new Error(`Error processing dynamodb event: ${JSON.stringify(error)}.`);
   }
+}
+
+function getSubscriptionIdsList(subscriptionIdsList) {
+  let list = subscriptionIdsList.replace('[', '');
+  list = list.subscriptionIdsList.replace(']', '');
+  list = list.split(',');
+  return list;
 }

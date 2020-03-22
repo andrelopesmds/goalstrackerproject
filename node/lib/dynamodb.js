@@ -54,7 +54,7 @@ async function getEvents(minutesToTrack) {
       ':timestamp': timestamp,
     },
     FilterExpression: '#timestamp > :timestamp',
-    ProjectionExpression: 'team1, team2, score, currentStatus',
+    ProjectionExpression: 'team1, team2, score, currentStatus, team1Id, team2Id',
     ScanIndexForward: false,
     ConsistentRead: false,
   };
