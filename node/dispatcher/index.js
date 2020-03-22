@@ -23,9 +23,8 @@ async function processEvent(event) {
   console.log(`Event which will be sent: ${JSON.stringify(obj)}`);
 
   const subscriptions = await dynamodb.getSubscriptions();
-  const filteredSubscriptions = filterSubscriptions(subscriptions, idsList);
   console.log(subscriptions);
-  console.log(filteredSubscriptions);
+  const filteredSubscriptions = filterSubscriptions(subscriptions, idsList);
   filteredSubscriptions.forEach((s) => {
     delete s.teamsIds;
   });
@@ -42,7 +41,8 @@ async function processEvent(event) {
 const filterSubscriptions = (subscriptions, idsList) => {
   const filteredSubscriptions = [];
   subscriptions.forEach((subscription) => {
-    const containId = false;
+    let containId = false;
+    console.log(subscription);
     const subscriptionIdsList = getSubscriptionIdsList(subscription.teamsIds);
 
     subscriptionIdsList.forEach((subscriptionId) => {
@@ -110,7 +110,7 @@ function createEventObjectAndIdsList(event) {
 
 function getSubscriptionIdsList(subscriptionIdsList) {
   let list = subscriptionIdsList.replace('[', '');
-  list = list.subscriptionIdsList.replace(']', '');
+  list = list.replace(']', '');
   list = list.split(',');
   return list;
 }
