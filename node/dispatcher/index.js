@@ -6,11 +6,25 @@ const dynamodb = require('../lib/dynamodb');
 const pushFunction = process.env.pushFunction;
 
 module.exports.handler = async (event) => {
-  const obj = createEventObject(event);
+  try {
+    await processEvent(event);
+  } catch (error) {
+    console.log(`Error when processing event: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
+    throw error;
+  }
+
+  console.log(`Operation concluded!`);
+};
+
+async function processEvent(event) {
+  const obj = createEventObjectWithIds(event);
   console.log(`Event which will be sent: ${JSON.stringify(obj)}`);
 
   const subscriptions = await dynamodb.getSubscriptions();
   console.log(subscriptions);
+  subscriptions.forEach((s) => {
+    delete s.teamsIds;
+  });
 
   const results = [];
   for (let i = 0; i < subscriptions.length; i++) {
@@ -19,7 +33,7 @@ module.exports.handler = async (event) => {
   }
 
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
-};
+}
 
 async function sendPush(obj, subscription) {
   return new Promise((resolve, reject) => {
@@ -40,7 +54,8 @@ async function sendPush(obj, subscription) {
   });
 }
 
-function createEventObject(event) {
+function createEventObjectWithIds(event) {
+  // todo ids
   try {
     return {
       team1: event.Records[0].dynamodb.NewImage.team1.S,

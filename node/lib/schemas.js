@@ -45,6 +45,9 @@ const eventsSchema = new Schema({
     required: true,
     hashKey: true,
   },
+  team1Id: {
+    type: String,
+  },
   score: {
     type: String,
     required: true,
@@ -52,6 +55,9 @@ const eventsSchema = new Schema({
   team2: {
     type: String,
     required: true,
+  },
+  team2Id: {
+    type: String,
   },
   timestamp: {
     type: String,
