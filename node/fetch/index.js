@@ -1,7 +1,7 @@
 'use strict';
 
-const sportsLive = require('sports-live');
 const dynamodb = require('../lib/dynamodb');
+const adapter = require('./adapter');
 
 const SPORT = 'hockey';
 const MINUTESTOTRACK = 60 * 24;
@@ -22,7 +22,7 @@ async function handler() {
 async function fetchGoals() {
   const availableTeams = await dynamodb.getTeams();
 
-  const results = await runApi();
+  const results = await adapter.getResults(SPORT);
 
   const filteredResults = filterResultsAndIncludeIds(results, availableTeams);
 
@@ -87,19 +87,6 @@ const filterResultsAndIncludeIds = (results, availableTeams) => {
   return filteredResults;
 };
 
-function runApi() {
-  return new Promise((resolve, reject) => {
-    sportsLive.getAllMatches(SPORT, function(err, matches) {
-      if (err) {
-        throw err;
-      } else {
-        resolve(matches);
-      }
-    });
-  });
-}
-
 module.exports = {
   handler,
-  runApi,
 };
