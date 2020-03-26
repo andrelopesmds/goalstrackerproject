@@ -6,16 +6,22 @@ const SPORT = 'hockey';
 const DESIRED_KEYS = ['currentStatus', 'score', 'team1', 'team2'];
 
 describe('Adapter for third-party API', function() {
-  it('should import module correctly', function() {
-    assert.equal(typeof adapter, 'object');
-    assert.equal(typeof adapter.getResults, 'function');
+  let results;
+  before(async function() {
+    results = await adapter.getResults(SPORT);
   });
 
-  it('should get sports result in the desired format', async function() {
-    const results = await adapter.getResults(SPORT);
-    assert.equal(typeof results, 'object');
-    assert.equal(typeof results, 'object');
+  it('should get an array', function() {
     expect(results).to.be.an('array');
+  });
+
+  it('each item should be an object', function() {
+    results.forEach((item) => {
+      assert.equal(typeof(item), 'object');
+    });
+  });
+
+  it('each object should contain the desired keys and values', function() {
     results.forEach((item) => {
       assert.containsAllKeys(item, DESIRED_KEYS);
       DESIRED_KEYS.forEach((key) => {
