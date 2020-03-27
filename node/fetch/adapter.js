@@ -34,7 +34,7 @@ function validateResults(results) {
       if (!DESIRED_KEYS.includes(key)) {
         throw new Error(`Result is missing a key. Results: ${results}`);
       } else if (!value) {
-        throw new Error(`Result is missing value. Results: ${Results}`);
+        throw new Error(`Result is missing value. Results: ${results}`);
       }
     }
   });
