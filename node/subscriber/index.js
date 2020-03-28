@@ -1,5 +1,6 @@
 'use strict';
 
+const helper = require('./../subscriber/helper');
 const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {
@@ -25,38 +26,6 @@ module.exports.handler = async (event) => {
 };
 
 async function saveSubscription(event) {
-  const body = JSON.parse(event.body);
-  const subscription = JSON.parse(body.subscription);
-  const teamsIds = body.teamsIds;
-
-  validateInput(subscription, teamsIds);
-
-  subscription.teamsIds = teamsIds.toString();
+  const subscription = helper.processSubscription(event);
   await dynamodb.saveSubscription(subscription);
 }
-
-const validateInput = (subscription, teamsIds) => {
-  if (!isSubscriptionValid(subscription)) {
-    throw new Error('Subscription is not valid');
-  }
-
-  if (!teamsIds || !(teamsIds.length > 0)) {
-    throw new Error('TeamsIds is not valid');
-  }
-};
-
-const isSubscriptionValid = (subscription) => {
-  if (!hasProperties(subscription, ['endpoint', 'keys']) || !hasProperties(subscription.keys, ['p256dh', 'auth'])) {
-    return false;
-  }
-
-  if (!subscription.endpoint.includes('https')) {
-    return false;
-  }
-
-  return true;
-};
-
-const hasProperties = (obj, propertiesList) => {
-  return propertiesList.every((property) => obj.hasOwnProperty(property));
-};

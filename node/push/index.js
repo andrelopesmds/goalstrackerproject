@@ -1,5 +1,6 @@
 'use strict';
 
+const helper = require('./helper');
 const webpush = require('web-push');
 
 const vapidKeys = {
@@ -20,16 +21,11 @@ module.exports.handler = async (event) => {
     console.log(`Error when sending push notification: ${JSON.stringify(error)}`);
     throw error;
   }
-  console.log('This is working');
-  console.log(JSON.stringify(event));
+  console.log('operation concluded!');
 };
 
 async function sendPushNotification(event) {
-  const message = {
-    title: event.obj.currentStatus,
-    body: `${event.obj.team1} ${event.obj.score} ${event.obj.team2}`,
-  };
-  const payload = JSON.stringify(message);
+  const payload = helper.createPayload(event);
 
   const result = await webpush.sendNotification(event.subscription, payload);
   console.log(result);
