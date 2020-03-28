@@ -3,6 +3,7 @@
 const aws = require('aws-sdk');
 const lambda = new aws.Lambda();
 const dynamodb = require('../lib/dynamodb');
+const helper = require('./helper');
 const pushFunction = process.env.pushFunction;
 
 module.exports.handler = async (event) => {
@@ -17,17 +18,13 @@ module.exports.handler = async (event) => {
 };
 
 async function processEvent(event) {
-  const [obj, idsList] = createEventObjectAndIdsList(event);
-  console.log('idsList');
-  console.log(idsList);
-  console.log(`Event which will be sent: ${JSON.stringify(obj)}`);
+  const [obj, idsList] = helper.createEventObjectAndIdsList(event);
+  console.log(`IdsList: ${JSON.stringify(idsList)}`);
+  console.log(`Object which will be sent: ${JSON.stringify(obj)}`);
 
   const subscriptions = await dynamodb.getSubscriptions();
-  console.log(subscriptions);
-  const filteredSubscriptions = filterSubscriptions(subscriptions, idsList);
-  filteredSubscriptions.forEach((s) => {
-    delete s.teamsIds;
-  });
+
+  const filteredSubscriptions = helper.filterAndCleanSubscriptions(subscriptions, idsList);
 
   const results = [];
   for (let i = 0; i < filteredSubscriptions.length; i++) {
@@ -37,28 +34,6 @@ async function processEvent(event) {
 
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
 }
-
-const filterSubscriptions = (subscriptions, idsList) => {
-  const filteredSubscriptions = [];
-  subscriptions.forEach((subscription) => {
-    let containId = false;
-    const subscriptionIdsList = subscription.teamsIds.split(',');
-
-    subscriptionIdsList.forEach((subscriptionId) => {
-      idsList.forEach((id) => {
-        if (subscriptionId == id) {
-          containId = true;
-        }
-      });
-    });
-
-    if (containId) {
-      filteredSubscriptions.push(subscription);
-    }
-  });
-
-  return filteredSubscriptions;
-};
 
 async function sendPush(obj, subscription) {
   return new Promise((resolve, reject) => {
@@ -77,32 +52,5 @@ async function sendPush(obj, subscription) {
       }
     });
   });
-}
-
-function createEventObjectAndIdsList(event) {
-  try {
-    const imageOfEvent = event.Records[0].dynamodb.NewImage;
-    const eventObj = {
-      team1: imageOfEvent.team1.S,
-      team2: imageOfEvent.team2.S,
-      score: imageOfEvent.score.S,
-      currentStatus: imageOfEvent.currentStatus.S,
-    };
-
-    const idsList = [];
-    if (imageOfEvent.team1Id) {
-      idsList.push(imageOfEvent.team1Id.S);
-    }
-    if (imageOfEvent.team2Id) {
-      idsList.push(imageOfEvent.team2Id.S);
-    }
-
-    return [
-      eventObj,
-      idsList,
-    ];
-  } catch (error) {
-    throw new Error(`Error processing dynamodb event: ${JSON.stringify(error)}.`);
-  }
 }
 

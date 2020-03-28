@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-describe('TODO', function() {
+describe('Teams service', function() {
   it('TODO', function() {
     assert.equal(true, true);
   });

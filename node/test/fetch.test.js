@@ -1,11 +1,11 @@
 const assert = require('chai').assert;
 const expect = require('chai').expect;
-const adapter = require('./../../fetch/adapter');
+const adapter = require('./../fetch/adapter');
 
 const SPORT = 'hockey';
 const DESIRED_KEYS = ['currentStatus', 'score', 'team1', 'team2'];
 
-describe('Adapter for third-party API', function() {
+describe('Fetch service - Adapter for third-party API', function() {
   let results;
   before(async function() {
     results = await adapter.getResults(SPORT);
