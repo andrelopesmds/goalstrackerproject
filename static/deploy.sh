@@ -8,6 +8,7 @@ if [ $stage = "prod" ] || [ $stage = "staging" ] || [ $stage = "dev" ]; then
   else
     bucket=$stage.goalstracker.info
   fi
+  npm install
   REACT_APP_ENV=$stage npm run build
   aws s3 rm s3://$bucket --recursive
   aws s3 cp build/ s3://$bucket --recursive
