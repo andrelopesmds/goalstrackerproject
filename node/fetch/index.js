@@ -3,13 +3,12 @@
 const dynamodb = require('../lib/dynamodb');
 const adapter = require('./adapter');
 
-const SPORT = 'hockey';
 const MINUTESTOTRACK = 60 * 24;
 
 
-async function handler() {
+async function handler(event) {
   try {
-    await fetchGoals();
+    await fetchGoals(event.sport);
   } catch (error) {
     console.log(`Error when fetching goals: ${JSON.stringify(error)}`);
     throw error;
@@ -19,10 +18,10 @@ async function handler() {
 };
 
 
-async function fetchGoals() {
+async function fetchGoals(sport) {
   const availableTeams = await dynamodb.getTeams();
 
-  const results = await adapter.getResults(SPORT);
+  const results = await adapter.getResults(sport);
 
   const filteredResults = filterResultsAndIncludeIds(results, availableTeams);
 
