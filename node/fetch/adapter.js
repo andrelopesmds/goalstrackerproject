@@ -32,9 +32,9 @@ function validateResults(results) {
   results.forEach((result) => {
     for (const [key, value] of Object.entries(result)) {
       if (!DESIRED_KEYS.includes(key)) {
-        throw new Error(`Result is missing a key. Results: ${results}`);
+        throw new Error(`Result is missing a key. Results: ${JSON.stringify(results)}`);
       } else if (!value) {
-        throw new Error(`Result is missing value. Results: ${results}`);
+        throw new Error(`Result is missing value. Results: ${JSON.stringify(results)}`);
       }
     }
   });
