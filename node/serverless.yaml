@@ -42,6 +42,18 @@ functions:
           startingPosition: LATEST
           enabled: true
 
+  welcomer:
+    handler: welcomer/index.handler
+    environment:
+      pushFunction: "${self:service}-${self:provider.stage}-push"
+    events:
+      - stream:
+          type: dynamodb
+          arn: { Fn::GetAtt: [SubscriptionsTable, StreamArn] }
+          batchSize: 1
+          startingPosition: LATEST
+          enabled: true
+
   subscriber:
     handler: subscriber/index.handler
     events:
@@ -90,6 +102,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 
     EventsTable:
       Type: AWS::DynamoDB::Table
