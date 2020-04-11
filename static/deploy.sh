@@ -16,5 +16,5 @@ if [ $stage = "prod" ] || [ $stage = "staging" ] || [ $stage = "dev" ]; then
   echo "Deployment stage: $stage."
   echo "Deployment bucket: $bucket."
 else
-    echo "Stage parameter could not be empty. It must be 'prod', 'stating' or 'dev'"
+    echo "Stage parameter could not be empty. It must be 'prod', 'staging' or 'dev'"
 fi
