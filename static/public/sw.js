@@ -1,6 +1,6 @@
 self.addEventListener('push', function(event) {
-    const iconPath = 'hifk.png';
-    const badgePath = 'hifkBadge.png';
+    const iconPath = 'ball.png';
+    const badgePath = 'ball.png';
 
     if (event.data) {
         let notification = JSON.parse(event.data.text());
@@ -10,7 +10,7 @@ self.addEventListener('push', function(event) {
         const options = {
             "badge": badgePath,
             "body": notification.body,
-            "icon": notification.icon = 'hifk' ? iconPath : null
+            "icon": iconPath // get it from backend in order to customize the message
         };
 
         const promiseChain = self.registration.showNotification(title, options);
