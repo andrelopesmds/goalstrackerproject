@@ -1,5 +1,4 @@
 import React from 'react';
-import Logo from './hifk.png';
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import CSS from 'csstype';
 import Loading from './Loading';
@@ -44,13 +43,11 @@ class Buttons extends React.Component<ButtonsProps, ButtonsStates> {
         const subscriptionStatus = this.props.subscriptionStatus;
         const clickableButton = <DialogSlide buttonProperties={buttonProperties} availableTeams={this.props.availableTeams} text={clickableButtonText} onClick={this.handleClick}/>;
         const messageButton = <p><Button {...buttonProperties} style={messageButtonStyles}>{messageButtonText}</Button></p>;
-        const image = <p><img src={Logo} style={imageStyles} alt="logo"/></p>;
 
         return (
             <div className="Buttons">
               { subscriptionStatus === SubscriptionStatus.NotSubscribed && clickableButton }
               { subscriptionStatus === SubscriptionStatus.InProgress && <Loading/> }
-              { subscriptionStatus === SubscriptionStatus.Subscribed && image }
               { subscriptionStatus === SubscriptionStatus.Subscribed && messageButton }
             </div>
         );
