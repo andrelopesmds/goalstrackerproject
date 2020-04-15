@@ -80,6 +80,10 @@ const teamsSchema = new Schema({
     type: String,
     required: true,
   },
+  sport: {
+    type: String,
+    required: true,
+  },
 });
 
 const SubscriptionsModel = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
