@@ -19,6 +19,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:GetItem
         - dynamodb:BatchWriteItem
+        - dynamodb:Query
       Resource:
         - { "Fn::GetAtt": ["SubscriptionsTable", "Arn" ] }
         - { "Fn::GetAtt": ["EventsTable", "Arn" ] }

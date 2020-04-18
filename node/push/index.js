@@ -2,6 +2,7 @@
 
 const helper = require('./helper');
 const webpush = require('web-push');
+const dynamodb = require('../lib/dynamodb');
 
 const vapidKeys = {
   publicKey: process.env.PUBLIC_KEY,
@@ -25,8 +26,18 @@ module.exports.handler = async (event) => {
 };
 
 async function sendPushNotification(event) {
+  const subscription = event.subscription;
   const payload = helper.createPayload(event);
 
-  const result = await webpush.sendNotification(event.subscription, payload);
-  console.log(result);
+  try {
+    const result = await webpush.sendNotification(subscription, payload);
+    console.log(`Message is sent: ${JSON.stringify(result)}`);
+  } catch (error) {
+    if (error.statusCode === 410) {
+      await dynamodb.deleteSubscription(subscription);
+      console.log('User is unsubscribed!');
+    } else {
+      throw error;
+    }
+  }
 };
