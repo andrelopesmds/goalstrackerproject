@@ -24,7 +24,7 @@ class App extends React.Component<AppProps, AppStates> {
     }
 
     componentDidMount() {
-        this.detectUser();
+        this.updatesubscriptionStatus();
         fetch(routes.teams)
         .then((response) => {
           return response.json()
@@ -36,7 +36,7 @@ class App extends React.Component<AppProps, AppStates> {
     }
 
     register(teamsIds: number[]) {
-        console.log(teamsIds);
+        this.updatesubscriptionStatus();
         this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
         
         if (!('serviceWorker' in navigator)) {
@@ -58,7 +58,7 @@ class App extends React.Component<AppProps, AppStates> {
         })
         .then((pushSubscription: any) => {
             var data = JSON.stringify(pushSubscription);
-            console.log('Received PushSubscription: ', data);
+
             return this.sendToServer(data, teamsIds);
         })
         .then(() => {
@@ -70,7 +70,7 @@ class App extends React.Component<AppProps, AppStates> {
         });
     }
 
-    getApplicationServerKey():Uint8Array {
+    getApplicationServerKey(): Uint8Array {
         const base64String = 'BGeQdm67i8LCUJ3ATI_lLM3HY78BliDlg63jPpqq3OnPDuRCqu7AeyDNR_GxAvAm6FC2SehtO5dW9jWFWQ2d4Q4'
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -84,10 +84,17 @@ class App extends React.Component<AppProps, AppStates> {
         return applicationServerKey;
     }
 
-    detectUser() {
-        if (Notification && Notification.permission === 'granted') this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
+    updatesubscriptionStatus() {
+        if (!('Notification' in window)) {
+            alert('Sorry! We unfortunately don\'t have support for your OS/browser. Please come back later on!');
+            return;
+        }
 
-        else this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
+        if (Notification.permission === 'granted') {
+            this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
+        } else {
+            this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
+        }
     }
 
     sendToServer(subscription: any, teamsIds: number[]) {
