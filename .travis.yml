@@ -2,7 +2,7 @@ matrix:
   include:
     - language: node_js
       node_js:
-        - "9"
+        - "12"
       before_install:
         - cd node/
       install: 
