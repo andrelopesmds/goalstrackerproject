@@ -66,7 +66,6 @@ const eventsSchema = new Schema({
   },
   currentStatus: {
     type: String,
-    required: true,
   },
 });
 
@@ -83,6 +82,15 @@ const teamsSchema = new Schema({
   sport: {
     type: String,
     required: true,
+  },
+  country: {
+    type: String,
+  },
+  adapterInputName: {
+    type: String,
+  },
+  adapterOutputName: {
+    type: String,
   },
 });
 

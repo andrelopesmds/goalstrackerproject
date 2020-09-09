@@ -1,3 +1,5 @@
+'use strict';
+
 const assert = require('assert');
 const helper = require('./../dispatcher/helper');
 
@@ -32,7 +34,6 @@ const event = {
 
 const eventObjAndIdsList = [
   {
-    currentStatus: 'currentStatus',
     score: 'score',
     team1: 'team1',
     team2: 'team2',

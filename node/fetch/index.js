@@ -1,7 +1,8 @@
 'use strict';
 
 const dynamodb = require('../lib/dynamodb');
-const adapter = require('./adapter');
+const helper = require('./helper');
+
 
 const MINUTESTOTRACK = 60 * 24;
 
@@ -21,14 +22,12 @@ async function handler(event) {
 async function fetchGoals(sport) {
   const availableTeams = await dynamodb.getTeams();
 
-  const results = await adapter.getResults(sport);
+  const fetchedEvents = await helper.getResults(sport, 'brazil', availableTeams);
 
-  const filteredResults = filterResultsAndIncludeIds(results, availableTeams);
-
-  if (filteredResults && filteredResults.length > 0) {
+  if (fetchedEvents && fetchedEvents.length > 0) {
     const recentlySavedEvents = await dynamodb.getEvents(MINUTESTOTRACK);
-
-    const notSavedEvents = filterNotSavedEvents(filteredResults, recentlySavedEvents);
+    
+    const notSavedEvents = filterNotSavedEvents(fetchedEvents, recentlySavedEvents);
 
     if (notSavedEvents && notSavedEvents.length > 0) {
       await dynamodb.saveEventList(notSavedEvents);
@@ -36,55 +35,34 @@ async function fetchGoals(sport) {
   }
 }
 
-const filterNotSavedEvents = (filteredResults, recentlySavedEvents) => {
+const filterNotSavedEvents = (fetchedEvents, recentlySavedEvents) => {
   const notSavedEvents = [];
-  filteredResults.forEach((result) => {
+  fetchedEvents.forEach((fetchedEvent) => {
     let isNew = true;
 
-    recentlySavedEvents.forEach((event) => {
-      if (isSameEvent(result, event)) {
+    recentlySavedEvents.forEach((recentlySavedEvent) => {
+      if (isEqual(fetchedEvent, recentlySavedEvent)) {
         isNew = false;
       }
     });
 
+
     if (isNew) {
-      notSavedEvents.push(result);
+      notSavedEvents.push(fetchedEvent);
     }
   });
 
   return notSavedEvents;
 };
 
-const isSameEvent = (resultWithIds, savedEvent) => {
-  const evaluatedKeys = ['team1', 'team2', 'currentStatus', 'score'];
+const isEqual = (event1, event2) => {
+  if (event1['score'] === event2['score'] && event1['team1'] === event2['team1'] && event1['team2'] === event2['team2']) {
+    return true;
+  }
 
-  let isSameEvent = true;
-  evaluatedKeys.forEach((key) => {
-    if (resultWithIds[key] !== savedEvent[key]) {
-      isSameEvent = false;
-    }
-  });
+  return false;
+}
 
-  return isSameEvent;
-};
-
-const filterResultsAndIncludeIds = (results, availableTeams) => {
-  const filteredResults = [];
-  results.forEach((result) => {
-    availableTeams.forEach((team) => {
-      if ((team.name === result.team1) || (team.name === result.team2)) {
-        const newItem = result;
-        if (team.name === result.team1) {
-          newItem.team1Id = team.id;
-        } else {
-          newItem.team2Id = team.id;
-        }
-        filteredResults.push(newItem);
-      }
-    });
-  });
-  return filteredResults;
-};
 
 module.exports = {
   handler,
