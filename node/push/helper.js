@@ -1,4 +1,4 @@
-const keys = ['currentStatus', 'team1', 'score', 'team2'];
+const keys = ['team1', 'score', 'team2'];
 
 const createPayload = (event) => {
   validateEvent(event);
@@ -17,7 +17,7 @@ const validateEvent = (event) => {
   const obj = event.obj;
   keys.forEach((key) => {
     if (!obj[key]) {
-      throw new Error(`Event object is missing value. Event: ${event}`);
+      throw new Error(`Event object is missing value. Event: ${JSON.stringify(event)}`);
     }
   });
 };
