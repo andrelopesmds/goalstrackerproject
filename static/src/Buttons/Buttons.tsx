@@ -36,9 +36,6 @@ class Buttons extends React.Component<ButtonsProps, ButtonsStates> {
         const messageButtonStyles: CSS.Properties = {
             pointerEvents: 'none'
         };
-        const imageStyles: CSS.Properties = {
-            height: '20vmin',
-        }
 
         const subscriptionStatus = this.props.subscriptionStatus;
         const clickableButton = <DialogSlide buttonProperties={buttonProperties} availableTeams={this.props.availableTeams} text={clickableButtonText} onClick={this.handleClick}/>;

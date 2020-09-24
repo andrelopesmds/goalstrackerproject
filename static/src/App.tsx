@@ -31,9 +31,24 @@ class App extends React.Component<AppProps, AppStates> {
         })
         .then((data) => {
           const teams: AvailableTeam[] = data.teams;
+          teams.sort(this.sortBySport); // this is needed so that 'groupBy' method of Autocomplete (Material-UI) works without duplications. 
+          
           this.setState({ availableTeams: teams });
         });
     }
+
+    sortBySport(team1: AvailableTeam, team2: AvailableTeam) {
+      let a = team1.sport;
+      let b = team2.sport;
+
+      if (a < b) {
+        return -1;
+      }
+      if (a > b) {
+        return 1;
+      }
+        return 0;
+      }
 
     register(teamsIds: number[]) {
         this.updatesubscriptionStatus();
