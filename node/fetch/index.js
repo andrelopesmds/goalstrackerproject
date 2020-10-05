@@ -9,7 +9,7 @@ const MINUTESTOTRACK = 60 * 24;
 
 async function handler(event) {
   try {
-    await fetchGoals(event.sport);
+    await fetchGoals(event.sport, event.country);
   } catch (error) {
     console.log(`Error when fetching goals: ${JSON.stringify(error)}`);
     throw error;
@@ -19,10 +19,10 @@ async function handler(event) {
 };
 
 
-async function fetchGoals(sport) {
+async function fetchGoals(sport, country) {
   const availableTeams = await dynamodb.getTeams();
 
-  const fetchedEvents = await helper.getResults(sport, 'brazil', availableTeams);
+  const fetchedEvents = await helper.getResults(sport, country, availableTeams);
 
   if (fetchedEvents && fetchedEvents.length > 0) {
     const recentlySavedEvents = await dynamodb.getEvents(MINUTESTOTRACK);
