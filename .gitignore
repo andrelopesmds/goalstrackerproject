@@ -1,5 +1,5 @@
 node/.serverless
 node/variables.yml
 node/node_modules
-static/node_modules
-static/build/
+react/node_modules
+react/build/
