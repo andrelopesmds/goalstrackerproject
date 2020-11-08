@@ -75,12 +75,12 @@ functions:
     handler: fetch/index.handler
     events:
       - schedule:
-          rate: rate(2 minutes)
+          rate: rate(5 minutes)
           enabled: true
           input:
             sport: hockey
       - schedule:
-          rate: rate(2 minutes)
+          rate: rate(5 minutes)
           enabled: true
           input:
             sport: soccer
