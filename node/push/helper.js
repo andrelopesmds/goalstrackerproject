@@ -4,7 +4,7 @@ const createPayload = (event) => {
   validateEvent(event);
 
   const message = {
-    title: event.obj.currentStatus,
+    title: event.obj.currentStatus || 'Goal',
     body: `${event.obj.team1} ${event.obj.score} ${event.obj.team2}`,
   };
 
