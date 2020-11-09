@@ -5,7 +5,8 @@ const soccerAdapter = require('./soccer-adapter.js');
 
 async function getResults(sport, country, listOfAvailableTeams) {
   if (sport !== 'soccer') {
-    throw new Error(`Sport: '${sport}' is incorrect or not implemented yet.`);
+    console.log(`Sport: '${sport}' is incorrect or not implemented yet.`);
+    return;
   }
 
   const listOfTeamsNames = getAdapterInputNames(listOfAvailableTeams);
