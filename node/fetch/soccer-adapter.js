@@ -31,7 +31,9 @@ async function runApi(country, listOfTeams) {
     });
   });
 
-  return allMatches;
+  const allMatchesNoDuplicates = [...new Set(allMatches)];
+
+  return allMatchesNoDuplicates;
 }
 
 const filterLiveMatches = allMatches => allMatches.filter(match => match.live);
