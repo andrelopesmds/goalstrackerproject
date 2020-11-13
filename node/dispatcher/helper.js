@@ -1,11 +1,15 @@
-const createEventObjectAndIdsList = (event) => {
-  const imageOfEvent = event.Records[0].dynamodb.NewImage;
-  const eventObj = {
-    team1: imageOfEvent.team1.S,
-    team2: imageOfEvent.team2.S,
-    score: imageOfEvent.score.S,
-  };
+const createEventObject = (imageOfEvent) => {
+  const team1 = imageOfEvent.team1.S;
+  const team2 = imageOfEvent.team2.S;
+  const score = imageOfEvent.score.S;
 
+  return {
+    title: 'Goal',
+    body: `${team1} ${score} ${team2}`,
+  };
+}
+
+const createIdsList = (imageOfEvent) => {
   const idsList = [];
   if (imageOfEvent.team1Id) {
     idsList.push(imageOfEvent.team1Id.S);
@@ -14,11 +18,8 @@ const createEventObjectAndIdsList = (event) => {
     idsList.push(imageOfEvent.team2Id.S);
   }
 
-  return [
-    eventObj,
-    idsList,
-  ];
-};
+  return idsList;
+}
 
 const filterAndCleanSubscriptions = (subscriptions, idsList) => {
   const filteredSubscriptions = [];
@@ -44,6 +45,7 @@ const filterAndCleanSubscriptions = (subscriptions, idsList) => {
 };
 
 module.exports = {
-  createEventObjectAndIdsList,
+  createEventObject,
+  createIdsList,
   filterAndCleanSubscriptions,
 };

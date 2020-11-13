@@ -1,23 +1,17 @@
-const keys = ['team1', 'score', 'team2'];
+const keys = ['title', 'body'];
 
-const createPayload = (event) => {
-  validateEvent(event);
+const createPayload = (obj) => {
+  validateObj(obj);
 
-  const message = {
-    title: event.obj.currentStatus || 'Goal',
-    body: `${event.obj.team1} ${event.obj.score} ${event.obj.team2}`,
-  };
-
-  const payload = JSON.stringify(message);
+  const payload = JSON.stringify(obj);
 
   return payload;
 };
 
-const validateEvent = (event) => {
-  const obj = event.obj;
+const validateObj = (obj) => {
   keys.forEach((key) => {
     if (!obj[key]) {
-      throw new Error(`Event object is missing value. Event: ${JSON.stringify(event)}`);
+      throw new Error(`Event object is missing value. Object: ${JSON.stringify(obj)}`);
     }
   });
 };

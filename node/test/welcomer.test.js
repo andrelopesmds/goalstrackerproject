@@ -37,10 +37,8 @@ const event = {
 };
 
 const welcomeMessageObject = {
-  currentStatus: 'Welcome to Goalstracker!',
-  score: 'following your',
-  team1: 'You are now',
-  team2: 'favorite team(s)!',
+  title: 'Welcome to Goalstracker!',
+  body: 'You are now following your favorite team(s)!'
 };
 
 describe('Welcomer service', function() {
