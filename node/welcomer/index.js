@@ -17,12 +17,16 @@ module.exports.handler = async (event) => {
 };
 
 async function processEvent(event) {
+  if (event.Records[0].eventName !== 'INSERT') {
+    console.log(`Event was ignored as it is not an insert. Event: ${JSON.stringify(event)}`);
+    return;
+  }
+
   const subscription = helper.createSubscriptionsObject(event);
 
   const obj = helper.createWelcomeMessageObject();
 
-  const result = await sendPush(obj, subscription);
-  console.log(`Job done. Results: ${JSON.stringify(result)}`);
+  await sendPush(obj, subscription);
 }
 
 async function sendPush(obj, subscription) {
@@ -35,8 +39,9 @@ async function sendPush(obj, subscription) {
 
     lambda.invoke(params, function(err, data) {
       if (err) {
-        console.log(`Error when sending push notification: ${JSON.stringify(err)}`);
+        console.log(`Error when sending push notification. Subscription: ${JSON.stringify(subscription)}`);
         throw err;
+
       } else {
         resolve(true);
       }
