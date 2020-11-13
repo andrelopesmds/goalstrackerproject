@@ -3,6 +3,7 @@ service: goals-tracker-project
 provider:
   name: aws
   runtime: nodejs12.x
+  memorySize: 128
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
@@ -75,7 +76,7 @@ functions:
     handler: fetch/index.handler
     events:
       - schedule:
-          rate: rate(30 minutes)
+          rate: rate(45 minutes)
           enabled: true
           input:
             sport: hockey
