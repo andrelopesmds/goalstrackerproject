@@ -34,7 +34,10 @@ async function sendPush(obj, subscription) {
     const params = {
       FunctionName: pushFunction,
       InvocationType: 'Event',
-      Payload: JSON.stringify({obj: obj, subscription: subscription}),
+      Payload: JSON.stringify({
+        obj: obj,
+        subscription: subscription
+      }),
     };
 
     lambda.invoke(params, function(err, data) {

@@ -9,16 +9,13 @@ const event = {
       dynamodb: {
         NewImage: {
           team1: {
-            S: 'team1',
+            S: 'Santos',
           },
           team2: {
-            S: 'team2',
+            S: 'Palmeiras',
           },
           score: {
-            S: 'score',
-          },
-          currentStatus: {
-            S: 'currentStatus',
+            S: '2x0',
           },
           team1Id: {
             S: 1,
@@ -32,14 +29,12 @@ const event = {
   ],
 };
 
-const eventObjAndIdsList = [
-  {
-    score: 'score',
-    team1: 'team1',
-    team2: 'team2',
-  },
-  [1, 2],
-];
+const eventObject = {
+  title: 'Goal',
+  body: 'Santos 2x0 Palmeiras',
+};
+
+const idsList1 = [1, 2];
 
 const subscriptions = [
   {
@@ -76,16 +71,24 @@ const filteredSubscriptions = [
   subscriptions[2],
 ];
 
-const idsList = [14];
+const idsList2 = [14];
 
 describe('Dispatcher service', function() {
   it('should create event object and ids list', function() {
-    const result = helper.createEventObjectAndIdsList(event);
-    assert.deepEqual(result, eventObjAndIdsList);
+    const imageOfEvent = event.Records[0].dynamodb.NewImage;
+    const result = helper.createEventObject(imageOfEvent);
+    assert.deepEqual(result, eventObject);
   });
 
+  it('should create event object and ids list', function() {
+    const imageOfEvent = event.Records[0].dynamodb.NewImage;
+    const result = helper.createIdsList(imageOfEvent);
+    assert.deepEqual(result, idsList1);
+  });
+
+
   it('should filter subscriptions containing the teams id', function() {
-    const result = helper.filterAndCleanSubscriptions(subscriptions, idsList);
+    const result = helper.filterAndCleanSubscriptions(subscriptions, idsList2);
     assert.deepEqual(result, filteredSubscriptions);
   });
 });

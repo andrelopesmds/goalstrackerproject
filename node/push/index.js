@@ -19,7 +19,7 @@ module.exports.handler = async (event) => {
   try {
     await sendPushNotification(event);
   } catch (error) {
-    console.log(`Error when sending push notification: ${JSON.stringify(error)}`);
+    console.log(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${event}`);
     throw error;
   }
   console.log('operation concluded!');
@@ -27,15 +27,19 @@ module.exports.handler = async (event) => {
 
 async function sendPushNotification(event) {
   const subscription = event.subscription;
-  const payload = helper.createPayload(event);
+  const payload = helper.createPayload(event.obj);
 
   try {
     const result = await webpush.sendNotification(subscription, payload);
-    console.log(`Message is sent: ${JSON.stringify(result)}`);
+    console.log(`Message sent: ${JSON.stringify(result)}`);
+
   } catch (error) {
+    console.log(`Error when sending the message: ${JSON.stringify(error)}`);
+
     if (error.statusCode === 410) {
       await dynamodb.deleteSubscription(subscription);
-      console.log('User is unsubscribed!');
+      console.log('User unsubscribed!');
+
     } else {
       throw error;
     }

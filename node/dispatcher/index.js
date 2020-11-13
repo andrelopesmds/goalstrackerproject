@@ -18,7 +18,16 @@ module.exports.handler = async (event) => {
 };
 
 async function processEvent(event) {
-  const [obj, idsList] = helper.createEventObjectAndIdsList(event);
+  if (event.Records[0].eventName !== 'INSERT') {
+    console.log(`Event was ignored as it is not an insert. Event: ${JSON.stringify(event)}`);
+    return;
+  }
+
+  const imageOfEvent = event.Records[0].dynamodb.NewImage;
+
+  const obj = helper.createEventObject(imageOfEvent);
+  const idsList = helper.createIdsList(imageOfEvent);
+
   console.log(`IdsList: ${JSON.stringify(idsList)}`);
   console.log(`Object which will be sent: ${JSON.stringify(obj)}`);
 

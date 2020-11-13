@@ -32,9 +32,6 @@ describe('Fetch - Soccer adapter test', function() {
 
   it('buildResults should return an array of live results (db format) when there is at least a live match', function() {
     const result = soccerAdapter.buildResults(constants.LIVE_MATCHES);
-    
-    
-    console.log(`LIVE RESULTS: ${JSON.stringify(constants.LIVE_RESULTS)}`)
 
     assert.equal(JSON.stringify(result), JSON.stringify(constants.LIVE_RESULTS));
   });
