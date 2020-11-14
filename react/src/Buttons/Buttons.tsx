@@ -2,7 +2,7 @@ import React from 'react';
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import CSS from 'csstype';
 import Loading from './Loading';
-import SubscriptionStatus from '../SubscriptionStatus';
+import SubscriptionStatus from '../Enums/SubscriptionStatus';
 import DialogSlide from './DialogSlide';
 import { AvailableTeam } from '../Utils/globalInterfaces';
 
