@@ -1,13 +1,16 @@
 import React from 'react';
 import './App.css';
 import Buttons from './Buttons/Buttons';
-import SubscriptionStatus from './SubscriptionStatus';
+import SubscriptionStatus from './Enums/SubscriptionStatus';
+import Menu from './Menu';
 import { AvailableTeam } from './Utils/globalInterfaces';
 import { routes } from './environment';
+import Section from './Enums/Section';
 
 interface AppStates {
-  subscriptionStatus: SubscriptionStatus,
-  availableTeams: AvailableTeam[]
+    subscriptionStatus: SubscriptionStatus,
+    availableTeams: AvailableTeam[],
+    section: Section,
 }
 
 interface AppProps { }
@@ -16,44 +19,46 @@ class App extends React.Component<AppProps, AppStates> {
     constructor(props: AppProps) {
         super(props);
         this.state = {
-          subscriptionStatus: SubscriptionStatus.NotSubscribed,
-          availableTeams: []
+            subscriptionStatus: SubscriptionStatus.NotSubscribed,
+            availableTeams: [],
+            section: Section.Home,
         };
-       
+
         this.register = this.register.bind(this);
+        this.controlSection = this.controlSection.bind(this);
     }
 
     componentDidMount() {
         this.updatesubscriptionStatus();
         fetch(routes.teams)
-        .then((response) => {
-          return response.json()
-        })
-        .then((data) => {
-          const teams: AvailableTeam[] = data.teams;
-          teams.sort(this.sortBySport); // this is needed so that 'groupBy' method of Autocomplete (Material-UI) works without duplications. 
-          
-          this.setState({ availableTeams: teams });
-        });
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                const teams: AvailableTeam[] = data.teams;
+                teams.sort(this.sortBySport); // this is needed so that 'groupBy' method of Autocomplete (Material-UI) works without duplications. 
+
+                this.setState({ availableTeams: teams });
+            });
     }
 
     sortBySport(team1: AvailableTeam, team2: AvailableTeam) {
-      let a = team1.sport;
-      let b = team2.sport;
+        let a = team1.sport;
+        let b = team2.sport;
 
-      if (a < b) {
-        return -1;
-      }
-      if (a > b) {
-        return 1;
-      }
+        if (a < b) {
+            return -1;
+        }
+        if (a > b) {
+            return 1;
+        }
         return 0;
-      }
+    }
 
     register(teamsIds: number[]) {
         this.updatesubscriptionStatus();
         this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
-        
+
         if (!('serviceWorker' in navigator)) {
             alert('Your browser does not support service workers.');
             this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
@@ -63,26 +68,26 @@ class App extends React.Component<AppProps, AppStates> {
         navigator.serviceWorker.register('sw.js')
 
         navigator.serviceWorker.ready
-        .then(registration => {
-            const subscribeOptions = {
-                userVisibleOnly: true,
-                applicationServerKey: this.getApplicationServerKey()
-            };
+            .then(registration => {
+                const subscribeOptions = {
+                    userVisibleOnly: true,
+                    applicationServerKey: this.getApplicationServerKey()
+                };
 
-            return registration.pushManager.subscribe(subscribeOptions);
-        })
-        .then((pushSubscription: any) => {
-            var data = JSON.stringify(pushSubscription);
+                return registration.pushManager.subscribe(subscribeOptions);
+            })
+            .then((pushSubscription: any) => {
+                var data = JSON.stringify(pushSubscription);
 
-            return this.sendToServer(data, teamsIds);
-        })
-        .then(() => {
-          this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
-        })
-        .catch(() => {
-            alert('Error during your registration');
-            this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed });
-        });
+                return this.sendToServer(data, teamsIds);
+            })
+            .then(() => {
+                this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
+            })
+            .catch(() => {
+                alert('Error during your registration');
+                this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed });
+            });
     }
 
     getApplicationServerKey(): Uint8Array {
@@ -118,22 +123,22 @@ class App extends React.Component<AppProps, AppStates> {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  subscription: subscription,
-                  teamsIds: teamsIds
+                    subscription: subscription,
+                    teamsIds: teamsIds
                 })
             };
 
             fetch(routes.subscription, parameters)
-            .then((response) => {
-                if (response.ok) {
-                    resolve();
-                } else {
-                    reject('Something wrong happened. Please contact support.');
-                }
-            })
-            .catch((error) => {
-                reject('There has been a problem with your fetch operation: ' + error.message);
-            });
+                .then((response) => {
+                    if (response.ok) {
+                        resolve();
+                    } else {
+                        reject('Something wrong happened. Please contact support.');
+                    }
+                })
+                .catch((error) => {
+                    reject('There has been a problem with your fetch operation: ' + error.message);
+                });
         });
     }
 
@@ -145,18 +150,36 @@ class App extends React.Component<AppProps, AppStates> {
         }
     }
 
+    controlSection(section: Section) {
+        this.setState({ section: section });
+    }
+
     render() {
+        let page;
+        if (this.state.section === Section.Home) {
+            page = <div className="Buttons">
+                <Buttons
+                    onClick={this.register}
+                    subscriptionStatus={this.state.subscriptionStatus}
+                    availableTeams={this.state.availableTeams}
+                />
+            </div>;
+        } else if (this.state.section === Section.Statistics) {
+            page = <p> Page two</p>;
+        } else if (this.state.section === Section.Help) {
+            page = <p> Page three</p>
+        } else if (this.state.section === Section.Author) {
+            page = <p> Page four</p>
+        }
+
         return (
             <div className="App">
-                <header className="App-header">
-                    <div className="Buttons">
-                        <Buttons
-                          onClick={this.register}
-                          subscriptionStatus={this.state.subscriptionStatus}
-                          availableTeams={this.state.availableTeams}  
-                        />
-                    </div>
-                </header>
+                <div className="Page">
+                    {page}
+                </div>
+                <div className="Menu">
+                    <Menu onClick={this.controlSection}></Menu>
+                </div>
             </div>
         );
     }

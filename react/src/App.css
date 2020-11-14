@@ -1,12 +1,4 @@
-.App {
-  text-align: center;
-}
-
-.Buttons {
-  display: grid;
-}
-
-.App-header {
+.Page {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -15,4 +7,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Menu {
+  overflow: hidden;
+  position: fixed; /* Set the navbar to fixed position */
+  bottom: 0; /* Position the navbar at the top of the page */
+  width: 100%;
 }
