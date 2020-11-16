@@ -8,7 +8,7 @@ const REQUIRED_KEYS = ['score', 'team1', 'team2'];
 async function getLiveResults(country, listOfTeams) {
   const allMatches = await runApi(country, listOfTeams);
 
-  const liveMatches = filterLiveMatches(allMatches);
+  const liveMatches = filterLiveMatchesAndRemoveDuplicates(allMatches)
 
   const results = buildResults(liveMatches);
   
@@ -23,24 +23,39 @@ async function runApi(country, listOfTeams) {
     promises.push(soccerParser(country, team));
   });
 
-  const allMatches = [];
-  const arrayOfArrayOfMatches = await Promise.all(promises);
-  arrayOfArrayOfMatches.forEach(array => {
+  const allMatches = await Promise.all(promises);
+  console.log(JSON.stringify(allMatches));
+
+  return allMatches;
+}
+
+const filterLiveMatchesAndRemoveDuplicates = (allMatches) => {
+  const liveMatches = [];
+  allMatches.forEach(array => {
     array.forEach(match => {
-      allMatches.push(match);
+      if (match.live && !isDuplicated(liveMatches, match)) {
+        liveMatches.push(match);
+      }
     });
   });
 
-  const allMatchesNoDuplicates = [...new Set(allMatches)];
-
-  return allMatchesNoDuplicates;
+  return liveMatches;
 }
 
-const filterLiveMatches = allMatches => allMatches.filter(match => match.live);
 
-const buildResults = matches => matches.map(match => buildResult(match));
+const isDuplicated = (array, match) => {
+  for (let a of array) {
+    if (a.game === match.game && a.live === match.live) {
+      return true;
+    }
+  }
 
-const buildResult = match => {
+  return false;
+}
+
+const buildResults = (matches) => matches.map(match => buildResult(match));
+
+const buildResult = (match) => {
   const game = match.game;
   const hifenIndex = game.indexOf('-');
   const team1 = game.substring(0, hifenIndex - 3);
@@ -54,7 +69,7 @@ const buildResult = match => {
   };
 }
 
-const validateResults = results => {
+const validateResults = (results) => {
   if (typeof(results) !== 'object') {
     throw new Error('Invalid results from API.');
   }
@@ -74,7 +89,8 @@ const validateResults = results => {
 
 module.exports = {
   getLiveResults,
-  filterLiveMatches,
+  filterLiveMatchesAndRemoveDuplicates,
   buildResults,
-  validateResults
+  validateResults,
+  isDuplicated,
 };
