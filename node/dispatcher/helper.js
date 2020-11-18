@@ -36,7 +36,8 @@ const filterAndCleanSubscriptions = (subscriptions, idsList) => {
     });
 
     if (containId) {
-      delete subscription.teamsIds;
+      const temp = { ...subscription };
+      delete temp.teamsIds;
       filteredSubscriptions.push(subscription);
     }
   });

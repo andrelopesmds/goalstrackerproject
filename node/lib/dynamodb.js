@@ -1,7 +1,6 @@
 const schemas = require('./schemas.js');
 
 async function saveSubscription(subscription) {
-  subscription.subscribeDate = new Date().toISOString();
   const subscriptionAttribute = new schemas.SubscriptionsModel(subscription);
 
   await subscriptionAttribute.save();
@@ -40,18 +39,9 @@ async function getSubscriptions() {
   return data;
 }
 
-async function saveEvent(event) {
-  event.timestamp = new Date().toISOString();
-  const eventAttribute = new schemas.EventsModel(event);
-
-  await eventAttribute.save();
-  console.log(`Event saved: ${JSON.stringify(event)}`);
-}
-
 async function saveEventList(events) {
   const listEvents = [];
   events.forEach((event) => {
-    event.timestamp = new Date().toISOString();
     const eventAttribute = new schemas.EventsModel(event);
     listEvents.push(eventAttribute);
   });
@@ -90,7 +80,6 @@ module.exports = {
   saveSubscription,
   deleteSubscription,
   getSubscriptions,
-  saveEvent,
   saveEventList,
   getEvents,
   getTeams,

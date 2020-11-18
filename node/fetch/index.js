@@ -22,9 +22,13 @@ async function fetchGoals(sport, country) {
   if (fetchedEvents && fetchedEvents.length > 0) {
     const recentlySavedEvents = await dynamodb.getEvents(MINUTESTOTRACK);
 
-    const notSavedEvents = filterNotSavedEvents(fetchedEvents, recentlySavedEvents);
+    let notSavedEvents = filterNotSavedEvents(fetchedEvents, recentlySavedEvents);
 
     if (notSavedEvents && notSavedEvents.length > 0) {
+      notSavedEvents = notSavedEvents.map((event) => ({
+        ...event,
+        timestamp: new Date().toISOString(),
+      }));
       await dynamodb.saveEventList(notSavedEvents);
     }
   }
