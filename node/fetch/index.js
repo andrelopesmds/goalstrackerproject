@@ -1,11 +1,7 @@
-'use strict';
-
 const dynamodb = require('../lib/dynamodb');
 const helper = require('./helper');
 
-
 const MINUTESTOTRACK = 60 * 24;
-
 
 async function handler(event) {
   try {
@@ -15,9 +11,8 @@ async function handler(event) {
     throw error;
   }
 
-  console.log(`Operation concluded!`);
-};
-
+  console.log('Operation concluded!');
+}
 
 async function fetchGoals(sport, country) {
   const availableTeams = await dynamodb.getTeams();
@@ -26,7 +21,7 @@ async function fetchGoals(sport, country) {
 
   if (fetchedEvents && fetchedEvents.length > 0) {
     const recentlySavedEvents = await dynamodb.getEvents(MINUTESTOTRACK);
-    
+
     const notSavedEvents = filterNotSavedEvents(fetchedEvents, recentlySavedEvents);
 
     if (notSavedEvents && notSavedEvents.length > 0) {
@@ -46,7 +41,6 @@ const filterNotSavedEvents = (fetchedEvents, recentlySavedEvents) => {
       }
     });
 
-
     if (isNew) {
       notSavedEvents.push(fetchedEvent);
     }
@@ -55,14 +49,7 @@ const filterNotSavedEvents = (fetchedEvents, recentlySavedEvents) => {
   return notSavedEvents;
 };
 
-const isEqual = (event1, event2) => {
-  if (event1['score'] === event2['score'] && event1['team1'] === event2['team1'] && event1['team2'] === event2['team2']) {
-    return true;
-  }
-
-  return false;
-}
-
+const isEqual = (event1, event2) => event1.score === event2.score && event1.team1 === event2.team1 && event1.team2 === event2.team2;
 
 module.exports = {
   handler,

@@ -7,7 +7,7 @@ const createEventObject = (imageOfEvent) => {
     title: 'Goal',
     body: `${team1} ${score} ${team2}`,
   };
-}
+};
 
 const createIdsList = (imageOfEvent) => {
   const idsList = [];
@@ -19,7 +19,7 @@ const createIdsList = (imageOfEvent) => {
   }
 
   return idsList;
-}
+};
 
 const filterAndCleanSubscriptions = (subscriptions, idsList) => {
   const filteredSubscriptions = [];

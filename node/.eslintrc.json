@@ -1,21 +1,26 @@
 {
     "env": {
         "browser": true,
-        "commonjs": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
     "extends": [
-        "google"
+        "airbnb-base"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     },
     "rules": {
-      "require-jsdoc" : 0,
-      "max-len": ["error", { "code": 120 }]
+        "no-use-before-define": ["off"],
+        "import/no-extraneous-dependencies": ["off"],
+        "max-len": ["warn", { "code": 120 }],
+        "no-param-reassign": ["warn"], // TODO -> make it an error
+        "no-await-in-loop": ["warn"], // TODO -> make it an error
+        "eqeqeq": ["warn"] // TODO -> make it an error ???
     }
 }

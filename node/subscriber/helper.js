@@ -1,7 +1,7 @@
 const processSubscription = (event) => {
   const body = JSON.parse(event.body);
   const subscription = JSON.parse(body.subscription);
-  const teamsIds = body.teamsIds;
+  const { teamsIds } = body;
 
   validateInput(subscription, teamsIds);
 
@@ -31,9 +31,7 @@ const isSubscriptionValid = (subscription) => {
   return true;
 };
 
-const hasProperties = (obj, propertiesList) => {
-  return propertiesList.every((property) => obj.hasOwnProperty(property));
-};
+const hasProperties = (obj, propertiesList) => propertiesList.every((property) => Object.prototype.hasOwnProperty.call(obj, property));
 
 module.exports = {
   processSubscription,

@@ -1,7 +1,5 @@
-'use strict';
-
-const helper = require('../push/helper');
 const assert = require('assert');
+const helper = require('../push/helper');
 
 const object = {
   title: 'half time',
@@ -10,8 +8,8 @@ const object = {
 
 const expected = JSON.stringify(object);
 
-describe('Push service', function() {
-  it('should create the payload based on event', function() {
+describe('Push service', () => {
+  it('should create the payload based on event', () => {
     const result = helper.createPayload(object);
 
     assert.equal(result, expected);

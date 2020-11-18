@@ -1,5 +1,3 @@
-'use strict';
-
 const schemas = require('./schemas.js');
 
 async function saveSubscription(subscription) {
@@ -22,7 +20,7 @@ async function deleteSubscription(subscription) {
 
 async function getSubscription(endpoint) {
   const queryFilter = {
-    endpoint: endpoint,
+    endpoint,
   };
   const data = await schemas.SubscriptionsModel.queryOne(queryFilter).exec();
   return data;

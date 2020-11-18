@@ -1,7 +1,5 @@
-'use strict';
-
 const assert = require('assert');
-const helper = require('./../dispatcher/helper');
+const helper = require('../dispatcher/helper');
 
 const event = {
   Records: [
@@ -73,23 +71,21 @@ const filteredSubscriptions = [
 
 const idsList2 = [14];
 
-describe('Dispatcher service', function() {
-  it('should create event object and ids list', function() {
+describe('Dispatcher service', () => {
+  it('should create event object and ids list', () => {
     const imageOfEvent = event.Records[0].dynamodb.NewImage;
     const result = helper.createEventObject(imageOfEvent);
     assert.deepEqual(result, eventObject);
   });
 
-  it('should create event object and ids list', function() {
+  it('should create event object and ids list', () => {
     const imageOfEvent = event.Records[0].dynamodb.NewImage;
     const result = helper.createIdsList(imageOfEvent);
     assert.deepEqual(result, idsList1);
   });
 
-
-  it('should filter subscriptions containing the teams id', function() {
+  it('should filter subscriptions containing the teams id', () => {
     const result = helper.filterAndCleanSubscriptions(subscriptions, idsList2);
     assert.deepEqual(result, filteredSubscriptions);
   });
 });
-

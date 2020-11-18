@@ -1,7 +1,5 @@
-'use strict';
-
 const assert = require('assert');
-const helper = require('./../subscriber/helper');
+const helper = require('../subscriber/helper');
 
 const endpoint = 'https...';
 const keys = {
@@ -10,23 +8,22 @@ const keys = {
 };
 const teamsIds = [1, 13];
 const subscription = {
-  endpoint: endpoint,
-  keys: keys,
+  endpoint,
+  keys,
 };
 const body = JSON.stringify({
   subscription: JSON.stringify(subscription),
-  teamsIds: teamsIds,
+  teamsIds,
 });
 const event = {
-  body: body,
+  body,
 };
 
 const expectedResult = subscription;
 expectedResult.teamsIds = teamsIds.toString();
 
-
-describe('Subscription service', function() {
-  it('should process user\'s subscription from event input', function() {
+describe('Subscription service', () => {
+  it('should process user\'s subscription from event input', () => {
     const result = helper.processSubscription(event);
 
     assert.deepEqual(result, expectedResult);
