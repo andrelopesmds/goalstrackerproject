@@ -17,8 +17,8 @@ const createSubscriptionsObject = (event) => {
 
 const createWelcomeMessageObject = () => {
   const WelcomeObj = {
-    title:'Welcome to Goalstracker!',
-    body: 'You are now following your favorite team(s)!'
+    title: 'Welcome to Goalstracker!',
+    body: 'You are now following your favorite team(s)!',
   };
 
   return WelcomeObj;

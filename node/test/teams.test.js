@@ -1,9 +1,7 @@
-'use strict';
-
 const assert = require('assert');
 
-describe('Teams service', function() {
-  it('TODO', function() {
+describe('Teams service', () => {
+  it('TODO', () => {
     assert.equal(true, true);
   });
 });

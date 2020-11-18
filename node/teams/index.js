@@ -1,5 +1,3 @@
-'use strict';
-
 const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {

@@ -1,7 +1,5 @@
-'use strict';
-
 const assert = require('assert');
-const helper = require('./../welcomer/helper');
+const helper = require('../welcomer/helper');
 
 const endpoint = 'https...';
 const keys = {
@@ -9,8 +7,8 @@ const keys = {
   auth: 'wvkjkewjbvkw',
 };
 const subscription = {
-  endpoint: endpoint,
-  keys: keys,
+  endpoint,
+  keys,
 };
 const event = {
   Records: [
@@ -38,16 +36,16 @@ const event = {
 
 const welcomeMessageObject = {
   title: 'Welcome to Goalstracker!',
-  body: 'You are now following your favorite team(s)!'
+  body: 'You are now following your favorite team(s)!',
 };
 
-describe('Welcomer service', function() {
-  it('should create subscriptions object from DynamoDB stream', function() {
+describe('Welcomer service', () => {
+  it('should create subscriptions object from DynamoDB stream', () => {
     const result = helper.createSubscriptionsObject(event);
     assert.deepEqual(result, subscription);
   });
 
-  it('should create the correct Welcome message', function() {
+  it('should create the correct Welcome message', () => {
     const result = helper.createWelcomeMessageObject();
     assert.deepEqual(result, welcomeMessageObject);
   });

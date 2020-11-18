@@ -1,10 +1,10 @@
 const dynamoose = require('dynamoose');
 
-const SUBSCRIPTIONS_TABLE = process.env.SUBSCRIPTIONS_TABLE;
-const EVENTS_TABLE = process.env.EVENTS_TABLE;
-const TEAMS_TABLE = process.env.TEAMS_TABLE;
+const { SUBSCRIPTIONS_TABLE } = process.env;
+const { EVENTS_TABLE } = process.env;
+const { TEAMS_TABLE } = process.env;
 
-const Schema = dynamoose.Schema;
+const { Schema } = dynamoose;
 
 const subscriptionsSchema = new Schema({
   endpoint: {

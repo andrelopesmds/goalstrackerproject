@@ -1,6 +1,4 @@
-'use strict';
-
-const helper = require('./../subscriber/helper');
+const helper = require('./helper');
 const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {
@@ -10,7 +8,7 @@ const SUCCESS_RESPONSE = {
     'Access-Control-Allow-Credentials': true,
   },
   body: JSON.stringify({
-    message: `User subscribed!`,
+    message: 'User subscribed!',
   }),
 };
 

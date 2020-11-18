@@ -1,9 +1,8 @@
-'use strict';
-
 const aws = require('aws-sdk');
-const lambda = new aws.Lambda();
 const helper = require('./helper');
-const pushFunction = process.env.pushFunction;
+
+const lambda = new aws.Lambda();
+const { pushFunction } = process.env;
 
 module.exports.handler = async (event) => {
   try {
@@ -13,7 +12,7 @@ module.exports.handler = async (event) => {
     throw error;
   }
 
-  console.log(`Operation concluded!`);
+  console.log('Operation concluded!');
 };
 
 async function processEvent(event) {
@@ -30,25 +29,23 @@ async function processEvent(event) {
 }
 
 async function sendPush(obj, subscription) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const params = {
       FunctionName: pushFunction,
       InvocationType: 'Event',
       Payload: JSON.stringify({
-        obj: obj,
-        subscription: subscription
+        obj,
+        subscription,
       }),
     };
 
-    lambda.invoke(params, function(err, data) {
+    lambda.invoke(params, (err) => {
       if (err) {
         console.log(`Error when sending push notification. Subscription: ${JSON.stringify(subscription)}`);
         throw err;
-
       } else {
         resolve(true);
       }
     });
   });
 }
-
