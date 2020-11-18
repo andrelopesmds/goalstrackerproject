@@ -6,7 +6,7 @@ matrix:
       before_install:
         - cd node/
       install: 
-        - npm install
+        - npm ci
       script:
         - npm test
 
