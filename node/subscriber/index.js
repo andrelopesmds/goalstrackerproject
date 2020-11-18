@@ -25,5 +25,6 @@ module.exports.handler = async (event) => {
 
 async function saveSubscription(event) {
   const subscription = helper.processSubscription(event);
+  subscription.subscribeDate = new Date().toISOString();
   await dynamodb.saveSubscription(subscription);
 }
