@@ -35,13 +35,19 @@ async function processEvent(event) {
 
   const filteredSubscriptions = helper.filterAndCleanSubscriptions(subscriptions, idsList);
 
-  const results = [];
-  for (let i = 0; i < filteredSubscriptions.length; i += 1) {
-    const result = await sendPush(obj, filteredSubscriptions[i]);
-    results.push(result);
-  }
+  const results = await sendMessages(obj, filteredSubscriptions);
 
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
+}
+
+async function sendMessages(obj, filteredSubscriptions) {
+  const promises = [];
+  filteredSubscriptions.forEach((subscription) => {
+    promises.push(sendPush(obj, subscription));
+  });
+
+  const allMessages = await Promise.all(promises);
+  return allMessages;
 }
 
 async function sendPush(obj, subscription) {
