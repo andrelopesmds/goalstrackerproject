@@ -43,8 +43,8 @@ class App extends React.Component<AppProps, AppStates> {
     }
 
     sortBySport(team1: AvailableTeam, team2: AvailableTeam) {
-        let a = team1.sport;
-        let b = team2.sport;
+        let a = team1.country;
+        let b = team2.country;
 
         if (a < b) {
             return -1;

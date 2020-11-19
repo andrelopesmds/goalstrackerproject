@@ -30,7 +30,7 @@ export default function CheckboxesTags(props: CheckboxesTagsProps) {
       options={props.availableTeams}
       disableCloseOnSelect
       getOptionLabel={option => option.name}
-      groupBy={(option) => option.sport}
+      groupBy={(option) => option.country}
       onChange={exportChanges}
       renderOption={(option, { selected }) => (
         <React.Fragment>
