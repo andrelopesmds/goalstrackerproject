@@ -2,8 +2,8 @@ const soccerParser = require('livesoccertv-parser');
 
 const REQUIRED_KEYS = ['score', 'team1', 'team2'];
 
-async function getLiveResults(country, listOfTeams) {
-  const allMatches = await runApi(country, listOfTeams);
+async function getLiveResults(listOfTeams) {
+  const allMatches = await runApi(listOfTeams);
 
   const liveMatches = filterLiveMatchesAndRemoveDuplicates(allMatches);
 
@@ -14,10 +14,10 @@ async function getLiveResults(country, listOfTeams) {
   return results;
 }
 
-async function runApi(country, listOfTeams) {
+async function runApi(listOfTeams) {
   const promises = [];
   listOfTeams.forEach((team) => {
-    promises.push(soccerParser(country, team));
+    promises.push(soccerParser(team.country, team.adapterInputName));
   });
 
   const allMatches = await Promise.all(promises);

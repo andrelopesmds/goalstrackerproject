@@ -84,7 +84,6 @@ functions:
           enabled: true
           input:
             sport: soccer
-            country: brazil
 
   push:
     handler: push/index.handler

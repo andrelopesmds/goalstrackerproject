@@ -85,6 +85,7 @@ const teamsSchema = new Schema({
   },
   country: {
     type: String,
+    required: true,
   },
   adapterInputName: {
     type: String,

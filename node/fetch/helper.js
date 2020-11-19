@@ -1,14 +1,12 @@
 const soccerAdapter = require('./soccer-adapter.js');
 
-async function getResults(sport, country, listOfAvailableTeams) {
+async function getResults(sport, listOfAvailableTeams) {
   if (sport !== 'soccer') {
     console.log(`Sport: '${sport}' is incorrect or not implemented yet.`);
     return [];
   }
 
-  const listOfTeamsNames = getAdapterInputNames(listOfAvailableTeams);
-
-  const liveMatches = await soccerAdapter.getLiveResults(country, listOfTeamsNames);
+  const liveMatches = await soccerAdapter.getLiveResults(listOfAvailableTeams);
 
   const events = getEventsStandardTeamsNamesAndIds(liveMatches, listOfAvailableTeams);
 
@@ -37,10 +35,7 @@ const getEventsStandardTeamsNamesAndIds = (liveMatches, availableTeams) => {
   return events;
 };
 
-const getAdapterInputNames = (availableTeams) => availableTeams.map((team) => team.adapterInputName);
-
 module.exports = {
   getResults,
-  getAdapterInputNames,
   getEventsStandardTeamsNamesAndIds,
 };
