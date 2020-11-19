@@ -80,7 +80,7 @@ functions:
           input:
             sport: hockey
       - schedule:
-          rate: rate(15 minutes)
+          rate: rate(5 minutes)
           enabled: true
           input:
             sport: soccer
