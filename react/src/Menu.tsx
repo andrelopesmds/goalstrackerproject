@@ -1,7 +1,7 @@
 import React from 'react';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import { Home, Help, BarChart, Person } from '@material-ui/icons';
+import { Home, Help, BarChart, Feedback } from '@material-ui/icons';
 import Section from './Enums/Section';
 
 interface MenuProps {
@@ -33,7 +33,7 @@ class Menu extends React.Component<MenuProps, MenuStates> {
       <BottomNavigationAction label="Home" icon={<Home />} />
       <BottomNavigationAction label="Statistics" icon={<BarChart />} />
       <BottomNavigationAction label="Help" icon={<Help />} />
-      <BottomNavigationAction label="Author" icon={<Person />} />
+      <BottomNavigationAction label="Feedback" icon={<Feedback />} />
     </BottomNavigation>
   }
 }

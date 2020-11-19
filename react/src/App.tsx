@@ -6,6 +6,9 @@ import Menu from './Menu';
 import { AvailableTeam } from './Utils/globalInterfaces';
 import { routes } from './environment';
 import Section from './Enums/Section';
+import Help from './Sections/Help';
+import Statistics from './Sections/Statistics';
+import Feedback from './Sections/Feedback';
 
 interface AppStates {
     subscriptionStatus: SubscriptionStatus,
@@ -165,11 +168,11 @@ class App extends React.Component<AppProps, AppStates> {
                 />
             </div>;
         } else if (this.state.section === Section.Statistics) {
-            page = <p> Page two</p>;
+            page = <Statistics></Statistics>;
         } else if (this.state.section === Section.Help) {
-            page = <p> Page three</p>
-        } else if (this.state.section === Section.Author) {
-            page = <p> Page four</p>
+            page = <Help></Help>;
+        } else if (this.state.section === Section.Feedback) {
+            page = <Feedback></Feedback>;
         }
 
         return (
