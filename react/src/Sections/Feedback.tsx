@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Feedback() {
+const Feedback = () => {
   return (
     <div>
       <h1>Help us to get better! Did you like the app? Is there something we could improve? We would love to hear your feedback!</h1>

@@ -6,36 +6,22 @@ import Section from './Enums/Section';
 
 interface MenuProps {
   onClick: Function,
+  section: Number,
 };
 
-interface MenuStates {
-  value: Number,
-}
-
-class Menu extends React.Component<MenuProps, MenuStates> {
-  constructor(props: MenuProps) {
-    super(props);
-    this.state = {
-      value: 0,
-    }
-  }
-
-  render() {
-    return <BottomNavigation
-      value={this.state.value}
-      onChange={(event: any, newValue: Section) => {
-        this.setState({value: newValue });
-
-        this.props.onClick(newValue);
-      }}
-      showLabels
-    >
-      <BottomNavigationAction label="Home" icon={<Home />} />
-      <BottomNavigationAction label="Statistics" icon={<BarChart />} />
-      <BottomNavigationAction label="Help" icon={<Help />} />
-      <BottomNavigationAction label="Feedback" icon={<Feedback />} />
-    </BottomNavigation>
-  }
+const Menu = (props: MenuProps) => {
+  return <BottomNavigation
+    value={props.section}
+    onChange={(_event: any, newValue: Section) => {
+      props.onClick(newValue);
+    }}
+    showLabels
+  >
+    <BottomNavigationAction label="Home" icon={<Home />} />
+    <BottomNavigationAction label="Statistics" icon={<BarChart />} />
+    <BottomNavigationAction label="Help" icon={<Help />} />
+    <BottomNavigationAction label="Feedback" icon={<Feedback />} />
+  </BottomNavigation>
 }
 
 export default Menu;

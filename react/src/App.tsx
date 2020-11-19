@@ -181,7 +181,7 @@ class App extends React.Component<AppProps, AppStates> {
                     {page}
                 </div>
                 <div className="Menu">
-                    <Menu onClick={this.controlSection}></Menu>
+                    <Menu section={this.state.section} onClick={this.controlSection}></Menu>
                 </div>
             </div>
         );
