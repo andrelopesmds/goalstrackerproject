@@ -21,8 +21,10 @@ async function getSubscription(endpoint) {
   const queryFilter = {
     endpoint,
   };
-  const data = await schemas.SubscriptionsModel.queryOne(queryFilter).exec();
-  return data;
+
+  const subscription = await schemas.SubscriptionsModel.queryOne(queryFilter).exec();
+  console.log(`Subscription loaded: ${JSON.stringify(subscription)}`);
+  return subscription;
 }
 
 async function getSubscriptions() {
@@ -33,10 +35,9 @@ async function getSubscriptions() {
     ConsistentRead: false,
   };
 
-  const data = await schemas.SubscriptionsModel.scan(filter).all().exec();
-  console.log('Data loaded');
-  console.log(data);
-  return data;
+  const subscriptions = await schemas.SubscriptionsModel.scan(filter).all().exec();
+  console.log(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
+  return subscriptions;
 }
 
 async function saveEventList(events) {
@@ -65,15 +66,15 @@ async function getEvents(minutesToTrack) {
     ConsistentRead: false,
   };
 
-  const data = await schemas.EventsModel.scan(filter).all().exec();
-  console.log('Data loaded');
-  console.log(data);
-  return data;
+  const events = await schemas.EventsModel.scan(filter).all().exec();
+  console.log(`Events loaded: ${JSON.stringify(events)}`);
+  return events;
 }
 
 async function getTeams() {
-  const data = await schemas.TeamsModel.scan().all().exec();
-  return data;
+  const teams = await schemas.TeamsModel.scan().all().exec();
+  console.log(`Teams loaded: ${JSON.stringify(teams)}`);
+  return teams;
 }
 
 module.exports = {
