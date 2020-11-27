@@ -1,21 +1,21 @@
 import React from 'react';
 import Button, { ButtonProps } from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CSS from 'csstype';
-import Loading from './Loading';
 import SubscriptionStatus from '../Enums/SubscriptionStatus';
-import DialogSlide from './DialogSlide';
+import DialogSlide from '../Utils/DialogSlide';
 import { AvailableTeam } from '../Utils/globalInterfaces';
 
-interface ButtonsProps {
+interface HomeProps {
     onClick: Function,
     subscriptionStatus: SubscriptionStatus,
     availableTeams: AvailableTeam[]
 }
 
-interface ButtonsStates { }
+interface HomeStates { }
 
-class Buttons extends React.Component<ButtonsProps, ButtonsStates> {
-    constructor(props: ButtonsProps) {
+class Home extends React.Component<HomeProps, HomeStates> {
+    constructor(props: HomeProps) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
@@ -44,11 +44,11 @@ class Buttons extends React.Component<ButtonsProps, ButtonsStates> {
         return (
             <div className="Buttons">
               { subscriptionStatus === SubscriptionStatus.NotSubscribed && clickableButton }
-              { subscriptionStatus === SubscriptionStatus.InProgress && <Loading/> }
+              { subscriptionStatus === SubscriptionStatus.InProgress && <CircularProgress/> }
               { subscriptionStatus === SubscriptionStatus.Subscribed && messageButton }
             </div>
         );
     }
 }
 
-export default Buttons;
+export default Home;

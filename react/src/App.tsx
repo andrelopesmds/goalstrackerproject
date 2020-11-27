@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Buttons from './Buttons/Buttons';
+import Home from './Sections/Home';
 import SubscriptionStatus from './Enums/SubscriptionStatus';
 import Menu from './Menu';
 import { AvailableTeam } from './Utils/globalInterfaces';
@@ -160,12 +160,12 @@ class App extends React.Component<AppProps, AppStates> {
     render() {
         let page;
         if (this.state.section === Section.Home) {
-            page = <div className="Buttons">
-                <Buttons
+            page = <div>
+                <Home
                     onClick={this.register}
                     subscriptionStatus={this.state.subscriptionStatus}
                     availableTeams={this.state.availableTeams}
-                />
+                ></Home>
             </div>;
         } else if (this.state.section === Section.Statistics) {
             page = <Statistics></Statistics>;
