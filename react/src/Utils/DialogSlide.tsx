@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
 import CheckboxesTags from './CheckboxesTags';
-import { AvailableTeam } from '../Utils/globalInterfaces';
+import { AvailableTeam } from './globalInterfaces';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement<any, any> },
