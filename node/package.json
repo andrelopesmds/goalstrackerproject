@@ -26,7 +26,8 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^5.0.1",
-    "mocha": "^7.1.1"
+    "mocha": "^7.1.1",
+    "sinon": "^9.2.4"
   },
   "dependencies": {
     "dynamoose": "^2.7.0",
