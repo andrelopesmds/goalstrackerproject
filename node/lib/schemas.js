@@ -14,9 +14,10 @@ const subscriptionsSchema = new Schema({
   },
   expirationTime: {
     type: String,
-    default: null,
+    required: false,
   },
   keys: {
+    type: Object,
     p256dh: {
       type: String,
       required: true,
@@ -32,7 +33,7 @@ const subscriptionsSchema = new Schema({
   },
   unsubscribeDate: {
     type: String,
-    default: null,
+    required: false,
   },
   teamsIds: {
     type: String,

@@ -1,6 +1,9 @@
 const schemas = require('./schemas.js');
 
 async function saveSubscription(subscription) {
+  subscription.expirationTime = 'test string';
+  subscription.unsubscribeDate = 'test string';
+
   const subscriptionAttribute = new schemas.SubscriptionsModel(subscription);
 
   await subscriptionAttribute.save();
