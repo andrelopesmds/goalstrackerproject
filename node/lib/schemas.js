@@ -18,14 +18,16 @@ const subscriptionsSchema = new Schema({
   },
   keys: {
     type: Object,
-    p256dh: {
-      type: String,
-      required: true,
-    },
-    auth: {
-      type: String,
-      required: true,
-    },
+    schema: {
+      p256dh: {
+        type: String,
+        required: true,
+      },
+      auth: {
+        type: String,
+        required: true,
+      },
+    }
   },
   subscribeDate: {
     type: String,
