@@ -8,7 +8,9 @@
   },
   "scripts": {
     "linter": "eslint . --ext .js",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "test:subscriber": "serverless invoke local --function subscriber -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path subscriber/subscription.test.js",
+    "test:fetch": "serverless invoke local --function fetch -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path fetch/event.test.js"
   },
   "husky": {
     "hooks": {
