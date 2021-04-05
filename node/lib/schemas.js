@@ -98,12 +98,12 @@ const teamsSchema = new Schema({
   },
 });
 
-const SubscriptionsModel = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
-const EventsModel = dynamoose.model(EVENTS_TABLE, eventsSchema);
-const TeamsModel = dynamoose.model(TEAMS_TABLE, teamsSchema);
+const Subscription = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
+const Event = dynamoose.model(EVENTS_TABLE, eventsSchema);
+const Team = dynamoose.model(TEAMS_TABLE, teamsSchema);
 
 module.exports = {
-  SubscriptionsModel,
-  EventsModel,
-  TeamsModel,
+  Subscription,
+  Event,
+  Team,
 };

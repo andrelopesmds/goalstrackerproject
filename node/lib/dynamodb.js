@@ -1,10 +1,10 @@
-const schemas = require('./schemas.js');
+const { Team, Subscription, Event } = require('./schemas.js');
 
 async function saveSubscription(subscription) {
   delete subscription.expirationTime;
   delete subscription.unsubscribeDate;
 
-  const subscriptionAttribute = new schemas.SubscriptionsModel(subscription);
+  const subscriptionAttribute = new Subscription(subscription);
 
   await subscriptionAttribute.save();
   console.log(`Subscription saved: ${JSON.stringify(subscription)}`);
@@ -14,7 +14,7 @@ async function deleteSubscription(subscription) {
   const completeSubscription = await getSubscription(subscription.endpoint);
   completeSubscription.unsubscribeDate = new Date().toISOString();
 
-  const subscriptionAttribute = new schemas.SubscriptionsModel(completeSubscription);
+  const subscriptionAttribute = new Subscription(completeSubscription);
 
   await subscriptionAttribute.save();
   console.log(`Subscription deleted: ${JSON.stringify(subscription)}`);
@@ -25,7 +25,7 @@ async function getSubscription(endpoint) {
     endpoint,
   };
 
-  const subscription = await schemas.SubscriptionsModel.queryOne(queryFilter).exec();
+  const subscription = await Subscription.queryOne(queryFilter).exec();
   console.log(`Subscription loaded: ${JSON.stringify(subscription)}`);
   return subscription;
 }
@@ -38,7 +38,7 @@ async function getSubscriptions() {
     ConsistentRead: false,
   };
 
-  const subscriptions = await schemas.SubscriptionsModel.scan(filter).all().exec();
+  const subscriptions = await Subscriptions.scan(filter).all().exec();
   console.log(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
   return subscriptions;
 }
@@ -46,36 +46,23 @@ async function getSubscriptions() {
 async function saveEventList(events) {
   const listEvents = [];
   events.forEach((event) => {
-    const eventAttribute = new schemas.EventsModel(event);
+    const eventAttribute = new Event(event);
     listEvents.push(eventAttribute);
   });
 
-  await schemas.EventsModel.batchPut(listEvents);
+  await Event.batchPut(listEvents);
   console.log(`Events saved: ${JSON.stringify(listEvents)}`);
 }
 
 async function getEvents(minutesToTrack) {
   const timestamp = (new Date((new Date().getTime()) - minutesToTrack * 60000)).toISOString();
-  const filter = {
-    ExpressionAttributeNames: {
-      '#timestamp': 'timestamp',
-    },
-    ExpressionAttributeValues: {
-      ':timestamp': timestamp,
-    },
-    FilterExpression: '#timestamp > :timestamp',
-    ProjectionExpression: 'team1, team2, score, currentStatus, team1Id, team2Id',
-    ScanIndexForward: false,
-    ConsistentRead: false,
-  };
-
-  const events = await schemas.EventsModel.scan(filter).all().exec();
+  const events = await Event.scan().filter('timestamp').gt(timestamp).exec();
   console.log(`Events loaded: ${JSON.stringify(events)}`);
   return events;
 }
 
 async function getTeams() {
-  const teams = await schemas.TeamsModel.scan().all().exec();
+  const teams = await Team.scan().all().exec();
   console.log(`Teams loaded: ${JSON.stringify(teams)}`);
   return teams;
 }
