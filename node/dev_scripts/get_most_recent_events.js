@@ -10,11 +10,11 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-const paramsProd = {
+const params = {
   TableName: "dev-EventsTable",
 };
 
-docClient.scan(paramsProd, (err, data) => {
+docClient.scan(params, (err, data) => {
   if (err) console.log(err);
 
   var allItems = [];

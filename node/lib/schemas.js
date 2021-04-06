@@ -14,17 +14,20 @@ const subscriptionsSchema = new Schema({
   },
   expirationTime: {
     type: String,
-    default: null,
+    required: false,
   },
   keys: {
-    p256dh: {
-      type: String,
-      required: true,
-    },
-    auth: {
-      type: String,
-      required: true,
-    },
+    type: Object,
+    schema: {
+      p256dh: {
+        type: String,
+        required: true,
+      },
+      auth: {
+        type: String,
+        required: true,
+      },
+    }
   },
   subscribeDate: {
     type: String,
@@ -32,7 +35,7 @@ const subscriptionsSchema = new Schema({
   },
   unsubscribeDate: {
     type: String,
-    default: null,
+    required: false,
   },
   teamsIds: {
     type: String,
@@ -95,12 +98,12 @@ const teamsSchema = new Schema({
   },
 });
 
-const SubscriptionsModel = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
-const EventsModel = dynamoose.model(EVENTS_TABLE, eventsSchema);
-const TeamsModel = dynamoose.model(TEAMS_TABLE, teamsSchema);
+const Subscription = dynamoose.model(SUBSCRIPTIONS_TABLE, subscriptionsSchema);
+const Event = dynamoose.model(EVENTS_TABLE, eventsSchema);
+const Team = dynamoose.model(TEAMS_TABLE, teamsSchema);
 
 module.exports = {
-  SubscriptionsModel,
-  EventsModel,
-  TeamsModel,
+  Subscription,
+  Event,
+  Team,
 };
