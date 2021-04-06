@@ -38,7 +38,7 @@ const getSubscriptions = async () => {
     ConsistentRead: false,
   };
 
-  const subscriptions = await Subscriptions.scan(filter).all().exec();
+  const subscriptions = await Subscription.scan(filter).all().exec();
   console.log(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
   return subscriptions;
 }
