@@ -1,6 +1,6 @@
 const { Team, Subscription, Event } = require('./schemas.js');
 
-async function saveSubscription(subscription) {
+const saveSubscription = async (subscription) => {
   delete subscription.expirationTime;
   delete subscription.unsubscribeDate;
 
@@ -10,7 +10,7 @@ async function saveSubscription(subscription) {
   console.log(`Subscription saved: ${JSON.stringify(subscription)}`);
 }
 
-async function deleteSubscription(subscription) {
+const deleteSubscription = async (subscription) => {
   const completeSubscription = await getSubscription(subscription.endpoint);
   completeSubscription.unsubscribeDate = new Date().toISOString();
 
@@ -20,7 +20,7 @@ async function deleteSubscription(subscription) {
   console.log(`Subscription deleted: ${JSON.stringify(subscription)}`);
 }
 
-async function getSubscription(endpoint) {
+const getSubscription = async (endpoint) => {
   const queryFilter = {
     endpoint,
   };
@@ -30,7 +30,7 @@ async function getSubscription(endpoint) {
   return subscription;
 }
 
-async function getSubscriptions() {
+const getSubscriptions = async () => {
   const unsubscribedUsersAttribute = 'unsubscribeDate';
   const filter = {
     FilterExpression: `attribute_not_exists(${unsubscribedUsersAttribute})`,
@@ -43,7 +43,7 @@ async function getSubscriptions() {
   return subscriptions;
 }
 
-async function saveEventList(events) {
+const saveEventList = async (events) => {
   const listEvents = [];
   events.forEach((event) => {
     const eventAttribute = new Event(event);
@@ -54,14 +54,14 @@ async function saveEventList(events) {
   console.log(`Events saved: ${JSON.stringify(listEvents)}`);
 }
 
-async function getEvents(minutesToTrack) {
+const getEvents = async (minutesToTrack) => {
   const timestamp = (new Date((new Date().getTime()) - minutesToTrack * 60000)).toISOString();
   const events = await Event.scan().filter('timestamp').gt(timestamp).exec();
   console.log(`Events loaded: ${JSON.stringify(events)}`);
   return events;
 }
 
-async function getTeams() {
+const getTeams = async () => {
   const teams = await Team.scan().all().exec();
   console.log(`Teams loaded: ${JSON.stringify(teams)}`);
   return teams;
