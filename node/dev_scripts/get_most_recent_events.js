@@ -23,7 +23,7 @@ docClient.scan(params, (err, data) => {
   });
 
   allItems = allItems.sort((a, b) => {
-    a.timestamp - b.timestamp;
+    return new Date(a.timestamp) - new Date(b.timestamp);
   }).reverse();
 
   for (let i = 0; i < N_EVENTS_TO_LOG; i++) {
