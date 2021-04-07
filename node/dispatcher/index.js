@@ -24,6 +24,7 @@ async function processEvent(event) {
   }
 
   const imageOfEvent = event.Records[0].dynamodb.NewImage;
+  console.log(`Image that will be processed: ${JSON.stringify(imageOfEvent)}`);
 
   const obj = helper.createEventObject(imageOfEvent);
   const idsList = helper.createIdsList(imageOfEvent);

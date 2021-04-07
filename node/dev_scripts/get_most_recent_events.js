@@ -1,7 +1,11 @@
-// This script logs the most recent events from dev Events table
+// This script logs the most recent events from Events table
 
-const N_EVENTS_TO_LOG = 10;
+// Parameters
+const N_EVENTS_TO_LOG = 3;
 
+const env = 'dev'; // (dev | staging | prod)
+
+// Script
 var AWS = require("aws-sdk");
 
 AWS.config.update({
@@ -11,7 +15,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 const params = {
-  TableName: "dev-EventsTable",
+  TableName: `${env}-EventsTable`,
 };
 
 docClient.scan(params, (err, data) => {
