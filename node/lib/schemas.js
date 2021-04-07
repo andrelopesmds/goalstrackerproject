@@ -27,7 +27,7 @@ const subscriptionsSchema = new Schema({
         type: String,
         required: true,
       },
-    }
+    },
   },
   subscribeDate: {
     type: String,

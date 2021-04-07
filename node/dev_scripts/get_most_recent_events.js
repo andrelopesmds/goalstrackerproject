@@ -6,13 +6,13 @@ const N_EVENTS_TO_LOG = 3;
 const env = 'dev'; // (dev | staging | prod)
 
 // Script
-var AWS = require("aws-sdk");
+const AWS = require('aws-sdk');
 
 AWS.config.update({
-  region: "us-east-1",
+  region: 'us-east-1',
 });
 
-var docClient = new AWS.DynamoDB.DocumentClient();
+const docClient = new AWS.DynamoDB.DocumentClient();
 
 const params = {
   TableName: `${env}-EventsTable`,
@@ -21,8 +21,8 @@ const params = {
 docClient.scan(params, (err, data) => {
   if (err) console.log(err);
 
-  var allItems = [];
-  data.Items.forEach(item => {
+  let allItems = [];
+  data.Items.forEach((item) => {
     allItems.push(item);
   });
 

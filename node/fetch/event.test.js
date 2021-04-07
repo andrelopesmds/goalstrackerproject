@@ -1,5 +1,5 @@
 const event = {
-  sport: 'soccer'
+  sport: 'soccer',
 };
 
 module.exports = event;
