@@ -18,6 +18,8 @@ const params = {
   TableName: `${env}-EventsTable`,
 };
 
+const sortByTimestamp = (a, b) => new Date(a.timestamp) - new Date(b.timestamp);
+
 docClient.scan(params, (err, data) => {
   if (err) console.log(err);
 
@@ -26,9 +28,7 @@ docClient.scan(params, (err, data) => {
     allItems.push(item);
   });
 
-  allItems = allItems.sort((a, b) => {
-    return new Date(a.timestamp) - new Date(b.timestamp);
-  }).reverse();
+  allItems = allItems.sort(sortByTimestamp).reverse();
 
   for (let i = 0; i < N_EVENTS_TO_LOG; i++) {
     console.log(allItems[i]);
