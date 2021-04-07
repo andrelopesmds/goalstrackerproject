@@ -32,14 +32,10 @@ const getSubscription = async (endpoint) => {
 
 const getSubscriptions = async () => {
   const unsubscribedUsersAttribute = 'unsubscribeDate';
-  const filter = {
-    FilterExpression: `attribute_not_exists(${unsubscribedUsersAttribute})`,
-    ScanIndexForward: false,
-    ConsistentRead: false,
-  };
 
-  const subscriptions = await Subscription.scan(filter).all().exec();
+  const subscriptions = await Subscription.scan().filter(unsubscribedUsersAttribute).not().exists().exec();
   console.log(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
+  
   return subscriptions;
 }
 
