@@ -19,6 +19,7 @@
         "no-use-before-define": ["off"],
         "import/no-extraneous-dependencies": ["off"],
         "max-len": ["warn", { "code": 120 }],
-        "eqeqeq": ["warn"] // TODO -> make it an error ???
+        "eqeqeq": ["warn"], // TODO -> make it an error ???
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
     }
 }

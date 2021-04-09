@@ -31,7 +31,7 @@ const params = {
   Item: event,
 };
 
-docClient.put(params, (err, _data) => {
+docClient.put(params, (err) => {
   if (err) console.log(err);
 
   else console.log('Event inserted!');

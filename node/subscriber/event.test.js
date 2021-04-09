@@ -13,7 +13,7 @@ const event = {
   body: JSON.stringify({
     subscription: JSON.stringify(subscription),
     teamsIds,
-  })
+  }),
 };
 
 module.exports = event;
