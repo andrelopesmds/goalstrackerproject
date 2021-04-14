@@ -61,7 +61,6 @@ class App extends React.Component<AppProps, AppStates> {
     register(teamsIds: number[]) {
         this.updatesubscriptionStatus();
         this.setState({ subscriptionStatus: SubscriptionStatus.InProgress });
-
         if (!('serviceWorker' in navigator)) {
             alert('Your browser does not support service workers.');
             this.setState({ subscriptionStatus: SubscriptionStatus.NotSubscribed })
@@ -69,7 +68,6 @@ class App extends React.Component<AppProps, AppStates> {
         }
 
         navigator.serviceWorker.register('sw.js')
-
         navigator.serviceWorker.ready
             .then(registration => {
                 const subscribeOptions = {
