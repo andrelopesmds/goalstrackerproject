@@ -1,4 +1,11 @@
-[![Build Status](https://travis-ci.org/andrelopesmds/goalstrackerproject.svg?branch=master)](https://travis-ci.org/andrelopesmds/goalstrackerproject)
+<p align="center">
+  <a href="https://travis-ci.org/andrelopesmds/goalstrackerproject">
+    <img src="https://travis-ci.org/andrelopesmds/goalstrackerproject.svg?branch=master">
+  </a>
+  <a href="https://codeclimate.com/github/andrelopesmds/goalstrackerproject/maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/35545823d65095d487ae/maintainability"/>
+  </a>
+</p>
 
 # GoalsTracker's overview
 
