@@ -1,8 +1,5 @@
-const aws = require('aws-sdk');
 const helper = require('./helper');
-
-const lambda = new aws.Lambda();
-const { pushFunction } = process.env;
+const shared = require('../shared/shared');
 
 module.exports.handler = async (event) => {
   try {
@@ -25,27 +22,6 @@ async function processEvent(event) {
 
   const obj = helper.createWelcomeMessageObject();
 
-  await sendPush(obj, subscription);
+  await shared.callPushHandler(obj, subscription);
 }
 
-async function sendPush(obj, subscription) {
-  return new Promise((resolve) => {
-    const params = {
-      FunctionName: pushFunction,
-      InvocationType: 'Event',
-      Payload: JSON.stringify({
-        obj,
-        subscription,
-      }),
-    };
-
-    lambda.invoke(params, (err) => {
-      if (err) {
-        console.log(`Error when sending push notification. Subscription: ${JSON.stringify(subscription)}`);
-        throw err;
-      } else {
-        resolve(true);
-      }
-    });
-  });
-}
