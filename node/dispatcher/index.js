@@ -1,10 +1,6 @@
-const aws = require('aws-sdk');
-
-const lambda = new aws.Lambda();
 const dynamodb = require('../lib/dynamodb');
 const helper = require('./helper');
-
-const { pushFunction } = process.env;
+const shared = require('../shared/shared');
 
 module.exports.handler = async (event) => {
   try {
@@ -44,31 +40,10 @@ async function processEvent(event) {
 async function sendMessages(obj, filteredSubscriptions) {
   const promises = [];
   filteredSubscriptions.forEach((subscription) => {
-    promises.push(sendPush(obj, subscription));
+    promises.push(shared.callPushHandler(obj, subscription));
   });
 
   const allMessages = await Promise.all(promises);
   return allMessages;
 }
 
-async function sendPush(obj, subscription) {
-  return new Promise((resolve) => {
-    const params = {
-      FunctionName: pushFunction,
-      InvocationType: 'Event',
-      Payload: JSON.stringify({
-        obj,
-        subscription,
-      }),
-    };
-
-    lambda.invoke(params, (err) => {
-      if (err) {
-        console.log(`Error when sending push notification: ${JSON.stringify(err)}`);
-        throw err;
-      } else {
-        resolve(true);
-      }
-    });
-  });
-}
