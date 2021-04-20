@@ -63,17 +63,21 @@ const validateResults = (results) => {
   }
 
   results.forEach((result) => {
-    REQUIRED_KEYS.forEach((requiredKey) => {
-      if (!Object.prototype.hasOwnProperty.call(result, requiredKey)) {
-        throw new Error(`Result is missing a key. Result: ${JSON.stringify(result)}`);
-      }
-
-      if (!result[requiredKey]) {
-        throw new Error(`Result is missing a value. Result: ${JSON.stringify(result)}`);
-      }
-    });
+    validateResult(result);
   });
 };
+
+const validateResult = (result) => {
+  REQUIRED_KEYS.forEach((requiredKey) => {
+    if (!Object.prototype.hasOwnProperty.call(result, requiredKey)) {
+      throw new Error(`Result is missing a key. Result: ${JSON.stringify(result)}`);
+    }
+
+    if (!result[requiredKey]) {
+      throw new Error(`Result is missing a value. Result: ${JSON.stringify(result)}`);
+    }
+  });
+}
 
 module.exports = {
   getLiveResults,

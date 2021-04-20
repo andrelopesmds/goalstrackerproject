@@ -6,16 +6,16 @@ module.exports.handler = async (event) => {
   try {
     await processEvent(event);
   } catch (error) {
-    console.log(`Error when processing event: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
+    console.log(`Error when processing a new game event! Error: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
     throw error;
   }
 
   console.log('Operation concluded!');
 };
 
-async function processEvent(event) {
+const processEvent = async (event) => {
   if (event.Records[0].eventName !== 'INSERT') {
-    console.log(`Event was ignored as it is not an insert. Event: ${JSON.stringify(event)}`);
+    console.log(`Event was ignored as it is not a new game event in db. Event: ${JSON.stringify(event)}`);
     return;
   }
 
@@ -37,7 +37,7 @@ async function processEvent(event) {
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
 }
 
-async function sendMessages(obj, filteredSubscriptions) {
+const sendMessages = async (obj, filteredSubscriptions) => {
   const promises = [];
   filteredSubscriptions.forEach((subscription) => {
     promises.push(shared.callPushHandler(obj, subscription));
