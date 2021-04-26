@@ -1,13 +1,10 @@
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { AvailableTeam } from './globalInterfaces';
+import { groupBy } from 'lodash';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 interface CheckboxesTagsProps {
   availableTeams: AvailableTeam[],
@@ -15,38 +12,24 @@ interface CheckboxesTagsProps {
 }
 
 export default function CheckboxesTags(props: CheckboxesTagsProps) {
-  const exportChanges = (event: any, value: any) => {
-    var selectedIds: number[] = [];
-    value.forEach((v: { id: string; }) => {
-      selectedIds.push(parseInt(v.id));
-    });
-
-    props.updateList(selectedIds);
+  const updateList = (event: any) => {
+    const id = event.target.value;
+    const checked = event.target.checked;
+    props.updateList(id, checked)
   }
 
+  const groupedTeams = groupBy<AvailableTeam>(props.availableTeams, 'country');
+
+  const createItem = (icon: any, team: AvailableTeam) => <div><label>
+    <Checkbox onClick={updateList} value={team.id} icon={icon} style={{ marginRight: 8 }} />{team.name}</label></div>;
+
+  const createGroup = (group: AvailableTeam[]) => <div><div>{group[0].country}</div> {group.map((team) => createItem(icon, team))}</div>;
+
   return (
-    <Autocomplete
-      multiple
-      options={props.availableTeams}
-      disableCloseOnSelect
-      getOptionLabel={option => option.name}
-      groupBy={(option) => option.country}
-      onChange={exportChanges}
-      renderOption={(option, { selected }) => (
-        <React.Fragment>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-            value={option.id}
-          />
-          {option.name}
-        </React.Fragment>
-      )}
-      renderInput={params => (
-        <TextField {...params} variant="outlined" label="Available teams"/>
-      )}
-    />
+    <React.Fragment>
+      {
+        Object.values(groupedTeams).map((group) => createGroup(group))
+      }
+    </React.Fragment>
   );
 }

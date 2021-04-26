@@ -31,8 +31,12 @@ export default function DialogSlide(props: DialogSlideProps) {
     setOpen(true);
   };
 
-  const updateList = (ids: number[]) => {
-    setSelectedIds(ids);
+  const updateList = (id: number, checked: boolean) => {
+    if (checked) {
+      setSelectedIds([...selectedIds, id]);
+    } else {
+      setSelectedIds(selectedIds.filter(x => x !== id));
+    }
   }
 
   const handleConfirm = () => {
