@@ -18,6 +18,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        working-directory: ./node
+      - working-directory: ./node
       - run: npm ci
       - run: npm test
