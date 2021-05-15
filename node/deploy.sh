@@ -8,4 +8,3 @@ if [ $stage = "prod" ] || [ $stage = "staging" ] || [ $stage = "dev" ]; then
 else
   echo "Stage parameter could not be empty. It must be 'prod', 'staging' or 'dev'"
 fi
-
