@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: '14.x'
       - run: cd node && npm ci
+      - run: cd node && npm run linter
       - run: cd node && npm test
 
       - name: Configure AWS credentials
