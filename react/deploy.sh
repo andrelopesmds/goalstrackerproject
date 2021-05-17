@@ -1,11 +1,13 @@
 #!/bin/sh
 
-stage=$1
+branch=$1
 
-if [ $stage = "prod" ] || [ $stage = "staging" ] || [ $stage = "dev" ]; then
-  if [ $stage = "prod" ]; then
+if [ $branch = "master" ] || [ $branch = "staging" ] || [ $branch = "dev" ]; then
+  if [ $branch = "master" ]; then
+    stage=prod
     bucket=goalstracker.info
   else
+    stage=$branch
     bucket=$stage.goalstracker.info
   fi
   npm install
