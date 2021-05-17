@@ -2,6 +2,8 @@
 
 stage=$1
 
+echo "$stage"
+
 if [ $stage = "prod" ] || [ $stage = "staging" ] || [ $stage = "dev" ]; then
   if [ $stage = "prod" ]; then
     bucket=goalstracker.info
