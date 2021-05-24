@@ -15,7 +15,6 @@ webpush.setVapidDetails(
 
 module.exports.handler = async (event) => {
   try {
-    console.log(`Correlation-id: ${event.headers['x-correlation-id']}`);
     await sendPushNotification(event);
   } catch (error) {
     console.log(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${event}`);
