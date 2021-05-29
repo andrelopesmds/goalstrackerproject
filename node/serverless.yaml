@@ -50,7 +50,7 @@ functions:
   welcomer:
     handler: welcomer/index.handler
     environment:
-      pushFunction: "${self:service}-${self:provider.stage}-push"
+      snsTopicArn: !Ref EventTopic
     events:
       - stream:
           type: dynamodb
