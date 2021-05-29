@@ -1,30 +1,21 @@
-const aws = require('aws-sdk');
+const AWS = require('aws-sdk');
 
-const lambda = new aws.Lambda();
-const { pushFunction } = process.env;
+const SNS = new AWS.SNS();
+const { snsTopicArn } = process.env;
 
 const callPushHandler = async (obj, subscription) => {
-  return new Promise((resolve) => {
-    const payload = JSON.stringify({
-      obj,
-      subscription,
+    const message = JSON.stringify({
+      obj, subscription
     });
 
     const params = {
-      FunctionName: pushFunction,
-      InvocationType: 'Event',
-      Payload: payload,
+      Message: message,
+      TopicArn: snsTopicArn
     };
 
-    lambda.invoke(params, (err) => {
-      if (err) {
-        console.log(`Error when sending push notification. Params: ${JSON.stringify(params)}`);
-        throw err;
-      } else {
-        resolve(true);
-      }
-    });
-  });
+    const res = await SNS.publish(params).promise();
+    console.log(res);
+    return res;
 }
 
 module.exports = {

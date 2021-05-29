@@ -17,15 +17,17 @@ module.exports.handler = async (event) => {
   try {
     await sendPushNotification(event);
   } catch (error) {
-    console.log(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${event}`);
+    console.log(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
     throw error;
   }
   console.log('operation concluded!');
 };
 
 async function sendPushNotification(event) {
-  const { subscription } = event;
-  const payload = helper.createPayload(event.obj);
+  const message = JSON.parse(event.Records[0].Sns.Message);
+
+  const { subscription } = message;
+  const payload = helper.createPayload(message.obj);
 
   try {
     const result = await webpush.sendNotification(subscription, payload);
