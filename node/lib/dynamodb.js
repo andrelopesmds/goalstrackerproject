@@ -1,13 +1,15 @@
 const { Team, Subscription, Event } = require('./schemas.js');
 
 const saveSubscription = async (subscription) => {
-  delete subscription.expirationTime;
-  delete subscription.unsubscribeDate;
+  const subscriptionEntity = { ...subscription };
 
-  const subscriptionAttribute = new Subscription(subscription);
+  delete subscriptionEntity.expirationTime;
+  delete subscriptionEntity.unsubscribeDate;
+
+  const subscriptionAttribute = new Subscription(subscriptionEntity);
 
   await subscriptionAttribute.save();
-  console.log(`Subscription saved: ${JSON.stringify(subscription)}`);
+  console.log(`Subscription saved: ${JSON.stringify(subscriptionEntity)}`);
 };
 
 const deleteSubscription = async (subscription) => {

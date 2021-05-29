@@ -23,4 +23,4 @@ const processNewSubscription = async (event) => {
   const obj = helper.createWelcomeMessageObject();
 
   await shared.callPushHandler(obj, subscription);
-}
+};
