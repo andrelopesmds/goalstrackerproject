@@ -3,9 +3,9 @@
 // Parameters
 const tableName = 'dev-EventsTable';
 
-const team1 = 'Real Madrid';
-const team1Id = '105';
-const team2 = 'Liverpool';
+const team1 = 'Flamengo';
+const team1Id = '1';
+const team2 = 'Corinthians';
 const score = '1 - 0';
 const timestamp = new Date().toISOString();
 
