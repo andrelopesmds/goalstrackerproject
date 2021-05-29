@@ -35,7 +35,7 @@ const processNewGameEvent = async (event) => {
   const results = await sendMessages(obj, filteredSubscriptions);
 
   console.log(`Job done. Results: ${JSON.stringify(results)}`);
-}
+};
 
 const sendMessages = async (obj, filteredSubscriptions) => {
   const promises = [];
@@ -45,5 +45,4 @@ const sendMessages = async (obj, filteredSubscriptions) => {
 
   const allMessages = await Promise.all(promises);
   return allMessages;
-}
-
+};

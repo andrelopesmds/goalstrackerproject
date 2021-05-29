@@ -77,7 +77,7 @@ const validateResult = (result) => {
       throw new Error(`Result is missing a value. Result: ${JSON.stringify(result)}`);
     }
   });
-}
+};
 
 module.exports = {
   getLiveResults,
