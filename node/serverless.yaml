@@ -5,6 +5,7 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: us-east-1
+  memorySize: 256
   environment:
     EVENTS_TABLE: { Ref: EventsTable }
     SUBSCRIPTIONS_TABLE: { Ref: SubscriptionsTable }
@@ -77,6 +78,7 @@ functions:
 
   fetch:
     handler: fetch/index.handler
+    timeout: 15
     events:
       - schedule:
           rate: rate(45 minutes)
