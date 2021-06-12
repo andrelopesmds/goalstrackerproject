@@ -1,7 +1,7 @@
 const assert = require('assert');
 const helper = require('../dispatcher/helper');
 
-const event = {
+const eventBeginningOfMatch = {
   Records: [
     {
       dynamodb: {
@@ -13,7 +13,33 @@ const event = {
             S: 'Palmeiras',
           },
           score: {
-            S: '2x0',
+            S: '0 - 0',
+          },
+          team1Id: {
+            S: 1,
+          },
+          team2Id: {
+            S: 2,
+          },
+        },
+      },
+    },
+  ],
+}
+
+const eventGoal = {
+  Records: [
+    {
+      dynamodb: {
+        NewImage: {
+          team1: {
+            S: 'Santos',
+          },
+          team2: {
+            S: 'Palmeiras',
+          },
+          score: {
+            S: '2 - 0',
           },
           team1Id: {
             S: 1,
@@ -27,9 +53,14 @@ const event = {
   ],
 };
 
-const eventObject = {
+const eventGoalObject = {
   title: 'Goal',
-  body: 'Santos 2x0 Palmeiras',
+  body: 'Santos 2 - 0 Palmeiras',
+};
+
+const eventBeginningOfMatchObject = {
+  title: 'The match has just started',
+  body: 'Santos 0 - 0 Palmeiras',
 };
 
 const idsList1 = [1, 2];
@@ -72,15 +103,21 @@ const filteredSubscriptions = [
 const idsList2 = [14];
 
 describe('Dispatcher service', () => {
-  it('should create event object and ids list', () => {
-    const imageOfEvent = event.Records[0].dynamodb.NewImage;
-    const result = helper.createEventObject(imageOfEvent);
-    assert.deepEqual(result, eventObject);
+  it('should create an event object for a goal', () => {
+    const imageOfEventGoal = eventGoal.Records[0].dynamodb.NewImage;
+    const result = helper.createEventObject(imageOfEventGoal);
+    assert.deepEqual(result, eventGoalObject);
   });
 
-  it('should create event object and ids list', () => {
-    const imageOfEvent = event.Records[0].dynamodb.NewImage;
-    const result = helper.createIdsList(imageOfEvent);
+  it('should create an event object for the beginning of the match', () => {
+    const imageOfEventBeginningOfMatch = eventBeginningOfMatch.Records[0].dynamodb.NewImage;
+    const result = helper.createEventObject(imageOfEventBeginningOfMatch);
+    assert.deepEqual(result, eventBeginningOfMatchObject);
+  })
+
+  it('should create ids list', () => {
+    const imageOfEventGoal = eventGoal.Records[0].dynamodb.NewImage;
+    const result = helper.createIdsList(imageOfEventGoal);
     assert.deepEqual(result, idsList1);
   });
 
