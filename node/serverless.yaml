@@ -78,7 +78,7 @@ functions:
 
   fetch:
     handler: fetch/index.handler
-    timeout: 15
+    timeout: 30
     events:
       - schedule:
           rate: rate(45 minutes)
