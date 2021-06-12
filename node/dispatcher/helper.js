@@ -3,8 +3,10 @@ const createEventObject = (imageOfEvent) => {
   const team2 = imageOfEvent.team2.S;
   const score = imageOfEvent.score.S;
 
+  const title = score.includes('0 - 0') ? 'The match has just started' : 'Goal';
+
   return {
-    title: 'Goal',
+    title,
     body: `${team1} ${score} ${team2}`,
   };
 };

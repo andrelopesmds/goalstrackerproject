@@ -25,7 +25,7 @@ const eventBeginningOfMatch = {
       },
     },
   ],
-}
+};
 
 const eventGoal = {
   Records: [
@@ -113,7 +113,7 @@ describe('Dispatcher service', () => {
     const imageOfEventBeginningOfMatch = eventBeginningOfMatch.Records[0].dynamodb.NewImage;
     const result = helper.createEventObject(imageOfEventBeginningOfMatch);
     assert.deepEqual(result, eventBeginningOfMatchObject);
-  })
+  });
 
   it('should create ids list', () => {
     const imageOfEventGoal = eventGoal.Records[0].dynamodb.NewImage;
