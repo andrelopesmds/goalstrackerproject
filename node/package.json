@@ -8,10 +8,12 @@
   },
   "scripts": {
     "linter": "eslint . --ext .js",
+    "linter-fix": "eslint . --fix --ext .js",
     "test": "mocha --recursive",
     "test:subscriber": "serverless invoke local --function subscriber -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path subscriber/event.test.js",
     "test:fetch": "serverless invoke local --function fetch -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path fetch/event.test.js",
-    "test:dispatcher": "serverless invoke local --function dispatcher -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path dispatcher/event.test.js"
+    "test:dispatcher": "serverless invoke local --function dispatcher -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path dispatcher/event.test.js",
+    "test:push": "serverless invoke local --function push -e SUBSCRIPTIONS_TABLE=dev-SubscriptionsTable -e EVENTS_TABLE=dev-EventsTable -e TEAMS_TABLE=dev-TeamsTable --path push/event.test.js"
   },
   "husky": {
     "hooks": {
