@@ -23,13 +23,9 @@ const deleteSubscription = async (subscription) => {
 };
 
 const getSubscription = async (endpoint) => {
-  const queryFilter = {
-    endpoint,
-  };
-
-  const subscription = await Subscription.queryOne(queryFilter).exec();
+  const subscription = await Subscription.query('endpoint').eq(endpoint).exec();
   console.log(`Subscription loaded: ${JSON.stringify(subscription)}`);
-  return subscription;
+  return subscription[0];
 };
 
 const getSubscriptions = async () => {
