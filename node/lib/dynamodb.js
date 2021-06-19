@@ -56,8 +56,8 @@ const getEvents = async (minutesToTrack) => {
   return events;
 };
 
-const getTeams = async () => {
-  const teams = await Team.scan().all().exec();
+const getTeams = async (attributesToShow = null) => {
+  const teams = await Team.scan().all().attributes(attributesToShow).exec();
   console.log(`Teams loaded: ${JSON.stringify(teams)}`);
   return teams;
 };

@@ -21,7 +21,8 @@ module.exports.handler = async () => {
 };
 
 async function getTeams() {
-  const teams = await dynamodb.getTeams();
+  const attributestToShow = ['id', 'name', 'sport', 'country'];
+  const teams = await dynamodb.getTeams(attributestToShow);
 
   const response = SUCCESS_RESPONSE;
   response.body = JSON.stringify({
