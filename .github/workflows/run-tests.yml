@@ -1,0 +1,26 @@
+name: Run tests on PR to master
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: cd node && npm ci
+
+      - name: Run Linter
+        run: cd node && npm run linter
+
+      - name: Run tests
+        run: cd node && npm test
