@@ -39,7 +39,7 @@ jobs:
         run: npm install -g serverless
 
       - name: Serverless AWS authentication
-        run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Deploy backend
-        run: cd node && ./deploy.sh dev
+        run: cd node && PUBLIC_KEY=${{ secrets.PUBLIC_KEY }} PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} serverless deploy -s dev
