@@ -1,20 +1,29 @@
-name: Node.js CI
+name: Deploy to dev on push to master
 
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ master ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      - run: cd node && npm ci
-      - run: cd node && npm run linter
-      - run: cd node && npm test
+
+      - name: Install dependencies
+        run: cd node && npm ci
+
+      - name: Run Linter
+        run: cd node && npm run linter
+
+      - name: Run tests
+        run: cd node && npm test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -24,4 +33,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Copy files to S3 with the AWS CLI
-        run: cd react && ./deploy.sh ${GITHUB_REF##*/}
+        run: cd react && ./deploy.sh dev
