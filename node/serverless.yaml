@@ -98,8 +98,8 @@ functions:
           arn: !Ref EventTopic
           topicName: "${self:provider.stage}-EventTopic"
     environment:
-      PUBLIC_KEY: ${file(./variables.yml):PUBLIC_KEY}
-      PRIVATE_KEY: ${file(./variables.yml):PRIVATE_KEY}
+      PUBLIC_KEY: ${env:PUBLIC_KEY}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
 
 package:
   exclude:
