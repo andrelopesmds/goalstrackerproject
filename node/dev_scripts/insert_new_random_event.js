@@ -1,4 +1,5 @@
 // Insert a new event in Events table - used to simulate a real time event that it is saved by fetch function
+const logger = require('npmlog');
 
 // Parameters
 const tableName = 'dev-EventsTable';
@@ -32,7 +33,7 @@ const params = {
 };
 
 docClient.put(params, (err) => {
-  if (err) console.log(err);
+  if (err) logger.info(err);
 
-  else console.log('Event inserted!');
+  else logger.info('Event inserted!');
 });

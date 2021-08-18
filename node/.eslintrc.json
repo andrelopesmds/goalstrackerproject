@@ -20,6 +20,7 @@
         "import/no-extraneous-dependencies": ["off"],
         "max-len": ["error", { "code": 120 }],
         "eqeqeq": ["warn"], // TODO -> make it an error ???
-        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-console": ["error"]
     }
 }

@@ -1,3 +1,4 @@
+const logger = require('npmlog');
 const helper = require('./helper');
 const dynamodb = require('../lib/dynamodb');
 
@@ -16,7 +17,7 @@ module.exports.handler = async (event) => {
   try {
     await saveSubscription(event);
   } catch (error) {
-    console.log(`Error when subscribing new user! Event: ${JSON.stringify(event)}. Error:${JSON.stringify(error)}.`);
+    logger.info(`Error when subscribing new user! Event: ${JSON.stringify(event)}. Error:${JSON.stringify(error)}.`);
     throw error;
   }
 

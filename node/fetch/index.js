@@ -1,3 +1,4 @@
+const logger = require('npmlog');
 const dynamodb = require('../lib/dynamodb');
 const helper = require('./helper');
 
@@ -8,11 +9,11 @@ async function handler(event) {
     const { sport } = event;
     await fetchGoals(sport);
   } catch (error) {
-    console.log(`Error when fetching goals: ${JSON.stringify(error)}`);
+    logger.info(`Error when fetching goals: ${JSON.stringify(error)}`);
     throw error;
   }
 
-  console.log('Operation concluded!');
+  logger.info('Operation concluded!');
 }
 
 async function fetchGoals(sport) {
@@ -54,6 +55,7 @@ const filterNotSavedEvents = (fetchedEvents, recentlySavedEvents) => {
   return notSavedEvents;
 };
 
+// eslint-disable-next-line max-len
 const isEqual = (event1, event2) => event1.score === event2.score && event1.team1 === event2.team1 && event1.team2 === event2.team2;
 
 module.exports = {

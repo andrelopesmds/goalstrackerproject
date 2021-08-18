@@ -1,4 +1,5 @@
 const webpush = require('web-push');
+const logger = require('npmlog');
 const helper = require('./helper');
 const dynamodb = require('../lib/dynamodb');
 
@@ -17,10 +18,10 @@ module.exports.handler = async (event) => {
   try {
     await sendPushNotification(event);
   } catch (error) {
-    console.log(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
+    logger.info(`Error when sending push notification: ${JSON.stringify(error)}. Event: ${JSON.stringify(event)}`);
     throw error;
   }
-  console.log('operation concluded!');
+  logger.info('operation concluded!');
 };
 
 async function sendPushNotification(event) {
@@ -31,13 +32,13 @@ async function sendPushNotification(event) {
 
   try {
     const result = await webpush.sendNotification(subscription, payload);
-    console.log(`Message sent: ${JSON.stringify(result)}`);
+    logger.info(`Message sent: ${JSON.stringify(result)}`);
   } catch (error) {
-    console.log(`Error when sending the message: ${JSON.stringify(error)}`);
+    logger.info(`Error when sending the message: ${JSON.stringify(error)}`);
 
     if (error.statusCode === 410) {
       await dynamodb.deleteSubscription(subscription);
-      console.log('User unsubscribed!');
+      logger.info('User unsubscribed!');
     } else {
       throw error;
     }

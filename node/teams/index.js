@@ -1,3 +1,4 @@
+const logger = require('npmlog');
 const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {
@@ -13,7 +14,7 @@ module.exports.handler = async () => {
   try {
     response = await getTeams();
   } catch (error) {
-    console.log(`Error when fetching teams: ${JSON.stringify(error)}`);
+    logger.info(`Error when fetching teams: ${JSON.stringify(error)}`);
     throw error;
   }
 

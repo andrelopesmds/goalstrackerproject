@@ -31,6 +31,7 @@ const isSubscriptionValid = (subscription) => {
   return true;
 };
 
+// eslint-disable-next-line max-len
 const hasProperties = (obj, propertiesList) => propertiesList.every((property) => Object.prototype.hasOwnProperty.call(obj, property));
 
 module.exports = {

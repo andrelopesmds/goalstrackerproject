@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const logger = require('npmlog');
 
 const SNS = new AWS.SNS();
 const { snsTopicArn } = process.env;
@@ -14,7 +15,7 @@ const callPushHandler = async (obj, subscription) => {
   };
 
   const res = await SNS.publish(params).promise();
-  console.log(res);
+  logger.info(res);
   return res;
 };
 
