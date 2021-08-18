@@ -1,4 +1,5 @@
 const soccerParser = require('livesoccertv-parser');
+const logger = require('npmlog');
 
 const REQUIRED_KEYS = ['score', 'team1', 'team2'];
 
@@ -21,7 +22,7 @@ async function runApi(listOfTeams) {
   });
 
   const allMatches = await Promise.all(promises);
-  console.log(JSON.stringify(allMatches));
+  logger.info(JSON.stringify(allMatches));
 
   return allMatches;
 }

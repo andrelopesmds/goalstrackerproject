@@ -1,8 +1,9 @@
+const logger = require('npmlog');
 const soccerAdapter = require('./soccer-adapter.js');
 
 async function getResults(sport, listOfAvailableTeams) {
   if (sport !== 'soccer') {
-    console.log(`Sport: '${sport}' is incorrect or not implemented yet.`);
+    logger.info(`Sport: '${sport}' is incorrect or not implemented yet.`);
     return [];
   }
 

@@ -1,3 +1,4 @@
+const logger = require('npmlog');
 const { Team, Subscription, Event } = require('./schemas.js');
 
 const saveSubscription = async (subscription) => {
@@ -9,7 +10,7 @@ const saveSubscription = async (subscription) => {
   const subscriptionAttribute = new Subscription(subscriptionEntity);
 
   await subscriptionAttribute.save();
-  console.log(`Subscription saved: ${JSON.stringify(subscriptionEntity)}`);
+  logger.info(`Subscription saved: ${JSON.stringify(subscriptionEntity)}`);
 };
 
 const deleteSubscription = async (subscription) => {
@@ -19,12 +20,12 @@ const deleteSubscription = async (subscription) => {
   const subscriptionAttribute = new Subscription(completeSubscription);
 
   await subscriptionAttribute.save();
-  console.log(`Subscription deleted: ${JSON.stringify(subscription)}`);
+  logger.info(`Subscription deleted: ${JSON.stringify(subscription)}`);
 };
 
 const getSubscription = async (endpoint) => {
   const subscription = await Subscription.query('endpoint').eq(endpoint).exec();
-  console.log(`Subscription loaded: ${JSON.stringify(subscription)}`);
+  logger.info(`Subscription loaded: ${JSON.stringify(subscription)}`);
   return subscription[0];
 };
 
@@ -33,7 +34,7 @@ const getSubscriptions = async () => {
 
   const subscriptions = await Subscription.scan().filter(unsubscribedUsersAttribute).not().exists()
     .exec();
-  console.log(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
+  logger.info(`Subscriptions loaded: ${JSON.stringify(subscriptions)}`);
 
   return subscriptions;
 };
@@ -46,19 +47,19 @@ const saveEventList = async (events) => {
   });
 
   await Event.batchPut(listEvents);
-  console.log(`Events saved: ${JSON.stringify(listEvents)}`);
+  logger.info(`Events saved: ${JSON.stringify(listEvents)}`);
 };
 
 const getEvents = async (minutesToTrack) => {
   const timestamp = (new Date((new Date().getTime()) - minutesToTrack * 60000)).toISOString();
   const events = await Event.scan().filter('timestamp').gt(timestamp).exec();
-  console.log(`Events loaded: ${JSON.stringify(events)}`);
+  logger.info(`Events loaded: ${JSON.stringify(events)}`);
   return events;
 };
 
 const getTeams = async (attributesToShow = null) => {
   const teams = await Team.scan().all().attributes(attributesToShow).exec();
-  console.log(`Teams loaded: ${JSON.stringify(teams)}`);
+  logger.info(`Teams loaded: ${JSON.stringify(teams)}`);
   return teams;
 };
 

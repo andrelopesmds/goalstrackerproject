@@ -1,4 +1,5 @@
 // This script copies teams from prod and insert them into teams dev table
+const logger = require('npmlog');
 
 const AWS = require('aws-sdk');
 
@@ -31,7 +32,7 @@ const exec = async () => {
   });
 
   await Promise.all(promises);
-  console.log('Operation concluded!');
+  logger.info('Operation concluded!');
 };
 
 exec();

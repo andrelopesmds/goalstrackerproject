@@ -1,4 +1,5 @@
 // This script logs the most recent events from Events table
+const logger = require('npmlog');
 
 // Parameters
 const N_EVENTS_TO_LOG = 3;
@@ -21,7 +22,7 @@ const params = {
 const sortByTimestamp = (a, b) => new Date(a.timestamp) - new Date(b.timestamp);
 
 docClient.scan(params, (err, data) => {
-  if (err) console.log(err);
+  if (err) logger.info(err);
 
   let allItems = [];
   data.Items.forEach((item) => {
@@ -31,6 +32,6 @@ docClient.scan(params, (err, data) => {
   allItems = allItems.sort(sortByTimestamp).reverse();
 
   for (let i = 0; i < N_EVENTS_TO_LOG; i++) {
-    console.log(allItems[i]);
+    logger.info(allItems[i]);
   }
 });
