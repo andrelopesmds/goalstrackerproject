@@ -20,8 +20,8 @@ jobs:
       - name: Install dependencies
         run: cd node && npm ci
 
-      - name: Run Linter
-        run: cd node && npm run linter
+      - name: Run Lint
+        run: cd node && npm run lint
 
       - name: Run tests
         run: cd node && npm test
