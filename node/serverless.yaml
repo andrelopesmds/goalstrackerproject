@@ -10,6 +10,7 @@ provider:
     EVENTS_TABLE: { Ref: EventsTable }
     SUBSCRIPTIONS_TABLE: { Ref: SubscriptionsTable }
     TEAMS_TABLE: { Ref: TeamsTable }
+    STAGE: ${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
