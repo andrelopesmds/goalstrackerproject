@@ -3,10 +3,9 @@ const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {
   statusCode: 200,
-/*   headers: {
+  headers: {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,
-  }, */
+  },
 };
 
 module.exports.handler = async () => {
