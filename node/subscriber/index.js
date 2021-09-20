@@ -1,17 +1,7 @@
 const logger = require('npmlog');
 const helper = require('./helper');
 const dynamodb = require('../lib/dynamodb');
-
-const SUCCESS_RESPONSE = {
-  statusCode: 200,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': true,
-  },
-  body: JSON.stringify({
-    message: 'User subscribed!',
-  }),
-};
+const constants = require('../shared/contants');
 
 module.exports.handler = async (event) => {
   try {
@@ -21,7 +11,11 @@ module.exports.handler = async (event) => {
     throw error;
   }
 
-  return SUCCESS_RESPONSE;
+  const body = JSON.stringify({
+    message: 'User subscribed!',
+  });
+
+  return { ...constants.DEFAULT_SUCCESS_RESPONSE, body };
 };
 
 async function saveSubscription(event) {

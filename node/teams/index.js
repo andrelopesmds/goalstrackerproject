@@ -1,12 +1,6 @@
 const logger = require('npmlog');
 const dynamodb = require('../lib/dynamodb');
-
-const SUCCESS_RESPONSE = {
-  statusCode: 200,
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
-};
+const constants = require('../shared/contants');
 
 module.exports.handler = async () => {
   let response;
@@ -28,5 +22,5 @@ async function getTeams() {
     teams,
   });
 
-  return { ...SUCCESS_RESPONSE, body };
+  return { ...constants.DEFAULT_SUCCESS_RESPONSE, body };
 }
