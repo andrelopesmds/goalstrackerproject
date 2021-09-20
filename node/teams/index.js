@@ -3,10 +3,10 @@ const dynamodb = require('../lib/dynamodb');
 
 const SUCCESS_RESPONSE = {
   statusCode: 200,
-  headers: {
+/*   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Credentials': true,
-  },
+  }, */
 };
 
 module.exports.handler = async () => {
@@ -25,10 +25,9 @@ async function getTeams() {
   const attributestToShow = ['id', 'name', 'sport', 'country'];
   const teams = await dynamodb.getTeams(attributestToShow);
 
-  const response = SUCCESS_RESPONSE;
-  response.body = JSON.stringify({
+  const body = JSON.stringify({
     teams,
   });
 
-  return response;
+  return { ...SUCCESS_RESPONSE, body };
 }
