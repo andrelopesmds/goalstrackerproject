@@ -80,9 +80,7 @@ class App extends React.Component<AppProps, AppStates> {
                 return registration.pushManager.subscribe(subscribeOptions);
             })
             .then((pushSubscription: any) => {
-                var data = JSON.stringify(pushSubscription);
-
-                return this.sendToServer(data, teamsIds);
+                return this.sendToServer(pushSubscription, teamsIds);
             })
             .then(() => {
                 this.setState({ subscriptionStatus: SubscriptionStatus.Subscribed });
@@ -126,8 +124,8 @@ class App extends React.Component<AppProps, AppStates> {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    subscription: subscription,
-                    teamsIds: teamsIds
+                    subscription,
+                    teamsIds
                 })
             };
 
