@@ -7,6 +7,15 @@
   </a>
 </p>
 
+
+# Source Code
+
+This app was completely rewritten and migrated to the following repos:
+ - [backend](https://github.com/andrelopesmds/goalstracker-api)
+ - [frontend](https://github.com/andrelopesmds/goalstracker-app)
+
+
+
 # GoalsTracker's overview
 
 Track your favorite team and send web push notifications when a match starts, ends or the team scores a goal.
